@@ -56,7 +56,7 @@ const LoginPage = () => {
                         layout='vertical'
                     >
                         <Form.Item
-                            label="Email"
+                            label="Tài khoản(Liên hệ IT cấp tài khoản)"
                             name="email"
                             rules={[
                                 {
