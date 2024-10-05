@@ -11,15 +11,19 @@ const Header = () => {
     console.log(">>> check auth: ", auth)
     const items = [
         {
-            label: <Link to={"/"}>Home Page</Link>,
+            label: <Link to={"/"}>Trang chủ</Link>,
             key: 'home',
             icon: <HomeOutlined />,
         },
         ...(auth.isAuthenticated ? [{
-            label: <Link to={"/user"}>Users</Link>,
+            label: <Link to={"/user"}>Người dùng</Link>,
             key: 'user',
             icon: <UsergroupAddOutlined />,
-        }] : []),
+        },{
+            label: <Link to={"/listEror"}>Danh sách lỗi</Link>,
+            key: 'user11',
+        }
+    ] : []),
 
         {
             label: `Welcome ${auth?.user?.email ?? ""}`,

@@ -22,7 +22,11 @@ const getUserApi = () => {
     const URL_API = "/v1/api/user";
     return axios.get(URL_API)
 }
+const getLsErrorApi = () => {
+    const URL_API = "/v1/api/lseror";
+    return axios.get(URL_API)
+}
 
 export {
-    createUserApi, loginApi, getUserApi
+    createUserApi, loginApi, getUserApi,getLsErrorApi
 }
