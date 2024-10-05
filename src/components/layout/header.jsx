@@ -16,14 +16,15 @@ const Header = () => {
             icon: <HomeOutlined />,
         },
         ...(auth.isAuthenticated ? [{
+            label: <Link to={"/listEror"}>Danh sách lỗi</Link>,
+            key: 'user11',
+        },
+        {
             label: <Link to={"/user"}>Người dùng</Link>,
             key: 'user',
             icon: <UsergroupAddOutlined />,
-        },{
-            label: <Link to={"/listEror"}>Danh sách lỗi</Link>,
-            key: 'user11',
         }
-    ] : []),
+        ] : []),
 
         {
             label: `Welcome ${auth?.user?.email ?? ""}`,
