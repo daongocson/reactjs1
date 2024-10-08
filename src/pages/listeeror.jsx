@@ -7,8 +7,8 @@ const { Search } = Input;
 
 const ListErorPage = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [dataSourceFilter, setDataSourceFilter] = useState([]);
-    const [keyword, setKeyword] = useState([]);
+    const [dataSourceFilter, setDataSourceFilter] = useState([]);    
+    const [keyword, setKeyword] = useState('');
     const fetchUser = async () => {
         const res = await getLsErrorApi();
         if (!res?.message) {              
@@ -32,7 +32,7 @@ const ListErorPage = () => {
             dataIndex: 'MaVP',
         },
         {
-            title: 'Mã VP',
+            title: 'Mã BN',
             dataIndex: 'MaBN',
         },
         {
@@ -52,54 +52,34 @@ const ListErorPage = () => {
             dataIndex: 'TenBS',
         }
 
-    ];
-    const handleSearchKhoa=(event)=>{      
-        let tearm =event.target.value;
-        if(tearm){
-            let cloneData= dataSourceFilter.filter(item=>item.MaKhoa.toLowerCase().includes(tearm.toLowerCase()));
-            console.log("cloneTEAM",dataSourceFilter.length);
-            setDataSource(cloneData);
-        }else{
-            console.log(event.target.value,"NOT TEAM");
-            fetchUser();
-        }
-    };
-    const handleSearchBs=(event)=>{      
-        let tearm =event.target.value;
-        if(tearm){
-            let cloneData= dataSourceFilter.filter(item=>item.TenBS.toLowerCase().includes(tearm.toLowerCase()));          
-            setDataSource(cloneData);
-        }else{
-            console.log(event.target.value,"NOT TEAM");
-            fetchUser();
-        }
+    ];   
+  
+    const searchTable=(data)=>{
+        console.log(">>>",data.length,keyword);
+        return data.filter(
+            (item)=>(
+                item.TenBS.toLowerCase().includes(keyword.toLowerCase()) ||
+                item.MaKhoa.toLowerCase().includes(keyword.toLowerCase()) ||
+                item.ndloi.toLowerCase().includes(keyword.toLowerCase()) ||
+                item.MaVP.toLowerCase().includes(keyword.toLowerCase()) 
+            ));        
     }
-
     return (       
         <div style={{ padding: 30 }}>      
-            <div className="ant-col ant-col-xs-24 ant-col-xl-8">
-                <Space direction="horizontal">
+            <div className="ant-col ant-col-xs-24 ant-col-xl-8">             
                     <Search
                     placeholder="Khoa phòng"
                     allowClear
-                    onChange={(event)=>handleSearchKhoa(event)}
+                    onChange={(event)=>setKeyword(event.target.value)}
                     style={{
-                        width: 300,
+                        width: 500,
                     }}
                     />
-                    <Search
-                    placeholder="bác sĩ"
-                    allowClear
-                    onChange={(event)=>handleSearchBs(event)}
-                    style={{
-                        width: 300,
-                    }}
-                    />
-                    </Space>
+                 
             </div>           
             <Table
                 bordered
-                dataSource={dataSource} columns={columns}
+                dataSource={searchTable(dataSource)} columns={columns}
                 rowKey={"id"}
             />
         </div>
