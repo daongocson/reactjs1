@@ -1,19 +1,17 @@
-import { Input, notification, Space, Table } from "antd";
-import { AudioOutlined } from '@ant-design/icons';
+import { Input, notification, Table } from "antd";
 
 import { useEffect, useState } from "react";
-import { getLsErrorApi, getUserApi } from "../util/api";
+import { getLsErrorApi } from "../util/api";
 const { Search } = Input;
 
 const ListErorPage = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [dataSourceFilter, setDataSourceFilter] = useState([]);    
+    const keys  = ["TenBS","ndloi","MaKhoa","MaVP","TenDV"];    
     const [keyword, setKeyword] = useState('');
     const fetchUser = async () => {
         const res = await getLsErrorApi();
         if (!res?.message) {              
-            setDataSource(res);   
-            setDataSourceFilter(res) ;     
+            setDataSource(res);               
         } else {
             notification.error({
                 message: "Unauthorized",
@@ -54,25 +52,22 @@ const ListErorPage = () => {
 
     ];   
   
-    const searchTable=(data)=>{
-        console.log(">>>",data.length,keyword);
+    const searchTable=(data)=>{      
         return data.filter(
             (item)=>(
-                item.TenBS.toLowerCase().includes(keyword.toLowerCase()) ||
-                item.MaKhoa.toLowerCase().includes(keyword.toLowerCase()) ||
-                item.ndloi.toLowerCase().includes(keyword.toLowerCase()) ||
-                item.MaVP.toLowerCase().includes(keyword.toLowerCase()) 
-            ));        
+                keys.some((key)=>item[key].toLowerCase().includes(keyword.toLowerCase())
+            )));        
     }
     return (       
         <div style={{ padding: 30 }}>      
             <div className="ant-col ant-col-xs-24 ant-col-xl-8">             
                     <Search
-                    placeholder="Khoa phòng"
+                    placeholder="Nhập nội dung"
                     allowClear
                     onChange={(event)=>setKeyword(event.target.value)}
+                    onSearch={onSearch} enterButton 
                     style={{
-                        width: 500,
+                        width: "100%"                        
                     }}
                     />
                  
@@ -80,8 +75,18 @@ const ListErorPage = () => {
             <Table
                 bordered
                 dataSource={searchTable(dataSource)} columns={columns}
+                defaultPageSize={30}         
                 rowKey={"id"}
+                pagination={{
+                    defaultPageSize:"10" , 
+                    defaultCurrent:"1",
+                    total: dataSource.length, 
+                    pageSizeOptions: ["10","50", "100", "150"],                   
+                    showSizeChanger: true, locale: {items_per_page: ""} 
+                   }}           
+          
             />
+            <>Total {dataSource.length} items</>
         </div>
     )
 }

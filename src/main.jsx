@@ -13,6 +13,7 @@ import HomePage from './pages/home.jsx';
 import LoginPage from './pages/login.jsx';
 import { AuthWrapper } from './components/context/auth.context.jsx';
 import ListErorPage from './pages/listeeror.jsx';
+import BacsiYlenhPage from './pages/bacsiylenh.jsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         path: "listEror",
         element: <ListErorPage />
       },
+      {
+        path: "ylenhbs",
+        element: <BacsiYlenhPage />
+      }
     ]
   },
   {

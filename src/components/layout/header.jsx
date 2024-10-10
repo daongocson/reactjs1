@@ -8,7 +8,6 @@ const Header = () => {
 
     const navigate = useNavigate();
     const { auth, setAuth } = useContext(AuthContext);
-    console.log(">>> check auth: ", auth)
     const items = [
         {
             label: <Link to={"/"}>Trang chủ</Link>,
@@ -17,15 +16,28 @@ const Header = () => {
         },
         ...(auth.isAuthenticated ? [{
             label: <Link to={"/listEror"}>Danh sách lỗi</Link>,
-            key: 'user11',
+            key: 'listEror',
         },
         {
-            label: <Link to={"/user"}>Người dùng</Link>,
-            key: 'user',
-            icon: <UsergroupAddOutlined />,
+            label: `Tìm nhanh ${auth?.user?.email ?? ""}`,
+            key: 'SubMenu11',
+            icon: <SettingOutlined />,
+            children: [
+                {
+                    label: <Link to={"/ylenhbs"}>Y lệnh Bs</Link>,
+                    key: 'ylenhbs',
+                    icon: <UsergroupAddOutlined />,
+                },
+                {
+                    label: <Link to={"/user"}>Người dùng</Link>,
+                    key: 'user',
+                    icon: <UsergroupAddOutlined />,
+                }
+            
+            ]
         }
+       
         ] : []),
-
         {
             label: `Welcome ${auth?.user?.email ?? ""}`,
             key: 'SubMenu',
@@ -53,7 +65,7 @@ const Header = () => {
                     }
                 ]),
             ],
-        },
+        }
 
     ];
 
