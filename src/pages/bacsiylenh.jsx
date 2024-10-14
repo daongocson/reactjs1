@@ -18,7 +18,11 @@ const BacsiYlenhPage = () => {
             dataIndex: 'patientrecordid',
         },
         {
-            title: 'Ngày YL',
+            title: 'Dịch vụ',
+            dataIndex: 'dichvu',
+        },
+        {
+            title: 'Thời gian',
             dataIndex: 'ngayyl',
         }      
 
@@ -92,7 +96,8 @@ const BacsiYlenhPage = () => {
                         bordered
                         dataSource={dataYL} columns={columns}                       
                         key="tbylenh"
-                        />                      
+                        /> ,
+                        'Số lượng: '+ dataYL.length                     
                     ],
                 },
                 {
@@ -104,8 +109,10 @@ const BacsiYlenhPage = () => {
                         bordered
                         dataSource={dataTH} columns={columns}                       
                         key="tbylenh"
-                        />                      
-                    ],                   
+                        />,
+                        'Số lượng: '+ dataTH.length    ,      
+                    ],  
+                                   
                 },
                 {
                     label: 'Giờ KQ',
@@ -116,7 +123,8 @@ const BacsiYlenhPage = () => {
                         bordered
                         dataSource={dataKQ} columns={columns}                       
                         key="tbylenh"
-                        />                      
+                        />   ,
+                        'Số lượng: '+ dataKQ.length    ,                         
                     ],
                 },
                 ]}
