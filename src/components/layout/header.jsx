@@ -15,7 +15,7 @@ const Header = () => {
             icon: <HomeOutlined />,
         },
         ...(auth.isAuthenticated ? [{
-            label: <Link to={"/listEror"}>Danh sách lỗi</Link>,
+            label: <Link to={"/listEror"}>HS cảnh báo</Link>,
             key: 'listEror',
         },
         {
@@ -24,8 +24,31 @@ const Header = () => {
             icon: <SettingOutlined />,
             children: [
                 {
-                    label: <Link to={"/ylenhbs"}>Y lệnh Bs</Link>,
+                    label: <Link to={"/ylenhbs"}>Tra cứu Bác sĩ</Link>,
                     key: 'ylenhbs',
+                    icon: <UsergroupAddOutlined />,
+                },
+                {
+                    label: <Link to={"/tracuubn"}>Tra cứu bệnh nhân</Link>,
+                    key: 'tracuubn',
+                    icon: <UsergroupAddOutlined />,
+                }, {
+                    label: <Link to={"/khambenh"}>Tra cứu Phòng khám</Link>,
+                    key: 'khambenh',
+                    icon: <UsergroupAddOutlined />,
+                },
+                {
+                    label: <Link to={"/listEror"}>Hồ sơ cảnh báo</Link>,
+                    key: 'hscanhbao',
+                    icon: <UsergroupAddOutlined />,
+                }, {
+                    label: <Link to={"/chamcong"}>Chấm công vân tay</Link>,
+                    key: 'chamcong',
+                    icon: <UsergroupAddOutlined />,
+                },
+                {
+                    label: <Link to={"/cskh"}>Hồ sơ CSKH</Link>,
+                    key: 'cskh',
                     icon: <UsergroupAddOutlined />,
                 },
                 {

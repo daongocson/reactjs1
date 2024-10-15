@@ -28,11 +28,7 @@ const ListErorPage = () => {
         {
             title: 'Mã VP',
             dataIndex: 'MaVP',
-        },
-        {
-            title: 'Mã BN',
-            dataIndex: 'MaBN',
-        },
+        },       
         {
             title: 'Nội dung lỗi',
             dataIndex: 'ndloi',

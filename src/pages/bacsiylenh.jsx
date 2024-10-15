@@ -71,8 +71,10 @@ const BacsiYlenhPage = () => {
         <div style={{ padding: 20 }}>
              <div className="ant-col ant-col-xs-24 ant-col-xl-8">             
                 <AutoComplete
-                 style={{ width: 300}}
-                 placeholder="Nhập nội dung"
+                 style={{   
+                    width: "100%"            
+                }}
+                 placeholder="Nhập bác sĩ"
                  options={options}
                  filterOption={true}
                  onSelect={(value)=>{
@@ -88,7 +90,7 @@ const BacsiYlenhPage = () => {
                 defaultActiveKey="1"
                 items={[
                 {
-                    label: 'Giờ YL',
+                    label: 'Giờ Y Lệnh',
                     key: '1',
                     children: [ 
                         <Table   
@@ -101,7 +103,7 @@ const BacsiYlenhPage = () => {
                     ],
                 },
                 {
-                    label: 'Giờ TH',
+                    label: 'Giờ Thực Hiện',
                     key: '2',
                     children: [ 
                         <Table   
@@ -115,7 +117,7 @@ const BacsiYlenhPage = () => {
                                    
                 },
                 {
-                    label: 'Giờ KQ',
+                    label: 'Giờ Kết Quả',
                     key: '3',
                     children: [ 
                         <Table   

@@ -14,6 +14,10 @@ import LoginPage from './pages/login.jsx';
 import { AuthWrapper } from './components/context/auth.context.jsx';
 import ListErorPage from './pages/listeeror.jsx';
 import BacsiYlenhPage from './pages/bacsiylenh.jsx';
+import DSKhamPage from './pages/dskham.jsx';
+import TracuubnPage from './pages/tracuubn.jsx';
+import ChamcongPage from './pages/Chamcong.jsx';
+import CSKHPage from './pages/cksh.jsx';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +35,22 @@ const router = createBrowserRouter([
       {
         path: "listEror",
         element: <ListErorPage />
+      },
+      {
+        path: "tracuubn",
+        element: <TracuubnPage />
+      },
+      {
+        path: "khambenh",
+        element: <DSKhamPage />
+      },
+      {
+        path: "chamcong",
+        element: <ChamcongPage />
+      },
+      {
+        path: "cskh",
+        element: <CSKHPage />
       },
       {
         path: "ylenhbs",
