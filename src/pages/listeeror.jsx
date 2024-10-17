@@ -35,11 +35,7 @@ const ListErorPage = () => {
         {
             title: 'Nội dung lỗi',
             dataIndex: 'ndloi',
-        },
-        {
-            title: 'Dịch vụ',
-            dataIndex: 'TenDV',
-        },
+        },        
         {
             title: 'Phòng',
             dataIndex: 'MaKhoa',
