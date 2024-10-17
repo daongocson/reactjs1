@@ -92,13 +92,7 @@ const TracuubnPage = () => {
                             onChange={(item) => {
                             console.log(item);
                             }}
-                        />,   
-                        <Table   
-                        rowKey={"idm"}                    
-                        bordered
-                        dataSource={dataTH} columns={columnEr}                       
-                        key="tbbaoloi"
-                        />,
+                        />,                          
                     ],
                 }, {
                     label: 'Công Khám',
@@ -137,6 +131,17 @@ const TracuubnPage = () => {
                         key="tbDichvu"
                         />   ,
                         'Số lượng: '+ dataDV.length    ,                         
+                    ],
+                },{
+                    label: 'Danh sách báo lỗi',
+                    key: '5',
+                    children: [ 
+                        <Table   
+                        rowKey={"idm"}                    
+                        bordered
+                        dataSource={dataTH} columns={columnEr}                       
+                        key="tbbaoloi"
+                        />,                       
                     ],
                 }
                 ]}

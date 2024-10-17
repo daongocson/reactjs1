@@ -2,7 +2,7 @@ import { Button, Input, Modal, notification, Table } from "antd";
 
 import { useEffect, useState } from "react";
 import { getLsErrorApi } from "../util/api";
-import { UsergroupAddOutlined } from "@ant-design/icons";
+import { CaretRightOutlined, DeleteOutlined, EyeOutlined, UsergroupAddOutlined } from "@ant-design/icons";
 const { Search } = Input;
 
 const ListErorPage = () => {
@@ -35,7 +35,11 @@ const ListErorPage = () => {
         {
             title: 'Nội dung lỗi',
             dataIndex: 'ndloi',
-        },        
+        },
+        {
+            title: 'Dịch vụ',
+            dataIndex: 'TenDV',
+        },
         {
             title: 'Phòng',
             dataIndex: 'MaKhoa',
@@ -48,9 +52,7 @@ const ListErorPage = () => {
             dataIndex: 'id',
             key: 'id',
             render: (index, record) => (
-              <Button type="primary" onClick={() => showModal(record)}>
-                Xem
-              </Button>
+              <Button  icon={<EyeOutlined />} onClick={() => showModal(record)} />
             ),
           },
 
@@ -108,9 +110,8 @@ const ListErorPage = () => {
                 onCancel={handleCancel}
             >
                 <p>Mã VP: {modaldata.MaVP}</p>
-                <p>Mã BN: {modaldata.MaBN}</p>
-                <p>{modaldata.MaBS}</p>
-                <p>{modaldata.TenBS}</p>
+                <p>Mã BN: {modaldata.MaBN}</p>                
+                <p>{modaldata.TenBS}({modaldata.MaBS})</p>
                 <p>{modaldata.TenDV}</p>
                 <p>{modaldata.ndloi}</p>
             </Modal>
