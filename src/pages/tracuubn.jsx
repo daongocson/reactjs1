@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Tabs, AutoComplete, Table, Input } from 'antd';
+import { Tabs, AutoComplete, Table, Input, Button } from 'antd';
 import { getLsDoctorApi, postbacsiApi, postpatientApi } from "../util/api";
 import { Link } from "react-router-dom";
 import { UsergroupAddOutlined } from "@ant-design/icons";
+import ModelAddnew from "../components/module/ModelAddnew";
+import { CollectionsPage2 } from "../components/module/CreateFormModal";
 const TracuubnPage = () => {   
     const { Search } = Input;
     const [options, setOptions]= useState([]);  
@@ -17,6 +19,16 @@ const TracuubnPage = () => {
         },
         {
             title: 'Ngày YL',
+            dataIndex: 'value',
+        }
+    ];  
+    const columnEr = [
+        {
+            title: 'Nội dung',
+            dataIndex: 'name',
+        },
+        {
+            title: 'Ngày tạo',
             dataIndex: 'value',
         }
     ];  
@@ -61,20 +73,32 @@ const TracuubnPage = () => {
                     }}
                     
                     />
-            </div> 
+            </div>            
            <Tabs
                 defaultActiveKey="1"
                 items={[
                 {
                     label: 'Thông tin Khách hàng',
                     key: '1',
-                    children: [ 
+                    children: [                              
                         <Table   
                         rowKey={"id"}                    
                         bordered
                         dataSource={dataKH} columns={columns}                       
                         key="tbylenh"
-                        />                
+                        />,     
+                        <CollectionsPage2
+                            key="collectionEr"
+                            onChange={(item) => {
+                            console.log(item);
+                            }}
+                        />,   
+                        <Table   
+                        rowKey={"idm"}                    
+                        bordered
+                        dataSource={dataTH} columns={columnEr}                       
+                        key="tbbaoloi"
+                        />,
                     ],
                 }, {
                     label: 'Công Khám',
@@ -84,7 +108,7 @@ const TracuubnPage = () => {
                         rowKey={"servicedataid"}                    
                         bordered
                         dataSource={dataKB} columns={columns}                       
-                        key="tbylenh"
+                        key="tbcongkham"
                         />                      
                     ],  
                                    
@@ -97,7 +121,7 @@ const TracuubnPage = () => {
                         rowKey={"servicedataid"}                    
                         bordered
                         dataSource={dataTH} columns={columns}                       
-                        key="tbylenh"
+                        key="tbThuoc"
                         />                               
                     ],  
                                    
@@ -110,11 +134,11 @@ const TracuubnPage = () => {
                         rowKey={"servicedataid"}                    
                         bordered
                         dataSource={dataDV} columns={columns}                       
-                        key="tbylenh"
+                        key="tbDichvu"
                         />   ,
                         'Số lượng: '+ dataDV.length    ,                         
                     ],
-                },
+                }
                 ]}
             />                                
         </div>

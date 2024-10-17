@@ -1,11 +1,14 @@
-import { Input, notification, Table } from "antd";
+import { Button, Input, Modal, notification, Table } from "antd";
 
 import { useEffect, useState } from "react";
 import { getLsErrorApi } from "../util/api";
+import { UsergroupAddOutlined } from "@ant-design/icons";
 const { Search } = Input;
 
 const ListErorPage = () => {
     const [dataSource, setDataSource] = useState([]);
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [modaldata, setmodaldata] = useState([]);
     const keys  = ["TenBS","ndloi","MaKhoa","MaVP","TenDV"];    
     const [keyword, setKeyword] = useState('');
     const fetchUser = async () => {
@@ -44,10 +47,30 @@ const ListErorPage = () => {
         {
             title: 'Tên bác sĩ',
             dataIndex: 'TenBS',
-        }
+        }, {
+            title: 'Action',
+            dataIndex: 'id',
+            key: 'id',
+            render: (index, record) => (
+              <Button type="primary" onClick={() => showModal(record)}>
+                Xem
+              </Button>
+            ),
+          },
 
     ];   
-  
+    const showModal = (record) => {
+        console.log(record);
+        setmodaldata(record);
+        setIsModalVisible(true);
+      };
+      const handleOk = () => {
+        setIsModalVisible(false);
+      };
+    
+      const handleCancel = () => {
+        setIsModalVisible(false);
+      };
     const searchTable=(data)=>{      
         return data.filter(
             (item)=>(
@@ -82,6 +105,19 @@ const ListErorPage = () => {
                    }}           
           
             />
+              <Modal
+                title="Chi tiết bệnh nhân"
+                open={isModalVisible}
+                onOk={handleOk}
+                onCancel={handleCancel}
+            >
+                <p>Mã VP: {modaldata.MaVP}</p>
+                <p>Mã BN: {modaldata.MaBN}</p>
+                <p>{modaldata.MaBS}</p>
+                <p>{modaldata.TenBS}</p>
+                <p>{modaldata.TenDV}</p>
+                <p>{modaldata.ndloi}</p>
+            </Modal>
             <>Total {dataSource.length} items</>
         </div>
     )
