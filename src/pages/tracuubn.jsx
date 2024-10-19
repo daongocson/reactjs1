@@ -157,7 +157,7 @@ const TracuubnPage = () => {
                         'Số lượng: '+ dataDV.length    ,                         
                     ],
                 },{
-                    label: 'DS báo sửa HS',
+                    label: 'Báo sửa HS',
                     key: '5',
                     children: [ 
                         <Table   

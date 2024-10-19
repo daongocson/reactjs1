@@ -59,12 +59,11 @@ const Header = () => {
              //   }
             
             ]
-        }
-       
-        ] : []),{
+        },,{
             label: <Link to={"/listEror"}>HS cảnh báo</Link>,
             key: 'listEror',
-        },
+        }       
+        ] : []),
         {
             label: `Welcome ${auth?.user?.email ?? ""}`,
             key: 'SubMenu',

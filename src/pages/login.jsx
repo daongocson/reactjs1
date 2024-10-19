@@ -1,5 +1,5 @@
 
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Button, Col, Divider, Form, Input, notification, Row } from 'antd';
 import { loginApi } from '../util/api';
 import { Link, useNavigate } from 'react-router-dom';
@@ -9,12 +9,24 @@ import { ArrowLeftOutlined } from '@ant-design/icons';
 const LoginPage = () => {
     const navigate = useNavigate();
     const { setAuth } = useContext(AuthContext);
-
-    const onFinish = async (values) => {
+    const [ipClient, setIpClient] = useState('');
+    const getClientApi=()=>{
+        fetch("https://api.ipify.org?format=json")
+        .then(response => response.json())
+        .then(data => {
+            // Display the IP address on the screen
+            setIpClient(data.ip);
+        })
+        .catch(error => {
+            console.error("Error fetching IP address:", error);
+        });
+    }    
+    useEffect(() => {           
+        getClientApi();        
+    }, [])
+    const onFinish = async (values) => {       
         const { email, password } = values;
-
-        const res = await loginApi(email, password);
-
+        const res = await loginApi(email, password,ipClient);
         if (res && res.EC === 0) {
             localStorage.setItem("access_token", res.access_token)
             notification.success({
