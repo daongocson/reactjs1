@@ -30,7 +30,7 @@ const YCsuahosoPage = () => {
   
     const columns = [
         {
-            title: 'Dịch vụ',
+            title: 'Tên bệnh nhân',
             dataIndex: 'tenbn',
         },              
         {
