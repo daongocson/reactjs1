@@ -14,10 +14,7 @@ const Header = () => {
             key: 'home',
             icon: <HomeOutlined />,
         },
-        ...(auth.isAuthenticated ? [{
-            label: <Link to={"/listEror"}>HS cảnh báo</Link>,
-            key: 'listEror',
-        },
+        ...(auth.isAuthenticated ? [
         {
             label: `Tìm nhanh ${auth?.user?.email ?? ""}`,
             key: 'SubMenu11',
@@ -64,7 +61,10 @@ const Header = () => {
             ]
         }
        
-        ] : []),
+        ] : []),{
+            label: <Link to={"/listEror"}>HS cảnh báo</Link>,
+            key: 'listEror',
+        },
         {
             label: `Welcome ${auth?.user?.email ?? ""}`,
             key: 'SubMenu',
