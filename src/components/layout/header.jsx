@@ -50,12 +50,16 @@ const Header = () => {
                     label: <Link to={"/cskh"}>Hồ sơ CSKH</Link>,
                     key: 'cskh',
                     icon: <UsergroupAddOutlined />,
-                },
-                {
-                    label: <Link to={"/user"}>Người dùng</Link>,
-                    key: 'user',
+                },{
+                    label: <Link to={"/ycsuahs"}>Yêu cầu sửa HS</Link>,
+                    key: 'dsSuahs',
                     icon: <UsergroupAddOutlined />,
                 }
+               // {
+           //         label: <Link to={"/user"}>Người dùng</Link>,
+             //       key: 'user',
+         //           icon: <UsergroupAddOutlined />,
+             //   }
             
             ]
         }

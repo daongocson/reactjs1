@@ -31,6 +31,10 @@ const postpatientApi = (mavp) => {
     }
     return axios.post(URL_API, data)
 }
+const postycsuaApi = (data) => {
+    const URL_API = "/v1/api/postycsua"; 
+    return axios.post(URL_API, data)
+}
 const postChamcongIdApi = (manv) => {
     const URL_API = "/v1/api/postchamcongid";
     const data = {
@@ -53,6 +57,10 @@ const getLsErrorApi = () => {
     const URL_API = "/v1/api/lseror";
     return axios.get(URL_API)
 }
+const getYcsuaApi = () => {   
+    const URL_API = "/v1/api/lsycsua";
+    return axios.get(URL_API)
+}
 const getLsChamcongApi = () => {
     const URL_API = "/v1/api/lschamcong";
     return axios.get(URL_API)
@@ -70,5 +78,5 @@ const getLsphongkhamApi  = () => {
     return axios.get(URL_API)
 }
 export {
-    createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi
+    createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
 }

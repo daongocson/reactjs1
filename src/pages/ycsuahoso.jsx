@@ -1,75 +1,51 @@
 import { Button, Input, Modal, notification, Table } from "antd";
 
 import { useEffect, useState } from "react";
-import { getLsErrorApi } from "../util/api";
+import { getLsErrorApi, getYcsuaApi } from "../util/api";
 import { EyeOutlined } from "@ant-design/icons";
 import ModelView from "../components/module/ModelView";
 
 const { Search } = Input;
 
-const ListErorPage = () => {
+const YCsuahosoPage = () => {
     const [dataSource, setDataSource] = useState([]);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [modaldata, setmodaldata] = useState([]);
-    const keys  = ["TenBS","ndloi","MaKhoa","MaVP","TenDV"];    
-    const [keyword, setKeyword] = useState('');    
-    useEffect(() => {   
-        const fetchUser = async () => {
-            const res = await getLsErrorApi();
-            if (!res?.message) {              
-                setDataSource(res);               
-            } else {
-                notification.error({
-                    message: "Unauthorized",
-                    description: res.message
-                })
-            }
+  
+    const keys  = ["dichvu","yeucau","tenbn","nguoiyc"];    
+    const [keyword, setKeyword] = useState('');
+    const fetchYC = async () => {
+        const res = await getYcsuaApi();
+        if (!res?.message) {                   
+            setDataSource(res);               
+        } else {
+            notification.error({
+                message: "Unauthorized",
+                description: res.message
+            })
         }
-        fetchUser();        
+    }
+    useEffect(() => {   
+        fetchYC();        
     }, [])
     const onSearch = (value, _e, info) => console.log(info?.source, value);
   
     const columns = [
         {
-            title: 'Mã VP',
-            dataIndex: 'MaVP',
-        },       
-        {
-            title: 'Nội dung lỗi',
-            dataIndex: 'ndloi',
-        },
+            title: 'Dịch vụ',
+            dataIndex: 'tenbn',
+        },              
         {
             title: 'Dịch vụ',
-            dataIndex: 'TenDV',
+            dataIndex: 'dichvu',
         },
         {
-            title: 'Phòng',
-            dataIndex: 'MaKhoa',
+            title: 'Yêu cầu',
+            dataIndex: 'yeucau',
         },
         {
-            title: 'Tên bác sĩ',
-            dataIndex: 'TenBS',
-        }, {
-            title: 'Action',
-            dataIndex: 'id',
-            key: 'id',
-            render: (index, record) => (
-              <Button  icon={<EyeOutlined />} onClick={() => showModal(record)} />
-            ),
-          },
-
-    ];   
-    const showModal = (record) => {       
-        setmodaldata(record);
-        setIsModalVisible(true);
-      };
-      const handleOk = () => {
-        setIsModalVisible(false);
-      };
-    
-      const handleCancel = () => {        
-        setIsModalVisible(false);
-      };
+            title: 'ngayyc',
+            dataIndex: 'nyc',
+        }
+    ];      
     const searchTable=(data)=>{      
         return data.filter(
             (item)=>(
@@ -94,7 +70,7 @@ const ListErorPage = () => {
                 bordered
                 dataSource={searchTable(dataSource)} columns={columns}
                 defaultPageSize={30}         
-                rowKey={"id"}
+                rowKey={"idyc"}
                 pagination={{
                     defaultPageSize:"10" , 
                     defaultCurrent:"1",
@@ -103,16 +79,10 @@ const ListErorPage = () => {
                     showSizeChanger: true, locale: {items_per_page: ""} 
                    }}           
           
-            />,
-            <ModelView 
-                open={isModalVisible}
-                modaldata={modaldata}
-                handleOk={handleOk}
-                handleCancel={handleCancel}
-            />
+            />           
                  
             <>Total {dataSource.length} items</>
         </div>
     )
 }
-export default ListErorPage;
+export default YCsuahosoPage;

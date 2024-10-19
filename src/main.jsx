@@ -18,6 +18,7 @@ import DSKhamPage from './pages/dskham.jsx';
 import TracuubnPage from './pages/tracuubn.jsx';
 import ChamcongPage from './pages/Chamcong.jsx';
 import CSKHPage from './pages/cksh.jsx';
+import YCsuahosoPage from './pages/ycsuahoso.jsx';
 
 const router = createBrowserRouter([
   {
@@ -28,9 +29,13 @@ const router = createBrowserRouter([
         index: true,
         element: <HomePage />
       },
-      {
+     /* {
         path: "user",
         element: <UserPage />
+      },*/
+      {
+        path: "ycsuahs",
+        element: <YCsuahosoPage />
       },
       {
         path: "listEror",
