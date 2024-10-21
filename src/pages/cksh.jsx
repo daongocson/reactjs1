@@ -25,8 +25,7 @@ const CSKHPage = () => {
     ];  
     const fetchKhachhang = async () => {
         const res = await getLsCskhApi();
-        if (!res?.message) {    
-            console.log("test>>>",res);                            
+        if (!res?.message) {   
             setDataKh(res);              
         } else {
             notification.error({

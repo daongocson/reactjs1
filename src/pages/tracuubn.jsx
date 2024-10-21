@@ -57,6 +57,15 @@ const TracuubnPage = () => {
         }
     }    
     const onCreate = async (data) =>{
+        var ngayrv ="";
+        dataKH.forEach(element => {
+            if(element.id==7){
+                ngayrv = element.value;
+            }
+            console.log(">>>",element);
+          });
+        data.ngayrv=ngayrv;
+        console.log(">>>data>",data);
        const res = await postycsuaApi(data);  
        if (!res?.message) {   
         setDataYC(res);                 

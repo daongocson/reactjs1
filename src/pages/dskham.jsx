@@ -22,8 +22,8 @@ const DSKhamPage = () => {
     ];  
     const fetchPhongkham = async () => {
         const res = await getLsphongkhamApi();
-        if (!res?.message) {    
-            console.log(res);                
+        if (!res?.message) {   
+                   
             const firstOptions = res.map(res => ({
                 value: res.roomname,
                 label: res.roomname,
@@ -48,7 +48,6 @@ const DSKhamPage = () => {
     const handleOnSelect=async (query)=>{    
         if(query.length<2)return
         const res = await postKhambenhApi(query);
-        console.log(">>>>>>",query);
         if (!res?.message) {                    
             setDatapk(res);   
         } else {

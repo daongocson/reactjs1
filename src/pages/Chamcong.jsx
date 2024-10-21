@@ -54,7 +54,6 @@ const ChamcongPage = () => {
     } 
     const handleChange=(value)=>{       
         if(value==""){
-            console.log(">>>ahi",value);
             return;
         }
         if (isNaN(value)) 

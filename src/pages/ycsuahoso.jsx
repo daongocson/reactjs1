@@ -1,15 +1,19 @@
-import { Button, Input, Modal, notification, Table } from "antd";
+import { Button, Form, Input, Modal, notification, Table } from "antd";
 
 import { useEffect, useState } from "react";
-import { getLsErrorApi, getYcsuaApi } from "../util/api";
-import { EyeOutlined } from "@ant-design/icons";
+import { getYcsuaApi, postduyetycApi } from "../util/api";
+import { EyeOutlined, SignatureOutlined } from "@ant-design/icons";
 import ModelView from "../components/module/ModelView";
+import { CollectionsPage2 } from "../components/module/CreateFormModal";
+import Duyeths from "../components/module/Duyeths";
 
 const { Search } = Input;
 
 const YCsuahosoPage = () => {
     const [dataSource, setDataSource] = useState([]);
-  
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [idyc, setIdyc] = useState('');
+    const [form] = Form.useForm();
     const keys  = ["dichvu","yeucau","tenbn","nguoiyc"];    
     const [keyword, setKeyword] = useState('');
     const fetchYC = async () => {
@@ -44,8 +48,42 @@ const YCsuahosoPage = () => {
         {
             title: 'ngayyc',
             dataIndex: 'nyc',
-        }
-    ];      
+        },{
+            title: 'ngay ra viện',
+            dataIndex: 'ngayrv',
+        },{
+            title: 'Xử lý',
+            dataIndex: 'phongth',
+        },{
+            title: 'Duyệt',
+            dataIndex: 'id',
+            key: 'id',
+            render: (index, record) => (
+              <Button  icon={<SignatureOutlined />} onClick={() => showModal(record)} />
+            )
+          },
+          
+    ]; 
+    const onCreate = async (data) =>{
+        const res = await postduyetycApi(data);  
+        if (res && res.message=="sucess") {      
+            fetchYC();         
+            notification.success({
+             message: "Duyệt YC thành công",
+             description: res.message
+         })           
+        } else {
+            notification.error({
+                message: "Duyệt YC thất bại",
+                description: res.message
+            })
+        }     
+      
+     }
+    const showModal = (record) => {       
+        form.setFieldsValue({tenbn:record.tenbn,idyc:record.idyc}); 
+        setIsModalVisible(true);
+      };     
     const searchTable=(data)=>{      
         return data.filter(
             (item)=>(
@@ -79,7 +117,16 @@ const YCsuahosoPage = () => {
                     showSizeChanger: true, locale: {items_per_page: ""} 
                    }}           
           
-            />           
+            />            
+             <Duyeths              
+                isModalVisible={isModalVisible}
+                setIsModalVisible={setIsModalVisible}
+                form={form}
+                onCreate ={onCreate}
+             />                                
+            
+          
+            
                  
             <>Total {dataSource.length} items</>
         </div>

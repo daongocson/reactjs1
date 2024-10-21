@@ -15,7 +15,12 @@ const LoginPage = () => {
         .then(response => response.json())
         .then(data => {
             // Display the IP address on the screen
-            setIpClient(data.ip);
+            let userAgent = window.navigator.userAgent;
+            if(userAgent.length>45)userAgent=userAgent.substring(0,45);
+            const host= window.location.hostname;
+
+            let info = host+":ip-"+data.ip+userAgent;
+            setIpClient(info);
         })
         .catch(error => {
             console.error("Error fetching IP address:", error);
@@ -37,7 +42,8 @@ const LoginPage = () => {
                 isAuthenticated: true,
                 user: {
                     email: res?.user?.email ?? "",
-                    name: res?.user?.name ?? ""
+                    name: res?.user?.name ?? "",
+                    ipclient:ipClient
                 }
             })
             navigate("/");
