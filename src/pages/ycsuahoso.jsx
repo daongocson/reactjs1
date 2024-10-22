@@ -46,11 +46,14 @@ const YCsuahosoPage = () => {
             dataIndex: 'yeucau',
         },
         {
-            title: 'ngayyc',
+            title: 'Ngày ra viện',
+            dataIndex: 'ngayrv',
+        },{
+            title: 'Ngày Yc',
             dataIndex: 'nyc',
         },{
-            title: 'ngay ra viện',
-            dataIndex: 'ngayrv',
+            title: 'Người Yc',
+            dataIndex: 'nguoiyc',
         },{
             title: 'Xử lý',
             dataIndex: 'phongth',
