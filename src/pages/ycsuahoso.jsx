@@ -55,6 +55,9 @@ const YCsuahosoPage = () => {
             title: 'Người Yc',
             dataIndex: 'nguoiyc',
         },{
+            title: 'Phòng',
+            dataIndex: 'phongrv',
+        },{
             title: 'Xử lý',
             dataIndex: 'phongth',
         },{

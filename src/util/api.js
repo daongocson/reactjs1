@@ -24,6 +24,10 @@ const postbacsiApi = (bacsi) => {
     }
     return axios.post(URL_API, data)
 }
+const postDeleteYeucauApi = (data) => {  
+    const URL_API = "/v1/api/deleteYeucau";    
+    return axios.post(URL_API, data)
+}
 const postpatientApi = (mavp) => {
     const URL_API = "/v1/api/postpatient";
     const data = {
@@ -82,5 +86,5 @@ const getLsphongkhamApi  = () => {
     return axios.get(URL_API)
 }
 export {
-    postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
+    postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
 }

@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Tabs, Table, Input, notification } from 'antd';
-import { postbacsiApi, postpatientApi, postycsuaApi } from "../util/api";
+import { Tabs, Table, Input, notification, Button, Space, Popconfirm, Modal } from 'antd';
+import { postbacsiApi, postDeleteYeucauApi, postpatientApi, postycsuaApi } from "../util/api";
 import { CollectionsPage2 } from "../components/module/CreateFormModal";
+import { DeleteOutlined, DeleteRowOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 const TracuubnPage = () => {   
     const { Search } = Input;
     const [options, setOptions]= useState('');  
     const [dataOp, setDataOp] = useState([]);
-
     const [dataKH, setDataKH]= useState([]); 
     const [dataKB, setDataKB]= useState([]); 
     const [dataTH, setDataTH]= useState([]); 
@@ -37,8 +37,40 @@ const TracuubnPage = () => {
         },{
             title: 'ngày yc',
             dataIndex: 'nyc',
-        }
+        },{
+            title: 'Phòng',
+            dataIndex: 'phongrv',
+        },{
+            title: 'Xử lý',
+            dataIndex: 'phongth',
+        },{
+            title:"Action",
+            key:"action",
+            render:(_, record) => (
+              <Space size="middle">
+                <a onClick={() => showPopconfirm(record)}> delete             
+               </a>
+              </Space>
+            )
+          }
     ];  
+    const showModal = (record) => {     
+        console.log(record);  
+    };  
+    const showPopconfirm = (record) =>{      
+        if (confirm("Bạn có muốn xóa!") == true) {
+            deleteYeucau({idyc:record.idyc,role:record.phongth,tenbn:record.tenbn});           
+        }    
+    }       
+    const handleOk =()=>{
+        console.log("handleOk");  
+        setOpen(false);
+    }
+    const handleCancel =()=>{
+        console.log("onCancel");  
+        setOpen(false);
+    }
+    
     const fetchPatientByID = async (query) => {  
         setOptions(query);    
         const res = await postpatientApi(query);                     
@@ -56,16 +88,25 @@ const TracuubnPage = () => {
             })
         }
     }    
+    const deleteYeucau = async (data) => {  
+        const res = await postDeleteYeucauApi(data);     
+        if (!res?.message) {
+            setDataYC(res.dataYC);                      
+        }
+    }
     const onCreate = async (data) =>{
         var ngayrv ="";
+        var phongrv ="";
         dataKH.forEach(element => {
             if(element.id==7){
                 ngayrv = element.value;
-            }
-            console.log(">>>",element);
+            }    
+            if(element.id==10){
+                phongrv = element.value;
+            }        
           });
-        data.ngayrv=ngayrv;
-        console.log(">>>data>",data);
+        data.ngayrv=ngayrv; 
+        data.phongrv=phongrv;       
        const res = await postycsuaApi(data);  
        if (!res?.message) {   
         setDataYC(res);                 
