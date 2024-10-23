@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Tabs, Table, Input, notification, Button, Space, Popconfirm, Modal } from 'antd';
+import { Tabs, Table, Input, notification, Space } from 'antd';
 import { postbacsiApi, postDeleteYeucauApi, postpatientApi, postycsuaApi } from "../util/api";
 import { CollectionsPage2 } from "../components/module/CreateFormModal";
-import { DeleteOutlined, DeleteRowOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
 const TracuubnPage = () => {   
     const { Search } = Input;
     const [options, setOptions]= useState('');  

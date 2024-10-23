@@ -14,7 +14,11 @@ const Header = () => {
             key: 'home',
             icon: <HomeOutlined />,
         },
-        ...(auth.isAuthenticated ? [
+        ...(auth.isAuthenticated ? [{
+            label: <Link to={"/tracuubn"}>Tra cứu bệnh nhân</Link>,
+            key: 'tracuubn',
+            icon: <UsergroupAddOutlined />,
+        },
         {
             label: `Tìm nhanh ${auth?.user?.email ?? ""}`,
             key: 'SubMenu11',
@@ -27,7 +31,7 @@ const Header = () => {
                 },
                 {
                     label: <Link to={"/tracuubn"}>Tra cứu bệnh nhân</Link>,
-                    key: 'tracuubn',
+                    key: 'tracuubnsub',
                     icon: <UsergroupAddOutlined />,
                 }, {
                     label: <Link to={"/khambenh"}>Tra cứu Phòng khám</Link>,
@@ -48,7 +52,7 @@ const Header = () => {
                     key: 'cskh',
                     icon: <UsergroupAddOutlined />,
                 },{
-                    label: <Link to={"/ycsuahs"}>Yêu cầu sửa HS</Link>,
+                    label: <Link to={"/ycsuahs"}>Xem yêu cầu HS</Link>,
                     key: 'dsSuahs',
                     icon: <UsergroupAddOutlined />,
                 }
@@ -60,8 +64,8 @@ const Header = () => {
             
             ]
         },,{
-            label: <Link to={"/listEror"}>HS cảnh báo</Link>,
-            key: 'listEror',
+            label: <Link to={"/tracuubn"}>Quản trị EHC</Link>,
+            key: 'quantriehc',
         }       
         ] : []),
         {
