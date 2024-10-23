@@ -57,6 +57,10 @@ const postKhambenhApi = (phongkham) => {
     }
     return axios.post(URL_API, data)
 }
+const postycbydateApi = (data) => {
+    const URL_API = "/v1/api/postycbydate";
+    return axios.post(URL_API, data)
+}
 const getUserApi = () => {
     const URL_API = "/v1/api/user";
     return axios.get(URL_API)
@@ -86,5 +90,5 @@ const getLsphongkhamApi  = () => {
     return axios.get(URL_API)
 }
 export {
-    postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
+    postycbydateApi,postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
 }

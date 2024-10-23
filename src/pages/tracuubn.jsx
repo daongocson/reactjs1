@@ -98,7 +98,8 @@ const TracuubnPage = () => {
         var phongrv ="";
         dataKH.forEach(element => {
             if(element.id==7){
-                ngayrv = element.value;
+                var nrv = element.value;
+                ngayrv= nrv.substring(6, 10)+'-'+nrv.substring(3, 5)+'-'+nrv.substring(0, 2)+' '+nrv.substring(11, 16)+':00.213'
             }    
             if(element.id==10){
                 phongrv = element.value;

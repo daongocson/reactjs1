@@ -80,7 +80,7 @@ const DSKhamPage = () => {
                 defaultActiveKey="1"
                 items={[
                 {
-                    label: 'Giờ Y Lệnh',
+                    label: 'Danh sách BN',
                     key: '1',
                     children: [ 
                         <Table   

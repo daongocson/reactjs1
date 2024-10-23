@@ -1,10 +1,9 @@
-import { Button, Form, Input, Modal, notification, Table } from "antd";
+import { Button, Form, Input, notification, Table } from "antd";
 
 import { useEffect, useState } from "react";
 import { getYcsuaApi, postduyetycApi } from "../util/api";
 import { EyeOutlined, SignatureOutlined } from "@ant-design/icons";
-import ModelView from "../components/module/ModelView";
-import { CollectionsPage2 } from "../components/module/CreateFormModal";
+
 import Duyeths from "../components/module/Duyeths";
 
 const { Search } = Input;
@@ -14,7 +13,7 @@ const YCsuahosoPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [idyc, setIdyc] = useState('');
     const [form] = Form.useForm();
-    const keys  = ["dichvu","yeucau","tenbn","nguoiyc"];    
+    const keys  = ["dichvu","yeucau","tenbn","nguoiyc","phongrv"];    
     const [keyword, setKeyword] = useState('');
     const fetchYC = async () => {
         const res = await getYcsuaApi();
@@ -32,7 +31,6 @@ const YCsuahosoPage = () => {
     }, [])
     const onSearch = (value, _e, info) => {
         fetchYC();
-        //console.log(info?.source, value);
     }
   
     const columns = [
@@ -50,7 +48,7 @@ const YCsuahosoPage = () => {
         },
         {
             title: 'Ngày ra viện',
-            dataIndex: 'ngayrv',
+            dataIndex: 'nrv',
         },{
             title: 'Ngày Yc',
             dataIndex: 'nyc',
@@ -132,7 +130,11 @@ const YCsuahosoPage = () => {
                 setIsModalVisible={setIsModalVisible}
                 form={form}
                 onCreate ={onCreate}
-             />    
+             />                                
+            
+          
+            
+                 
             <>Total {dataSource.length} items</>
         </div>
     )

@@ -45,7 +45,7 @@ const CreateForm = (props) => {
           name="yeucau"
           type="textarea"
           rules={[
-            { required: true, message: "Please input the title of collection!" }
+            { required: true, message: "Nhập yêu cầu !" }
           ]}
         >
           <AutoComplete
@@ -57,7 +57,8 @@ const CreateForm = (props) => {
                     {key: '1', label: 'IT Mở HS, Khoa sửa', value: 'IT Mở HS, Khoa sửa'},
                     {key: '2', label: 'IT sửa giờ', value: 'IT sửa giờ'},
                     {key: '3', label: 'IT sửa công khám', value: 'IT sửa công khám'},
-                    {key: '4', label: 'IT sửa dịch vụ', value: 'IT sửa dịch vụ'}
+                    {key: '4', label: 'IT sửa dịch vụ', value: 'IT sửa dịch vụ'},
+                    {key: '5', label: 'Đã sửa', value: 'Đã sửa'}
                   ]}
                  filterOption={true}                               
                  >
@@ -66,10 +67,10 @@ const CreateForm = (props) => {
         </Form.Item>
 
         <Form.Item
-          label="Dịch vụ"
+          label="Dịch vụ yêu cầu sửa"
           name="dichvu"         
           rules={[
-            { required: true, message: "Please input the title of collection!" }
+            { required: true, message: "Nhập yêu cầu!" }
           ]}
         >
             <AutoComplete

@@ -1,7 +1,49 @@
 import { CrownOutlined } from "@ant-design/icons";
-import { Result, Table, Tabs } from "antd";
+import { AutoComplete, Button, DatePicker, notification, Result, Space, Table, Tabs } from "antd";
+import { useState } from "react";
+import { postycbydateApi } from "../util/api";
 
 const QuantriPage = () => {   
+      const [datebc, setDatebc]= useState(''); 
+      const [optionNgay, setoptionNgay]= useState(''); 
+      const [datayc, setDatayc]= useState([]); 
+      const handleOnSelect  = (value) => {
+        console.log("onSelect", value);
+      };
+      const columns = [
+        {
+            title: 'Tên bệnh nhân',
+            dataIndex: 'tenbn',
+        },
+        {
+            title: 'Yêu cầu',
+            dataIndex: 'yeucau',
+        }, {
+            title: 'Ngày YC',
+            dataIndex: 'nyc',
+        },
+        {
+            title: 'Ngày Ra',
+            dataIndex: 'nrv',
+        }
+    ];  
+      const OnClickHs = async () => {
+        if(datebc&&optionNgay){
+            var option =0;
+            if(optionNgay=="Đúng ngày")
+                option=1;
+            const res = await postycbydateApi({datebc:datebc,option:option});
+            if (!res?.message) {     
+                console.log(res);               
+                setDatayc(res);   
+            } else {
+                notification.error({
+                    message: "Unauthorized",
+                    description: res.message
+                })
+            }
+        }
+      };
     return (
         <div >           
             <Tabs
@@ -12,6 +54,7 @@ const QuantriPage = () => {
                     key: '1',
                     children: [ 
                         <Result
+                            key={"adfdf"}
                             icon={<CrownOutlined />}
                             title="Trang quản trị dành cho IT"
                         >
@@ -19,12 +62,44 @@ const QuantriPage = () => {
                     ],
                 },{
                     label: 'Tạo nick bác sĩ',
-                    key: '3',
-                    children: [ 
+                    key: '2',
+                    children: [                        
                         <Table   
                                    
                         key="admin2"
                         />                       
+                    ],
+                },{
+                    label: 'Tổng hợp Hs Yêu cầu',
+                    key: '3',
+                    children: [ 
+                        <Space.Compact key={"spacehs"} block>
+                        <DatePicker   
+                          onChange={(date, dateString)=>{setDatebc(dateString)}}                       
+                          style={{
+                            width: '40%',
+                          }}
+                        />
+                         <AutoComplete                        
+                                style={{   
+                                width: "40%"            
+                            }}                                     
+                            onSelect={(value)=>{setoptionNgay(value)}}
+                            options={[
+                                {key: '1a', label: 'Đúng ngày', value: 'Đúng ngày'},
+                                {key: '2a', label: 'Trái ngày', value: 'Trái ngày'}                           
+                            ]}
+                            filterOption={true}                               
+                            >   
+                        </AutoComplete>
+                        <Button type="primary" onClick={OnClickHs}>Submit</Button>
+                      </Space.Compact>,
+                        <Table  
+                            rowKey={"idyc"}                    
+                            bordered
+                            dataSource={datayc} columns={columns}                        
+                        /> ,
+                        'Số lượng: '+ datayc.length    ,                        
                     ],
                 },
                 ]}
