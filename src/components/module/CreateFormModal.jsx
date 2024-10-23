@@ -15,7 +15,6 @@ const CreateForm = (props) => {
       });
   };
   const handleOnSearch=(query)=>{  
-    console.log("onsearh",dataOp);    
     if(dataOp?.length>0)
       dataOp.filter((el) => el.value.toLowerCase().includes(query.toLowerCase()));  
     
@@ -54,7 +53,12 @@ const CreateForm = (props) => {
                     width: "100%"            
                 }}                
                  placeholder="Nhập yêu cầu"
-                options={[{key: '10', label: 'IT Mở HS', value: 'IT Mở HS'},{key: '11', label: 'IT sửa giờ', value: 'IT sửa giờ'},{key: '12', label: 'IT sửa công khám', value: 'IT sửa công khám'},{key: '13', label: 'IT sửa dịch vụ', value: 'IT sửa dịch vụ'}]}
+                 options={[
+                    {key: '1', label: 'IT Mở HS, Khoa sửa', value: 'IT Mở HS, Khoa sửa'},
+                    {key: '2', label: 'IT sửa giờ', value: 'IT sửa giờ'},
+                    {key: '3', label: 'IT sửa công khám', value: 'IT sửa công khám'},
+                    {key: '4', label: 'IT sửa dịch vụ', value: 'IT sửa dịch vụ'}
+                  ]}
                  filterOption={true}                               
                  >
                     

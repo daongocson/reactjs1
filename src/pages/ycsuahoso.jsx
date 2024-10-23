@@ -30,7 +30,10 @@ const YCsuahosoPage = () => {
     useEffect(() => {   
         fetchYC();        
     }, [])
-    const onSearch = (value, _e, info) => console.log(info?.source, value);
+    const onSearch = (value, _e, info) => {
+        fetchYC();
+        //console.log(info?.source, value);
+    }
   
     const columns = [
         {
