@@ -64,7 +64,7 @@ const Header = () => {
             
             ]
         },,{
-            label: <Link to={"/tracuubn"}>Quản trị EHC</Link>,
+            label: <Link to={"/quantri"}>Quản trị EHC</Link>,
             key: 'quantriehc',
         }       
         ] : []),

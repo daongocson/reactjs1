@@ -29,7 +29,7 @@ const HomePage = () => {
                 <b>HƯỚNG DẪN TẠO YC SỬA HỒ SƠ</b>                      
                 <ul >
                     <li><b>Bước 1:</b> &#8594; Tra cứu bệnh nhân &#8594; Nhập mã bệnh nhân VD "562753"  &#8594; Báo sửa hồ sơ  </li>
-                    <li><b>Bước 2:</b> &#8594; Xem YC hồ sơ:&gt; Xem trạng thái hồ sơ, đang ở KHTH hay IT,đã xử lý xong  </li>                  
+                    <li><b>Bước 2:</b> &#8594; Xem YC hồ sơ=&gt; Xem trạng thái hồ sơ, đang ở KHTH hay IT,đã xử lý xong  </li>                  
                 </ul>
             </div> 
                 </Result>

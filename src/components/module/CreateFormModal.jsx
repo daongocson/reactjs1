@@ -14,7 +14,8 @@ const CreateForm = (props) => {
         console.log("Validate Failed:", info);
       });
   };
-  const handleOnSearch=(query)=>{      
+  const handleOnSearch=(query)=>{  
+    console.log("onsearh",dataOp);    
     if(dataOp?.length>0)
       dataOp.filter((el) => el.value.toLowerCase().includes(query.toLowerCase()));  
     
@@ -41,14 +42,23 @@ const CreateForm = (props) => {
         </Form.Item> 
      
         <Form.Item
-          label="Nội dung yêu cầu"
+          label="Nhập Yêu cầu IT"
           name="yeucau"
           type="textarea"
           rules={[
             { required: true, message: "Please input the title of collection!" }
           ]}
         >
-          <Input />
+          <AutoComplete
+                 style={{   
+                    width: "100%"            
+                }}                
+                 placeholder="Nhập yêu cầu"
+                options={[{key: '10', label: 'IT Mở HS', value: 'IT Mở HS'},{key: '11', label: 'IT sửa giờ', value: 'IT sửa giờ'},{key: '12', label: 'IT sửa công khám', value: 'IT sửa công khám'},{key: '13', label: 'IT sửa dịch vụ', value: 'IT sửa dịch vụ'}]}
+                 filterOption={true}                               
+                 >
+                    
+                </AutoComplete>
         </Form.Item>
 
         <Form.Item

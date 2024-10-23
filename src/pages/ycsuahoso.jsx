@@ -129,11 +129,7 @@ const YCsuahosoPage = () => {
                 setIsModalVisible={setIsModalVisible}
                 form={form}
                 onCreate ={onCreate}
-             />                                
-            
-          
-            
-                 
+             />    
             <>Total {dataSource.length} items</>
         </div>
     )

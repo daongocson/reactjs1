@@ -19,6 +19,7 @@ import TracuubnPage from './pages/tracuubn.jsx';
 import ChamcongPage from './pages/Chamcong.jsx';
 import CSKHPage from './pages/cksh.jsx';
 import YCsuahosoPage from './pages/ycsuahoso.jsx';
+import QuantriPage from './pages/quantri.jsx';
 
 const router = createBrowserRouter([
   {
@@ -52,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "chamcong",
         element: <ChamcongPage />
+      },
+      {
+        path: "quantri",
+        element: <QuantriPage />
       },
       {
         path: "cskh",
