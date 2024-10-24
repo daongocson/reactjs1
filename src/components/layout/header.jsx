@@ -55,12 +55,17 @@ const Header = () => {
                     label: <Link to={"/ycsuahs"}>Xem yêu cầu HS</Link>,
                     key: 'dsSuahs',
                     icon: <UsergroupAddOutlined />,
-                }
-               // {
-           //         label: <Link to={"/user"}>Người dùng</Link>,
-             //       key: 'user',
-         //           icon: <UsergroupAddOutlined />,
-             //   }
+                },
+                /*{
+                    label: <Link to={"/yctaonick"}>YC Tạo nick</Link>,
+                    key: 'yctaonick',
+                    icon: <UsergroupAddOutlined />,
+                },
+                {
+                    label: <Link to={"/user"}>Người dùng</Link>,
+                    key: 'user',
+                    icon: <UsergroupAddOutlined />,
+                } */
             
             ]
         },,{

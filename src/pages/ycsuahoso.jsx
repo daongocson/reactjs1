@@ -13,7 +13,7 @@ const YCsuahosoPage = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [idyc, setIdyc] = useState('');
     const [form] = Form.useForm();
-    const keys  = ["dichvu","yeucau","tenbn","nguoiyc","phongrv"];    
+    const keys  = ["dichvu","yeucau","tenbn","nguoiyc","phongrv","phongth"];    
     const [keyword, setKeyword] = useState('');
     const fetchYC = async () => {
         const res = await getYcsuaApi();

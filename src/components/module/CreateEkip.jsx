@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 //import { Button, Modal } from 'antd';
 import { Button, Checkbox, Form, Input,Modal } from 'antd';
-function Duyeths(props) {
+function CreateEkip(props) {
     const {isModalVisible,setIsModalVisible,form,onCreate } =props;    
     
     const onModelCreate = (values) => {
@@ -13,8 +13,8 @@ function Duyeths(props) {
         <>
             <Modal
             open={isModalVisible}
-            title="Duyệt hồ sơ"
-            okText="Duyệt"
+            title="Tạo bác sĩ ekip mới"
+            okText="Gửi duyệt"
             cancelText="Cancel"
             okButtonProps={{
             autoFocus: true,
@@ -34,27 +34,27 @@ function Duyeths(props) {
             )}
         >
             
-            <Form.Item name="idyc" label="Mã HS">
+            <Form.Item name="mabhyt" label="Số chứng chỉ hành nghề(bác sĩ)">
                   <Input  disabled={true}/>
             </Form.Item>
             <Form.Item
-            name="tenbn"
-            label="Tên bệnh nhân"           
+            name="tenbs"
+            label="Tên bác sĩ"           
             >
             <Input />
             </Form.Item>
-            <Form.Item name="maquyen" label="Mã quản trị" 
+            <Form.Item name="mabs" label="ID ekip mới" 
              rules={[
                 {
                 required: true,
-                message: 'Mời nhập mã quyền quản trị!',
+                message: 'Mời nhập nick!',
                 },
             ]}
             >
-            <Input.Password />
+            <Input />
             </Form.Item>          
         </Modal>
     </>
     )
 };
-export default Duyeths;
+export default CreateEkip;

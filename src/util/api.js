@@ -24,7 +24,7 @@ const postbacsiApi = (bacsi) => {
     }
     return axios.post(URL_API, data)
 }
-const postDeleteYeucauApi = (data) => {  
+const postDeleteYeucauApi = (data) => {   
     const URL_API = "/v1/api/deleteYeucau";    
     return axios.post(URL_API, data)
 }

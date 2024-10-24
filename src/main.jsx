@@ -20,6 +20,7 @@ import ChamcongPage from './pages/Chamcong.jsx';
 import CSKHPage from './pages/cksh.jsx';
 import YCsuahosoPage from './pages/ycsuahoso.jsx';
 import QuantriPage from './pages/quantri.jsx';
+import YCtaonickPage from './pages/yctaonick.jsx';
 
 const router = createBrowserRouter([
   {
@@ -65,6 +66,9 @@ const router = createBrowserRouter([
       {
         path: "ylenhbs",
         element: <BacsiYlenhPage />
+      }, {
+        path: "yctaonick",
+        element: <YCtaonickPage />
       }
     ]
   },

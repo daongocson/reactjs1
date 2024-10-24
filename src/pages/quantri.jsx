@@ -1,7 +1,8 @@
-import { CrownOutlined } from "@ant-design/icons";
+import { CrownOutlined, FileExcelOutlined, SearchOutlined } from "@ant-design/icons";
 import { AutoComplete, Button, DatePicker, notification, Result, Space, Table, Tabs } from "antd";
 import { useState } from "react";
 import { postycbydateApi } from "../util/api";
+import { CSVLink } from "react-csv";
 
 const QuantriPage = () => {   
       const [datebc, setDatebc]= useState(''); 
@@ -70,15 +71,16 @@ const QuantriPage = () => {
                         />                       
                     ],
                 },{
-                    label: 'Tổng hợp Hs Yêu cầu',
+                    label: 'Tổng hợp Hồ sơ',
                     key: '3',
                     children: [ 
                         <Space.Compact key={"spacehs"} block>
                         <DatePicker   
-                          onChange={(date, dateString)=>{setDatebc(dateString)}}                       
-                          style={{
-                            width: '40%',
-                          }}
+                            placeholder="Chọn ngày YC"
+                            onChange={(date, dateString)=>{setDatebc(dateString)}}                       
+                            style={{
+                                width: '40%',
+                            }}
                         />
                          <AutoComplete                        
                                 style={{   
@@ -92,12 +94,30 @@ const QuantriPage = () => {
                             filterOption={true}                               
                             >   
                         </AutoComplete>
-                        <Button type="primary" onClick={OnClickHs}>Submit</Button>
+                        <Button type="default" onClick={OnClickHs}><SearchOutlined /></Button>
+                        <CSVLink 
+                            filename={"Tonghop-hosoyeucau.csv"}   
+                            icon={<FileExcelOutlined />}                        
+                            data={datayc}><Button
+                              icon={<FileExcelOutlined />}
+                            type="default"/>
+                        </CSVLink>
                       </Space.Compact>,
                         <Table  
                             rowKey={"idyc"}                    
                             bordered
-                            dataSource={datayc} columns={columns}                        
+                            dataSource={datayc} 
+                            columns={columns}   
+                            defaultPageSize={10}                                  
+                            pagination={{
+                                defaultPageSize:"10" , 
+                                defaultCurrent:"1",
+                                total: datayc.length, 
+                                pageSizeOptions: ["10","50", "100", "150"],                   
+                                showSizeChanger: true, locale: {items_per_page: ""} 
+                               }}           
+                        
+                                               
                         /> ,
                         'Số lượng: '+ datayc.length    ,                        
                     ],
