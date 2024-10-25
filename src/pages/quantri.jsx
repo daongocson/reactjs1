@@ -1,13 +1,19 @@
-import { CrownOutlined, FileExcelOutlined, SearchOutlined } from "@ant-design/icons";
-import { AutoComplete, Button, DatePicker, notification, Result, Space, Table, Tabs } from "antd";
-import { useState } from "react";
-import { postycbydateApi } from "../util/api";
+import { CrownOutlined, FileExcelOutlined, SearchOutlined, SignatureOutlined } from "@ant-design/icons";
+import { AutoComplete, Button, DatePicker, Form, notification, Result, Space, Table, Tabs } from "antd";
+import { useEffect, useState } from "react";
+import { getuserduyetApi, postycbydateApi } from "../util/api";
 import { CSVLink } from "react-csv";
+import Duyeths from "../components/module/Duyeths";
+import ModelAddnew from "../components/module/ModelAddnew";
 
 const QuantriPage = () => {   
       const [datebc, setDatebc]= useState(''); 
       const [optionNgay, setoptionNgay]= useState(''); 
       const [datayc, setDatayc]= useState([]); 
+      const [duyetUser, setDuyetUser]= useState([]); 
+      const [dataUser, setDataUser]= useState([]); 
+      const [isModalVisible, setIsModalVisible] = useState(false);
+      const [form] = Form.useForm();
       const handleOnSelect  = (value) => {
         console.log("onSelect", value);
       };
@@ -28,14 +34,71 @@ const QuantriPage = () => {
             dataIndex: 'nrv',
         }
     ];  
+    const showModal = (record) => {           
+        setDataUser(record);
+        form.setFieldsValue({tenbn:record.nhanviencode,idyc:record.idnv}); 
+        setIsModalVisible(true);
+      };  
+      const onCreate = async (data) =>{       
+       dataUser.action = data.maquyen;           
+       const res = await getuserduyetApi(dataUser);
+       if (res && res.message=="sucess") {    
+        notification.success({
+         message: "Duyệt YC thành công",
+         description: res.duyet
+        })           
+        } else {
+            notification.error({
+                message: "Duyệt YC thất bại",
+                description: res.duyet
+            })
+        }       
+      
+     }       
+    const columnsduyet = [
+        {
+            title: 'Account đăng nhập',
+            dataIndex: 'nhanviencode',
+        },
+        {
+            title: 'CCHN',
+            dataIndex: 'nhanviencode_byt',
+        }, {
+            title: 'Trạng thái',
+            dataIndex: 'duyet'
+        }, {
+            title: 'Ngày YC',
+            dataIndex: 'ntao',
+        },{
+            title: 'Duyệt',
+            dataIndex: 'idnv',
+            key: 'idnv',
+            render: (index, record) => (
+              <Button  icon={<SignatureOutlined />} onClick={() => showModal(record)} />
+            )
+          }
+    ];  
+    useEffect(() => {  
+        const fetchUser= async()=>{
+            const res = await getuserduyetApi({data:"aa",action:"view"});
+            if (!res?.message) {                
+                setDuyetUser(res);              
+            } else {
+                notification.error({
+                    message: "Unauthorized",
+                    description: res.message
+                })
+            }
+        } 
+        fetchUser();        
+    }, [])
       const OnClickHs = async () => {
         if(datebc&&optionNgay){
             var option =0;
             if(optionNgay=="Đúng ngày")
                 option=1;
             const res = await postycbydateApi({datebc:datebc,option:option});
-            if (!res?.message) {     
-                console.log(res);               
+            if (!res?.message) {                    
                 setDatayc(res);   
             } else {
                 notification.error({
@@ -62,13 +125,27 @@ const QuantriPage = () => {
                         </Result>
                     ],
                 },{
-                    label: 'Tạo nick bác sĩ',
-                    key: '2',
-                    children: [                        
-                        <Table   
+                    label: 'Duyệt nick bác sĩ',
+                    key: '2dd',
+                    children: [    
+                        <Table  
+                            key={"tbduyetuser"}
+                            rowKey={"idnv"}                    
+                            bordered
+                            dataSource={duyetUser} 
+                            columns={columnsduyet}   
+                            defaultPageSize={10}                                  
+                            pagination={{
+                                defaultPageSize:"10" , 
+                                defaultCurrent:"1",
+                                total: datayc.length, 
+                                pageSizeOptions: ["10","50", "100", "150"],                   
+                                showSizeChanger: true, locale: {items_per_page: ""} 
+                               }}           
+                        
+                                               
+                        />                    
                                    
-                        key="admin2"
-                        />                       
                     ],
                 },{
                     label: 'Tổng hợp Hồ sơ',
@@ -104,6 +181,7 @@ const QuantriPage = () => {
                         </CSVLink>
                       </Space.Compact>,
                         <Table  
+                            key={"tbsdsd"}
                             rowKey={"idyc"}                    
                             bordered
                             dataSource={datayc} 
@@ -123,8 +201,14 @@ const QuantriPage = () => {
                     ],
                 },
                 ]}
-                />
-        </div>
+                />,  
+                  <Duyeths              
+                        isModalVisible={isModalVisible}
+                        setIsModalVisible={setIsModalVisible}
+                        form={form}
+                        onCreate ={onCreate}
+                    />                  
+        </div>         
       
     )
 }

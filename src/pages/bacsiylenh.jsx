@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { Tabs, AutoComplete, Input, Table, Button, Form } from 'antd';
-import { getLsDoctorApi, postbacsiApi } from "../util/api";
+import { Tabs, AutoComplete, Input, Table, Button, Form, notification } from 'antd';
+import { createnickbsApi, getLsDoctorApi, postbacsiApi } from "../util/api";
 import { Link } from "react-router-dom";
 import { UsergroupAddOutlined } from "@ant-design/icons";
 import Duyeths from "../components/module/Duyeths";
@@ -11,6 +11,7 @@ const BacsiYlenhPage = () => {
     const [dataYL, setDataYL]= useState([]); 
     const [dataTH, setDataTH]= useState([]); 
     const [dataKQ, setDataKQ]= useState([]); 
+    const [dataEkip, setDataEkip]= useState(''); 
     const [phong, setPhong]= useState(''); 
     const [quyen, setQuyen]= useState(''); 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -61,15 +62,37 @@ const BacsiYlenhPage = () => {
         }
     }
     const creatDoctors = async () => {
-   //   console.log("check creatdocteo",quyen,phong,dataBS);
-        form.setFieldsValue({mabhyt:dataBS[3].value,tenbs:dataBS[1].value,mabs:dataBS[0].value});       
+   
+        form.setFieldsValue({mabhyt:dataBS[1].value+"(" +dataBS[3].value+")",tenbs:dataBS[1].value});       
         setIsModalVisible(true);
     }
-    const onCreate = async () => {
-        console.log("onCreate>>>>");
-       // form.setFieldsValue({mabs:"acd",idyc:record.idyc}); 
-      //  setIsModalVisible(true);
+    const onCreate = async (values) => {           
+        const res = await createnickbsApi({nick:values.mabs,tenbsekip:values.tenbsekip,phonebsekip:values.phonebsekip,nickname:dataBS[1].value,tencchn:dataBS[2].value,
+            cccd:dataBS[4].value,msdinhdanh:dataBS[5].value,tktracuu:dataBS[6].value,cchn: dataBS[3].value,phong,quyen});
+        if (res?.message) {
+            if (res && res.message=="sucess") {    
+                notification.success({
+                 message: "Duyệt YC thành công",
+                 description: res.duyet
+             })           
+            } else {
+                notification.error({
+                    message: "Duyệt YC thất bại",
+                    description: res.duyet
+                })
+            }                    
+        } else {
+            notification.error({
+                message: "Unauthorized",
+                description: res.message
+            })
+        }
+        
       }
+    const setBsChinhEkip = (data) => {
+        var subdata = data.substring(data.indexOf("-")+1);
+        setDataEkip(subdata);         
+    }
     const handleOnSearch=(query)=>{ 
         if(query.length==0){ 
             setPhong(''); 
@@ -77,7 +100,7 @@ const BacsiYlenhPage = () => {
             setDataBS([]);   
             setDataYL([]);
             setDataTH([]);
-            setDataKQ([]);
+            setDataKQ([]);            
         }else{
             return options.filter((el) => el.value.toLowerCase().includes(query.toLowerCase()));
         }
@@ -91,7 +114,8 @@ const BacsiYlenhPage = () => {
             setDataBS(res.dataBS);    
             setDataYL(res.dataYL);     
             setDataTH(res.dataTH);
-            setDataKQ(res.dataKQ);         
+            setDataKQ(res.dataKQ);   
+            setBsChinhEkip(res.dataBS[0].value);      
         } else {
             notification.error({
                 message: "Unauthorized",
@@ -163,7 +187,7 @@ const BacsiYlenhPage = () => {
                     ],
                 },
                 {
-                    label: 'Tạo ekip mới',
+                    label: 'Tạo nick BS-Ekip',
                     key: '4',
                     children: [ 
                         <Table   
@@ -181,6 +205,8 @@ const BacsiYlenhPage = () => {
                 isModalVisible={isModalVisible}
                 setIsModalVisible={setIsModalVisible}
                 form={form}
+                dataEkip={dataEkip}
+                dataBS={dataBS}
                 onCreate ={onCreate}
              />       
                                       

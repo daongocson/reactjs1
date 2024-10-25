@@ -24,6 +24,17 @@ const postbacsiApi = (bacsi) => {
     }
     return axios.post(URL_API, data)
 }
+const postDoctorApi = (bacsi) => {
+    const URL_API = "/v1/api/postfilldoctor";
+    const data = {
+        bacsi
+    }
+    return axios.post(URL_API, data)
+}
+const createnickbsApi = (data) => {
+    const URL_API = "/v1/api/createnickbs";
+    return axios.post(URL_API, data)
+}
 const postDeleteYeucauApi = (data) => {   
     const URL_API = "/v1/api/deleteYeucau";    
     return axios.post(URL_API, data)
@@ -61,6 +72,10 @@ const postycbydateApi = (data) => {
     const URL_API = "/v1/api/postycbydate";
     return axios.post(URL_API, data)
 }
+const getuserduyetApi = (data) => {
+    const URL_API = "/v1/api/getuserduyet";
+    return axios.post(URL_API, data)
+}
 const getUserApi = () => {
     const URL_API = "/v1/api/user";
     return axios.get(URL_API)
@@ -90,5 +105,5 @@ const getLsphongkhamApi  = () => {
     return axios.get(URL_API)
 }
 export {
-    postycbydateApi,postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
+    getuserduyetApi,createnickbsApi,postDoctorApi,postycbydateApi,postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
 }
