@@ -42,17 +42,22 @@ const QuantriPage = () => {
       const onCreate = async (data) =>{       
        dataUser.action = data.maquyen;           
        const res = await getuserduyetApi(dataUser);
-       if (res && res.message=="sucess") {    
-        notification.success({
-         message: "Duyệt YC thành công",
-         description: res.duyet
-        })           
+       if (!res?.message) {
+            if(res.recordset)                    
+                setDuyetUser(res.recordset); 
+            console.log(res.duyet); 
+            if(res.duyet){
+                notification.success({
+                message: "Duyệt Thành công",
+                description: res.duyet
+            })
+            }    
         } else {
             notification.error({
                 message: "Duyệt YC thất bại",
-                description: res.duyet
+                description: res.message
             })
-        }       
+        }  
       
      }       
     const columnsduyet = [
