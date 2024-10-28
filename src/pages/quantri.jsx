@@ -1,18 +1,19 @@
-import { CrownOutlined, FileExcelOutlined, SearchOutlined, SignatureOutlined } from "@ant-design/icons";
-import { AutoComplete, Button, DatePicker, Form, notification, Result, Space, Table, Tabs } from "antd";
+import { CrownOutlined, DeleteOutlined, FileExcelOutlined, SearchOutlined, SignatureOutlined } from "@ant-design/icons";
+import { AutoComplete, Button, DatePicker, Form, message, notification, Result, Space, Table, Tabs } from "antd";
 import { useEffect, useState } from "react";
-import { getuserduyetApi, postycbydateApi } from "../util/api";
+import { getuserduyetApi, postmaquyenApi, postycbydateApi } from "../util/api";
 import { CSVLink } from "react-csv";
 import Duyeths from "../components/module/Duyeths";
-import ModelAddnew from "../components/module/ModelAddnew";
-
+import DuyetNick from "../components/module/DuyetNick";
+import DuyetBasic from "../components/module/DuyetBasic";
 const QuantriPage = () => {   
       const [datebc, setDatebc]= useState(''); 
       const [optionNgay, setoptionNgay]= useState(''); 
       const [datayc, setDatayc]= useState([]); 
       const [duyetUser, setDuyetUser]= useState([]); 
       const [dataUser, setDataUser]= useState([]); 
-      const [isModalVisible, setIsModalVisible] = useState(false);
+      const [isModalVisible, setIsModalVisible] = useState(false); 
+      const [isbasicVisible, setIsbasicVisible] = useState(false);         
       const [form] = Form.useForm();
       const handleOnSelect  = (value) => {
         console.log("onSelect", value);
@@ -25,13 +26,16 @@ const QuantriPage = () => {
         {
             title: 'Yêu cầu',
             dataIndex: 'yeucau',
-        }, {
-            title: 'Ngày YC',
-            dataIndex: 'nyc',
-        },
+        }, 
         {
             title: 'Ngày Ra',
             dataIndex: 'nrv',
+        },{
+            title: 'Ngày YC',
+            dataIndex: 'nyc',
+        },{
+            title: 'Ngày Duyệt',
+            dataIndex: 'nduyet',
         }
     ];  
     const showModal = (record) => {           
@@ -39,13 +43,41 @@ const QuantriPage = () => {
         form.setFieldsValue({tenbn:record.nhanviencode,idyc:record.idnv}); 
         setIsModalVisible(true);
       };  
+      const showModalInfo = (record) => {           
+        setDataUser(record);       
+        setInfoVisible(true);
+      }
+      const onCreateBasic = async (data) =>{      
+                
+        const res = await postmaquyenApi(data);
+        if (res?.message) {          
+            if(res.message=="sucess"){
+                notification.success({
+                    message: "Duyệt YC thành công",
+                    description: res.duyet
+                })
+            }
+            else {
+                notification.error({
+                    message: "Duyệt YC thất bại",
+                    description: res.duyet
+                })
+            }
+            
+         } else {
+             notification.error({
+                 message: "Duyệt YC thất bại",
+                 description: res.message
+             })
+         }  
+       
+      }  
       const onCreate = async (data) =>{       
        dataUser.action = data.maquyen;           
        const res = await getuserduyetApi(dataUser);
        if (!res?.message) {
             if(res.recordset)                    
-                setDuyetUser(res.recordset); 
-            console.log(res.duyet); 
+                setDuyetUser(res.recordset);           
             if(res.duyet){
                 notification.success({
                 message: "Duyệt Thành công",
@@ -78,8 +110,8 @@ const QuantriPage = () => {
             title: 'Duyệt',
             dataIndex: 'idnv',
             key: 'idnv',
-            render: (index, record) => (
-              <Button  icon={<SignatureOutlined />} onClick={() => showModal(record)} />
+            render: (index, record) => (                
+                <Button  icon={<SignatureOutlined />} onClick={() => showModal(record)} />                 
             )
           }
     ];  
@@ -102,9 +134,20 @@ const QuantriPage = () => {
             var option =0;
             if(optionNgay=="Đúng ngày")
                 option=1;
+            else if(optionNgay=="Trái ngày")
+                option=2;
+            else{
+                option =3;
+            }
             const res = await postycbydateApi({datebc:datebc,option:option});
-            if (!res?.message) {                    
-                setDatayc(res);   
+            if (!res?.message) { 
+                if(res?.thongbao){
+                    notification.success({
+                        message: "Thành công",
+                        description: res.thongbao
+                    })
+                }else
+                    setDatayc(res);   
             } else {
                 notification.error({
                     message: "Unauthorized",
@@ -158,7 +201,7 @@ const QuantriPage = () => {
                     children: [ 
                         <Space.Compact key={"spacehs"} block>
                         <DatePicker   
-                            placeholder="Chọn ngày YC"
+                            placeholder="Ngày Duyệt YC"
                             onChange={(date, dateString)=>{setDatebc(dateString)}}                       
                             style={{
                                 width: '40%',
@@ -171,7 +214,8 @@ const QuantriPage = () => {
                             onSelect={(value)=>{setoptionNgay(value)}}
                             options={[
                                 {key: '1a', label: 'Đúng ngày', value: 'Đúng ngày'},
-                                {key: '2a', label: 'Trái ngày', value: 'Trái ngày'}                           
+                                {key: '2a', label: 'Trái ngày', value: 'Trái ngày'} ,
+                                {key: '3a', label: 'Cập nhật Database', value: 'Cập nhật'}                           
                             ]}
                             filterOption={true}                               
                             >   
@@ -184,6 +228,10 @@ const QuantriPage = () => {
                               icon={<FileExcelOutlined />}
                             type="default"/>
                         </CSVLink>
+                        <Button type="primary" onClick={
+                            ()=>{                               
+                                setIsbasicVisible(true);
+                                }}><DeleteOutlined /></Button>
                       </Space.Compact>,
                         <Table  
                             key={"tbsdsd"}
@@ -194,25 +242,31 @@ const QuantriPage = () => {
                             defaultPageSize={10}                                  
                             pagination={{
                                 defaultPageSize:"10" , 
-                                defaultCurrent:"1",
-                                total: datayc.length, 
-                                pageSizeOptions: ["10","50", "100", "150"],                   
-                                showSizeChanger: true, locale: {items_per_page: ""} 
+                                defaultCurrent:"1",                              
+                                pageSizeOptions: ["10","50", "100", "150"],                                            
+                                showSizeChanger: true, locale: {items_per_page: ""}     
                                }}           
                         
                                                
-                        /> ,
-                        'Số lượng: '+ datayc.length    ,                        
-                    ],
+                        /> ,                        
+                        'Số lượng: '+ datayc.length                        
+                    ]
                 },
                 ]}
-                />,  
-                  <Duyeths              
+                />  
+                  <DuyetNick              
                         isModalVisible={isModalVisible}
                         setIsModalVisible={setIsModalVisible}
                         form={form}
                         onCreate ={onCreate}
-                    />                  
+                        modaldata={dataUser}
+                    />
+                    <DuyetBasic
+                        isbasicVisible={isbasicVisible}
+                        setIsbasicVisible={setIsbasicVisible}
+                        onCreate ={onCreateBasic}
+                        form={form}
+                    />    
         </div>         
       
     )

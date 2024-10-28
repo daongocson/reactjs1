@@ -1,7 +1,7 @@
-import { Button, Form, Input, notification, Table } from "antd";
+import { Button, DatePicker, Form, Input, notification, Space, Table } from "antd";
 
 import { useEffect, useState } from "react";
-import { getYcsuaApi, postduyetycApi } from "../util/api";
+import { fetchycbydateApi, getYcsuaApi, postduyetycApi } from "../util/api";
 import { EyeOutlined, SignatureOutlined } from "@ant-design/icons";
 
 import Duyeths from "../components/module/Duyeths";
@@ -12,6 +12,7 @@ const YCsuahosoPage = () => {
     const [dataSource, setDataSource] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [idyc, setIdyc] = useState('');
+    const [ngayyc, setNgayyc] = useState('');
     const [form] = Form.useForm();
     const keys  = ["dichvu","yeucau","tenbn","nguoiyc","phongrv","phongth"];    
     const [keyword, setKeyword] = useState('');
@@ -29,8 +30,21 @@ const YCsuahosoPage = () => {
     useEffect(() => {   
         fetchYC();        
     }, [])
-    const onSearch = (value, _e, info) => {
-        fetchYC();
+    const onSearch = async(value, _e, info) => {        
+        if(ngayyc=="")
+            fetchYC();
+        else{
+            const res = await fetchycbydateApi({ngayyc});
+            if (!res?.message) {                   
+                setDataSource(res);               
+            } else {
+                notification.error({
+                    message: "Unauthorized",
+                    description: res.message
+                })
+            }
+
+        }
     }
   
     const columns = [
@@ -99,17 +113,26 @@ const YCsuahosoPage = () => {
     }    
     return (       
         <div style={{ padding: 30 }}>      
-            <div className="ant-col ant-col-xs-24 ant-col-xl-8">             
-                    <Search
-                    placeholder="Nhập nội dung"
-                    allowClear
-                    onChange={(event)=>setKeyword(event.target.value)}
-                    onSearch={onSearch} enterButton 
-                    style={{
-                        width: "100%"                        
-                    }}
-                    />
-                 
+            <div className="ant-col ant-col-xs-24 ant-col-xl-8">
+                
+                    <Space.Compact key={"spacehs"} block>                                   
+                    <DatePicker   
+                            placeholder="Ngày Duyệt YC"
+                            onChange={(date, dateString)=>{setNgayyc(dateString)}}                       
+                            style={{
+                                width: '150',
+                            }}
+                        />  
+                        <Search
+                        placeholder="Nhập nội dung"
+                        allowClear
+                        onChange={(event)=>setKeyword(event.target.value)}
+                        onSearch={onSearch} enterButton 
+                        style={{
+                            width: "100%"                        
+                        }}
+                        />                       
+                 </Space.Compact>
             </div>           
             <Table
                 bordered
