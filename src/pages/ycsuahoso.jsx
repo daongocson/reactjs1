@@ -117,7 +117,7 @@ const YCsuahosoPage = () => {
                 
                     <Space.Compact key={"spacehs"} block>                                   
                     <DatePicker   
-                            placeholder="Ngày Duyệt YC"
+                            placeholder="Ngày YC"
                             onChange={(date, dateString)=>{setNgayyc(dateString)}}                       
                             style={{
                                 width: '150',

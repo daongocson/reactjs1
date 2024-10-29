@@ -154,7 +154,13 @@ const BacsiYlenhPage = () => {
                         rowKey={"servicedataid"}                    
                         bordered
                         dataSource={dataYL} columns={columns}                      
-                           key="tbkyls"
+                        key="tbkyls"
+                        pagination={{
+                            defaultPageSize:"10" , 
+                            defaultCurrent:"1",                              
+                            pageSizeOptions: ["10","50", "100", "150"],                                            
+                            showSizeChanger: true, locale: {items_per_page: ""}     
+                           }}       
                         /> ,
                         'Số lượng: '+ dataYL.length                     
                     ],
@@ -167,7 +173,13 @@ const BacsiYlenhPage = () => {
                         rowKey={"servicedataid"}                    
                         bordered
                         dataSource={dataTH} columns={columns}                      
-                         key="tbkth"
+                        key="tbkth"
+                        pagination={{
+                            defaultPageSize:"10" , 
+                            defaultCurrent:"1",                              
+                            pageSizeOptions: ["10","50", "100", "150"],                                            
+                            showSizeChanger: true, locale: {items_per_page: ""}     
+                           }}                                
                         />,
                         'Số lượng: '+ dataTH.length    ,      
                     ],  
@@ -181,7 +193,13 @@ const BacsiYlenhPage = () => {
                         rowKey={"servicedataid"}                    
                         bordered
                         dataSource={dataKQ} columns={columns}                      
-                         key="tbkqs"
+                        key="tbkqs"
+                        pagination={{
+                            defaultPageSize:"10" , 
+                            defaultCurrent:"1",                              
+                            pageSizeOptions: ["10","50", "100", "150"],                                            
+                            showSizeChanger: true, locale: {items_per_page: ""}     
+                           }}       
                         />   ,
                         'Số lượng: '+ dataKQ.length    ,                         
                     ],

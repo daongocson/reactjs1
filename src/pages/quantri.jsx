@@ -136,8 +136,10 @@ const QuantriPage = () => {
                 option=1;
             else if(optionNgay=="Trái ngày")
                 option=2;
+            else if(optionNgay=="Tất cả")
+                option=3;
             else{
-                option =3;
+                option =4;
             }
             const res = await postycbydateApi({datebc:datebc,option:option});
             if (!res?.message) { 
@@ -215,7 +217,8 @@ const QuantriPage = () => {
                             options={[
                                 {key: '1a', label: 'Đúng ngày', value: 'Đúng ngày'},
                                 {key: '2a', label: 'Trái ngày', value: 'Trái ngày'} ,
-                                {key: '3a', label: 'Cập nhật Database', value: 'Cập nhật'}                           
+                                {key: '3a', label: 'Tất cả', value: 'Tất cả'} ,
+                                {key: '4a', label: 'Cập nhật Ngày RV', value: 'Cập nhật'}                           
                             ]}
                             filterOption={true}                               
                             >   
