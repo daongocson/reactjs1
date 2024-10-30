@@ -1,4 +1,4 @@
-import { CrownOutlined, DeleteOutlined, FileExcelOutlined, SearchOutlined, SignatureOutlined } from "@ant-design/icons";
+import { CrownOutlined, DeleteOutlined, FileExcelOutlined, GithubOutlined, SearchOutlined, SignatureOutlined } from "@ant-design/icons";
 import { AutoComplete, Button, DatePicker, Form, message, notification, Result, Space, Table, Tabs } from "antd";
 import { useEffect, useState } from "react";
 import { getuserduyetApi, postmaquyenApi, postycbydateApi } from "../util/api";
@@ -6,6 +6,7 @@ import { CSVLink } from "react-csv";
 import Duyeths from "../components/module/Duyeths";
 import DuyetNick from "../components/module/DuyetNick";
 import DuyetBasic from "../components/module/DuyetBasic";
+import DuyetBasicData from "../components/module/DuyetBasicData";
 const QuantriPage = () => {   
       const [datebc, setDatebc]= useState(''); 
       const [optionNgay, setoptionNgay]= useState(''); 
@@ -13,7 +14,8 @@ const QuantriPage = () => {
       const [duyetUser, setDuyetUser]= useState([]); 
       const [dataUser, setDataUser]= useState([]); 
       const [isModalVisible, setIsModalVisible] = useState(false); 
-      const [isbasicVisible, setIsbasicVisible] = useState(false);         
+      const [isbasicVisible, setIsbasicVisible] = useState(false);  
+      const [isbasicVisibleData, setIsbasicVisibleData] = useState(false);                
       const [form] = Form.useForm();
       const handleOnSelect  = (value) => {
         console.log("onSelect", value);
@@ -91,7 +93,30 @@ const QuantriPage = () => {
             })
         }  
       
-     }       
+     }    
+     const onCreateData = async (data) =>{    
+        const res = await getuserduyetApi(data);
+        if (res?.message) {
+            if(res.message=='fail'){
+                notification.error({
+                    message: "Duyệt YC thất bại",
+                    description: res.duyet
+                })
+            }            
+            else {
+                notification.success({
+                    message: "Phân quyền thành công",
+                    description: res.duyet
+                })
+            } 
+         }else{
+            notification.success({
+                message: "Phân quyền thành công",
+                description: res.duyet
+            })
+         }  
+       
+      }      
     const columnsduyet = [
         {
             title: 'Account đăng nhập',
@@ -158,6 +183,9 @@ const QuantriPage = () => {
             }
         }
       };
+      const OnClickPhanquyen = async () => {
+        setIsbasicVisibleData(true);       
+      }
     return (
         <div >           
             <Tabs
@@ -194,7 +222,8 @@ const QuantriPage = () => {
                                }}           
                         
                                                
-                        />                    
+                        /> ,
+                        <Button key='btnphanquyen' type="primary" onClick={OnClickPhanquyen}><GithubOutlined />Phân quyền</Button>                   
                                    
                     ],
                 },{
@@ -270,6 +299,12 @@ const QuantriPage = () => {
                         onCreate ={onCreateBasic}
                         form={form}
                     />    
+                     <DuyetBasicData
+                        isbasicVisible={isbasicVisibleData}
+                        setIsbasicVisible={setIsbasicVisibleData}
+                        onCreate ={onCreateData}
+                        form={form}
+                    />  
         </div>         
       
     )

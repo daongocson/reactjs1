@@ -85,7 +85,10 @@ const CreateForm = (props) => {
                     
                 </AutoComplete>
         </Form.Item>
-        <Form.Item name="nguoiyc" label="Người yêu cầu" >
+        <Form.Item name="nguoiyc" label="Người yêu cầu" 
+         rules={[
+          { required: true, message: "Nhập yêu cầu!" }
+        ]}>
           <Input/>
         </Form.Item>
       </Form>
