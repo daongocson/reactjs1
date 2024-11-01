@@ -107,6 +107,8 @@ const TracuubnPage = () => {
           });
         data.ngayrv=ngayrv; 
         data.phongrv=phongrv;       
+        console.log("possua>>>",data);
+        //return;
        const res = await postycsuaApi(data);  
        if (!res?.message) {   
         setDataYC(res);                 

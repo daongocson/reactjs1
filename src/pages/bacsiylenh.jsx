@@ -144,8 +144,21 @@ const BacsiYlenhPage = () => {
             </div> 
            <Tabs
                 key={"tabbs"}
-                defaultActiveKey="1"
+                defaultActiveKey="info"
                 items={[
+                 {
+                    label: 'Bác sĩ',
+                    key: 'info',
+                    children: [ 
+                        <Table   
+                        rowKey={"keyid"}                    
+                        bordered
+                        dataSource={dataBS} columns={columnbs}                       
+                        key="tbabs"
+                        />   ,
+                        <Button key={"btn-createbs"} type="primary" onClick={creatDoctors}>Tạo nick-ekip</Button>
+                    ],
+                },
                 {
                     label: 'Giờ Y Lệnh',
                     key: '1',
@@ -203,20 +216,7 @@ const BacsiYlenhPage = () => {
                         />   ,
                         'Số lượng: '+ dataKQ.length    ,                         
                     ],
-                },
-                {
-                    label: 'Tạo nick BS-Ekip',
-                    key: '4',
-                    children: [ 
-                        <Table   
-                        rowKey={"keyid"}                    
-                        bordered
-                        dataSource={dataBS} columns={columnbs}                       
-                        key="tbabs"
-                        />   ,
-                        <Button key={"btn-createbs"} type="primary" onClick={creatDoctors}>Sao chép BS</Button>
-                    ],
-                }
+                }               
                 ]}
             />
                 <CreateEkip              

@@ -28,6 +28,9 @@ const QuantriPage = () => {
         {
             title: 'Yêu cầu',
             dataIndex: 'yeucau',
+        }, {
+            title: 'Dịch vụ YC',
+            dataIndex: 'dichvu',
         }, 
         {
             title: 'Ngày Ra',
