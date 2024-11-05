@@ -17,7 +17,7 @@ const YCsuahosoPage = () => {
     const keys  = ["dichvu","yeucau","tenbn","nguoiyc","phongrv","phongth"];    
     const [keyword, setKeyword] = useState('');
     const fetchYC = async () => {
-        const res = await getYcsuaApi();
+        const res = await getYcsuaApi();       
         if (!res?.message) {                   
             setDataSource(res);               
         } else {
