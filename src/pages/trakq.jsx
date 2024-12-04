@@ -53,9 +53,6 @@ export default function TrakqPage() {
 
     return (    
       <>
-       <Result               
-                title={dataKH[0]?.value+":"+idEncodeed} 
-            >       
        <Card title={dataKH[0]?.value+":"+idEncodeed} bordered={false} style={{ width: '100%',margin:10 ,backgroundColor:'#d4edd0', alignContent:"center"}}>    
        <li>
       
@@ -84,8 +81,7 @@ export default function TrakqPage() {
 
                 </li>
             </Card>
-        ))}  
-        </Result>
+        ))}         
       </>
     );
   }
