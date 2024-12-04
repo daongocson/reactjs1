@@ -1,14 +1,16 @@
 import { useLocation, useParams } from "react-router";
-import { useEffect,useState} from "react";
+import { React, useEffect,useState} from "react";
 import {  postkqclsApi} from "../util/api";
-import { AutoComplete, Form, Input,Modal, Card, Result, notification } from 'antd';
+import { AutoComplete, Form, Input,Modal, Card, Result, notification, Button } from 'antd';
 import { useForm } from "antd/es/form/Form";
 import { CheckCircleOutlined, CompassTwoTone, CrownOutlined, FieldTimeOutlined, FileProtectOutlined } from "@ant-design/icons";
 import QRCode from 'react-qr-code';
+import { QRCodeCanvas } from "qrcode.react"
+
 export default function TrakqPage() {
     const [form] = Form.useForm();
     const { id } = useParams();
-    const { url } = window.location.href;
+    
     useEffect(() => {   
         fetchUser();        
     }, [])
@@ -34,6 +36,20 @@ export default function TrakqPage() {
         }
     }
     const fullURL = window.location;
+    const downloadQRCode = () => {
+      const canvas = document.querySelector("#qrcode-canvas") 
+      if (!canvas) throw new Error("<canvas> not found in the DOM")
+  
+      const pngUrl = canvas
+        .toDataURL("image/png")
+        .replace("image/png", "image/octet-stream")
+      const downloadLink = document.createElement("a")
+      downloadLink.href = pngUrl
+      downloadLink.download =dataKH[0]?.value +"-QR code.png"
+      document.body.appendChild(downloadLink)
+      downloadLink.click()
+      document.body.removeChild(downloadLink)
+    } 
 
     return (    
       <>
@@ -46,15 +62,13 @@ export default function TrakqPage() {
             <p>{dataKH[2]?.name}:  {dataKH[2]?.value}</p>
             <p>{dataKH[3]?.name}:  {dataKH[3]?.value} </p>  
             <p>{dataKH[7]?.name}:  {dataKH[7]?.value}</p>
-                            {/* <span> Thời gian kết quả</span> */}
-                 
-                    <QRCode
-                        id='qrcode'
-                        value={fullURL.host+fullURL.pathname}
-                        size={90}
-                        level={'H'}         
-                    />            
-        
+                <div className="p-3">
+                    <QRCodeCanvas id="qrcode-canvas" 
+                    level="H" size={150} value={fullURL.host+fullURL.pathname} />
+                    <div className="my-5">
+                        <Button onClick={downloadQRCode}>Download QR Code</Button>
+                    </div>
+                </div>         
         </li>
             
            
