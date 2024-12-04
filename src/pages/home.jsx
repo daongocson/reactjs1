@@ -14,7 +14,7 @@ const HomePage = () => {
         }
         catch (e) { return "exception"+e}
     }
-    useEffect(() => {       
+    useEffect(() => {     
         console.log(">>>>homepage"+GetComputerName());        
     })
     

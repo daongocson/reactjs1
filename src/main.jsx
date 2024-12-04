@@ -21,6 +21,7 @@ import CSKHPage from './pages/cksh.jsx';
 import YCsuahosoPage from './pages/ycsuahoso.jsx';
 import QuantriPage from './pages/quantri.jsx';
 import YCtaonickPage from './pages/yctaonick.jsx';
+import TrakqPage from './pages/trakq.jsx';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "tracuubn",
         element: <TracuubnPage />
+      },
+      {
+        path:"/ketquacls/:id",
+        element:<TrakqPage />
       },
       {
         path: "khambenh",

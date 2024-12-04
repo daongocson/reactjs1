@@ -112,6 +112,7 @@ export const CollectionsPage2 = (props) => {
 
   return (
     <div>
+      <span className="input-label">
       <Button
         type="primary"
         onClick={() => {          
@@ -127,6 +128,25 @@ export const CollectionsPage2 = (props) => {
       >
         Báo sửa HS
       </Button>
+      <Button
+        type="default"
+        color="yellow"
+        onClick={() => {  
+          if(dataKH?.tenbn){
+            let idAray = dataKH.tenbn.split("-");
+            let idEncodeed = btoa(idAray[0]);
+            window.open('ketquacls/'+idEncodeed, '_blank').focus();
+          }
+          
+          console.log(dataKH.tenbn);
+          // window.open('ketquacls/'+dataKH, '_blank').focus();
+
+          //ketquacls/NTk4NzQz 
+        }}
+      >
+        Trả KQ-CLS
+      </Button>
+      </span>
       <CreateForm
         visible={visible}
         setVisible={setVisible}
