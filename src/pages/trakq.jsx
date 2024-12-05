@@ -1,16 +1,15 @@
 import { useLocation, useParams } from "react-router";
 import { React, useEffect,useState} from "react";
 import {  postkqclsApi} from "../util/api";
-import { AutoComplete, Form, Input,Modal, Card, Result, notification, Button } from 'antd';
-import { useForm } from "antd/es/form/Form";
+import { Card, notification, Button } from 'antd';
 import { CheckCircleOutlined, CompassTwoTone, CrownOutlined, FieldTimeOutlined, FileProtectOutlined } from "@ant-design/icons";
 import QRCode from 'react-qr-code';
 import { QRCodeCanvas } from "qrcode.react"
 
 export default function TrakqPage() {
-    const [form] = Form.useForm();
     const { id } = useParams();
-    
+    const location = useLocation()
+
     useEffect(() => {   
         fetchUser();        
     }, [])
@@ -35,7 +34,7 @@ export default function TrakqPage() {
             })
         }
     }
-    const fullURL = window.location;
+    const urlDomain ="https://traketqua.benhvienminhan.com/";
     const downloadQRCode = () => {
       const canvas = document.querySelector("#qrcode-canvas") 
       if (!canvas) throw new Error("<canvas> not found in the DOM")
@@ -53,7 +52,7 @@ export default function TrakqPage() {
 
     return (    
       <>
-       <Card title={dataKH[0]?.value+":"+idEncodeed} bordered={false} style={{ width: '100%',margin:10 ,backgroundColor:'#d4edd0', alignContent:"center"}}>    
+       <Card title={dataKH[0]?.value+":"+idEncodeed} bordered={false} style={{ width: '100%',margin:10 ,backgroundColor:'#f5f5f5', alignContent:"center"}}>    
        <li>
       
             <p>{dataKH[2]?.name}:  {dataKH[2]?.value}</p>
@@ -61,7 +60,7 @@ export default function TrakqPage() {
             <p>{dataKH[7]?.name}:  {dataKH[7]?.value}</p>
                 <div className="p-3">
                     <QRCodeCanvas id="qrcode-canvas" 
-                    level="H" size={150} value={fullURL.host+fullURL.pathname} />
+                    level="H" size={150} value={urlDomain+location.pathname} />
                     <div className="my-5">
                         <Button onClick={downloadQRCode}>Download QR Code</Button>
                     </div>
@@ -71,7 +70,7 @@ export default function TrakqPage() {
            
        </Card>       
          {dataDV.map((item, i) => (           
-            <Card key={i} title={item.name} bordered={false} style={{ width: '100%', backgroundColor: '#d4edda' ,margin:10 }}>    
+            <Card key={i} title={item.name} bordered={false} style={{ width: '100%', backgroundColor: '#f5f5f5' ,margin:10 }}>    
                 <li className="travelcompany-input" key={i}>
                     <span className="input-label"><b><FieldTimeOutlined />  Thời gian Chỉ định:{ item.tgyl } </b></span><br/>
                     <span className="input-label"><FieldTimeOutlined /><b>  Thời gian kết quả:{ item.tgkq }</b></span><br/>
