@@ -109,7 +109,7 @@ export const CollectionsPage2 = (props) => {
     onChange(values);
     setVisible(false);
   };
-
+  const urlDomain ="https://traketqua.benhvienminhan.com/";
   return (
     <div>
       <span className="input-label">
@@ -135,10 +135,10 @@ export const CollectionsPage2 = (props) => {
           if(dataKH?.tenbn){
             let idAray = dataKH.tenbn.split("-");
             let idEncodeed = btoa(idAray[0]);
-            window.open('ketquacls/'+idEncodeed, '_blank').focus();
+            window.open(urlDomain+'ketquacls/'+idEncodeed, '_blank').focus();
           }
           
-          console.log(dataKH.tenbn);
+       //   console.log(dataKH.tenbn);
           // window.open('ketquacls/'+dataKH, '_blank').focus();
 
           //ketquacls/NTk4NzQz 
