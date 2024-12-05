@@ -2,8 +2,7 @@ import { useLocation, useParams } from "react-router";
 import { React, useEffect,useState} from "react";
 import {  postkqclsApi} from "../util/api";
 import { Card, notification, Button } from 'antd';
-import { CheckCircleOutlined, CompassTwoTone, CrownOutlined, FieldTimeOutlined, FileProtectOutlined } from "@ant-design/icons";
-import QRCode from 'react-qr-code';
+import { CheckCircleOutlined, FieldTimeOutlined, FileProtectOutlined } from "@ant-design/icons";
 import { QRCodeCanvas } from "qrcode.react"
 
 export default function TrakqPage() {
