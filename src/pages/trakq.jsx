@@ -1,85 +1,314 @@
 import { useLocation, useParams } from "react-router";
-import { React, useEffect,useState} from "react";
-import {  postkqclsApi} from "../util/api";
-import { Card, notification, Button } from 'antd';
+import React, { useEffect, useState } from "react";
+import { postkqclsApi } from "../util/api";
+import { Card, notification, Button, Modal, Table, Typography  } from "antd";
 import { CheckCircleOutlined, FieldTimeOutlined, FileProtectOutlined } from "@ant-design/icons";
-import { QRCodeCanvas } from "qrcode.react"
+import { QRCodeCanvas } from "qrcode.react";
 
 export default function TrakqPage() {
-    const { id } = useParams();
-    const location = useLocation()
+  const { id } = useParams();
+  const location = useLocation();
 
-    useEffect(() => {   
-        fetchUser();        
-    }, [])
-    const [dataKH, setDataKH]= useState([]); 
-    const [dataKB, setDataKB]= useState([]); 
-    const [dataTH, setDataTH]= useState([]); 
-    const [dataDV, setDataDV]= useState([]); 
-    const idEncodeed= atob(id);
-    const fetchUser = async () => {       
-        const res = await postkqclsApi(id);                      
-        if (!res?.message) {                    
-            setDataKH(res.dataKH)          
-            setDataKB(res.dataKB);              
-            setDataTH(res.dataTH);    
-            setDataDV(res.dataDV);  
-            // setDataYC(res.dataYC);  
-            // callSetOp(res.dataDV);                
-        } else {
-            notification.error({
-                message: "Unauthorized",
-                description: res.message
-            })
-        }
+  const [dataKH, setDataKH] = useState([]);
+  const [dataXN, setDataXN] = useState([]);
+  const [dataDV, setDataDV] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedXN, setSelectedXN] = useState([]);
+
+
+  const idDecoded = atob(id);
+  const urlDomain = "https://traketqua.benhvienminhan.com/";
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await postkqclsApi(id);
+      if (!res?.message) {
+        setDataKH(res.dataKH);
+        setDataXN(res.dataXN);
+        setDataDV(res.dataDV);
+      } else {
+        notification.error({
+          message: "Unauthorized",
+          description: res.message,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      notification.error({
+        message: "Error",
+        description: "Failed to fetch data. Please try again later."
+      });
     }
-    const urlDomain ="https://traketqua.benhvienminhan.com/";
-    const downloadQRCode = () => {
-      const canvas = document.querySelector("#qrcode-canvas") 
-      if (!canvas) throw new Error("<canvas> not found in the DOM")
+  };
+
+  const downloadQRCode = () => {
+    const canvas = document.querySelector("#qrcode-canvas");
+    if (!canvas) {
+      notification.error({
+        message: "Error",
+        description: "QR Code canvas not found."
+      });
+      return;
+    }
+
+    const pngUrl = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+    const downloadLink = document.createElement("a");
+    downloadLink.href = pngUrl;
+    downloadLink.download = `${dataKH[0]?.value || "QRCode"}-QR-code.png`;
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+  };
+
+  const groupResultsByParent = (data) => {
+    const resultMap = {};
   
-      const pngUrl = canvas
-        .toDataURL("image/png")
-        .replace("image/png", "image/octet-stream")
-      const downloadLink = document.createElement("a")
-      downloadLink.href = pngUrl
-      downloadLink.download =dataKH[0]?.value +"-QR code.png"
-      document.body.appendChild(downloadLink)
-      downloadLink.click()
-      document.body.removeChild(downloadLink)
-    } 
+    data.forEach((item) => {
+      if (item.idcon === 0) {
+        // Là chỉ số cha
+        if (!resultMap[item.id]) {
+          resultMap[item.id] = {
+            ...item,
+            children: [],
+          };
+        } else {
+          resultMap[item.id] = {
+            ...resultMap[item.id],
+            ...item,
+          };
+        }
+      } else {
+        // Là chỉ số con
+        if (!resultMap[item.idcon]) {
+          resultMap[item.idcon] = {
+            id: item.idcon,
+            name: "Chỉ số cha chưa xác định",
+            data_value: null,
+            donvi: null,
+            binhthuong: null,
+            children: [],
+          };
+        }
+        resultMap[item.idcon].children.push(item);
+      }
+    });
+  
+    // Đảm bảo các trường "result", "unit", và "normal" luôn tồn tại
+    return Object.values(resultMap).map((parent) => ({
+      ...parent,
+      result: parent.children.length === 0 ? parent.data_value || "N/A" : "",
+      unit: parent.children.length === 0 ? parent.donvi || "N/A" : "",
+      normal: parent.children.length === 0 ? parent.binhthuong || "N/A" : "",
+      children: parent.children.map((child) => ({
+        ...child,
+        result: child.data_value,
+        unit: child.donvi || "N/A",
+        normal: child.binhthuong || "N/A",
+      })),
+    }));
+  };
+  
+  
+  const groupResultsByTreatment = (data) => {
+    const treatmentMap = {};
+  
+    data.forEach((item) => {
+      if (!treatmentMap[item.treatmentid]) {
+        treatmentMap[item.treatmentid] = {
+          treatmentid: item.treatmentid,
+          tgyl: item.tgyl, // Thời gian chỉ định
+          tgkq: item.tgkq, // Thời gian kết quả
+          children: [],
+        };
+      }
+  
+      treatmentMap[item.treatmentid].children.push(item);
+    });
+  
+    return Object.values(treatmentMap);
+  };
+  // const groupedData = groupResultsByTreatment(dataXN).map((treatmentGroup, index) => ({
+  //   key: index,
+  //   name: `Phiếu xét nghiệm #${treatmentGroup.treatmentid}`,
+  //   tgyl: treatmentGroup.tgyl,
+  //   tgkq: treatmentGroup.tgkq,
+  //   children: groupResultsByParent(treatmentGroup.children).map((parentItem, parentIndex) => ({
+  //     key: `${index}-${parentIndex}`,
+  //     name: parentItem.name,
+  //     result: parentItem.children.length > 0 ? "" : parentItem.data_value || "N/A",
+  //     unit: parentItem.children.length > 0 ? "" : parentItem.donvi || "N/A",
+  //     normal: parentItem.children.length > 0 ? "" : parentItem.binhthuong || "N/A",
+  //     children: parentItem.children.map((child, childIndex) => ({
+  //       key: `${index}-${parentIndex}-${childIndex}`,
+  //       name: child.name,
+  //       result: child.data_value,
+  //       unit: child.donvi || "N/A",
+  //       normal: child.binhthuong || "N/A",
+  //     })),
+  //   })),
+  // }));
 
-    return (    
-      <>
-       <Card title={dataKH[0]?.value+":"+idEncodeed} bordered={false} style={{ width: '100%',margin:10 ,backgroundColor:'#f5f5f5', alignContent:"center"}}>    
-       <li>
-      
-            <p>{dataKH[2]?.name}:  {dataKH[2]?.value}</p>
-            <p>{dataKH[3]?.name}:  {dataKH[3]?.value} </p>  
-            <p>{dataKH[7]?.name}:  {dataKH[7]?.value}</p>
-                <div className="p-3">
-                    <QRCodeCanvas id="qrcode-canvas" 
-                    level="H" size={150} value={urlDomain+location.pathname} />
-                    <div className="my-5">
-                        <Button onClick={downloadQRCode}>Download QR Code</Button>
-                    </div>
-                </div>         
-        </li>
-            
-           
-       </Card>       
-         {dataDV.map((item, i) => (           
-            <Card key={i} title={item.name} bordered={false} style={{ width: '100%', backgroundColor: '#f5f5f5' ,margin:10 }}>    
-                <li className="travelcompany-input" key={i}>
-                    <span className="input-label"><b><FieldTimeOutlined />  Thời gian Chỉ định:{ item.tgyl } </b></span><br/>
-                    <span className="input-label"><FieldTimeOutlined /><b>  Thời gian kết quả:{ item.tgkq }</b></span><br/>
-                    <span className="input-label"><b><CheckCircleOutlined />    KQ:</b><br/>{ item.data_value }</span><br/>
-                    <p><FileProtectOutlined />Xem chi tiết <a href={`http://103.237.144.134:3782/viewImgsH?ris_exam_id=${item.treatmentid}&service_id=${item.id}`} target="blank">Kết quả CLS</a>.</p>
+  //const groupedData = groupResultsByTreatment(dataXN);
 
-
-                </li>
-            </Card>
-        ))}         
-      </>
-    );
+  const columns = [
+    {
+      title: "Tên xét nghiệm",
+      dataIndex: "name",
+      key: "name",
+      render: (text, record) => {
+        const normalRange = record.normal;
+        const color = getColor(record, "result"); // Lấy màu từ hàm getColor
+        return <span style={{ color }}>{text}</span>;
+      },
+    },
+    {
+      title: "Kết quả",
+      dataIndex: "result",
+      key: "result",
+      render: (text, record) => {
+        const normalRange = record.normal;
+        const color = getColor(record, "result"); // Lấy màu từ hàm getColor
+        return <span style={{ color }}>{text}</span>;
+      },
+    },
+    {
+      title: "Đơn vị",
+      dataIndex: "unit",
+      key: "unit",
+      render: (text, record) => {
+        const normalRange = record.normal;
+        const color = getColor(record, "result"); // Lấy màu từ hàm getColor
+        return <span style={{ color }}>{text}</span>;
+      },      
+    },
+    {
+      title: "Bình thường",
+      dataIndex: "normal",
+      key: "normal",
+      render: (text, record) => {
+        const normalRange = record.normal;
+        const color = getColor(record, "result"); // Lấy màu từ hàm getColor
+        return <span style={{ color }}>{text}</span>;
+      },
+    },
+  ];
+  // Hàm getColor để xác định màu sắc dựa trên giá trị của cột "Kết quả"
+const getColor = (record, field) => {
+  const normalRange = record.normal;
+  const value = record[field]; // Giá trị của trường cần kiểm tra (ví dụ "result")
+  
+  if (!normalRange || normalRange === "N/A") {
+    return "black"; // Nếu không có phạm vi bình thường, trả về màu đen
   }
+
+  const rangeParts = normalRange.split("-");
+  if (rangeParts.length === 2) {
+    const [min, max] = rangeParts.map(Number);
+    const parsedValue = parseFloat(value);
+
+    if (!isNaN(parsedValue) && !isNaN(min) && !isNaN(max)) {
+      if (parsedValue < min) return "blue"; // Màu xanh khi giá trị nhỏ hơn mức bình thường
+      if (parsedValue > max) return "red"; // Màu đỏ khi giá trị lớn hơn mức bình thường
+      return "black"; // Màu xanh nhạt khi giá trị trong phạm vi bình thường
+    }
+  }
+
+  return "black"; // Mặc định là màu đen nếu không có điều kiện nào khớp
+};
+
+  // const tableData = groupResultsByParent(dataXN).map((parentItem, index) => ({
+  //   key: index,
+  //   name: parentItem.name,
+  //   result: parentItem.children.length > 0 ? "" : parentItem.data_value || "N/A", // Bỏ giá trị nếu có con
+  //   unit: parentItem.children.length > 0 ? "" : parentItem.donvi || "N/A",      // Bỏ giá trị nếu có con
+  //   normal: parentItem.children.length > 0 ? "" : parentItem.binhthuong || "N/A", // Bỏ giá trị nếu có con
+  //   children: parentItem.children.map((child, childIndex) => ({
+  //     key: `${index}-${childIndex}`,
+  //     name: child.name,
+  //     result: child.data_value,
+  //     unit: child.donvi || "N/A",
+  //     normal: child.binhthuong || "N/A",
+  //   })),
+  // }));
+  
+  return (
+    <>
+      <Card
+        title={`${dataKH[0]?.value || "N/A"}: ${idDecoded}`}
+        bordered={false}
+        style={{ width: "100%", margin: 10, backgroundColor: "#f5f5f5" }}
+      >
+        <ul>
+          <li>{dataKH[2]?.name}: {dataKH[2]?.value}</li>
+          <li>{dataKH[3]?.name}: {dataKH[3]?.value}</li>
+          <li>{dataKH[7]?.name}: {dataKH[7]?.value}</li>
+        </ul>
+        <div>
+          <QRCodeCanvas id="qrcode-canvas" level="H" size={150} value={`${urlDomain}${location.pathname}`} />
+          <Button onClick={downloadQRCode} style={{ marginTop: 10 }}>Download QR Code</Button>
+        </div>
+      </Card>
+
+      {dataDV.map((item, i) => (
+        <Card
+          key={i}
+          title={item.name}
+          bordered={false}
+          style={{ width: "100%", backgroundColor: "#f5f5f5", margin: 10 }}
+        >
+          <p><FieldTimeOutlined /> Thời gian Chỉ định: {item.tgyl}</p>
+          <p><FieldTimeOutlined /> Thời gian kết quả: {item.tgkq}</p>
+          <p><CheckCircleOutlined /> Kết quả: {item.data_value}</p>
+          <p>
+            <FileProtectOutlined /> <a href={`http://103.237.144.134:3782/viewImgsH?ris_exam_id=${item.treatmentid}&service_id=${item.id}`} target="_blank" rel="noopener noreferrer">Xem chi tiết</a>
+          </p>
+        </Card>
+      ))}
+
+{groupResultsByTreatment(dataXN).map((treatmentGroup, index) => (
+  <Card
+    key={index}
+    title={`Kết quả Xét nghiệm #${treatmentGroup.treatmentid}`}
+    bordered={false}
+    style={{ width: "100%", backgroundColor: "#f5f5f5", margin: 10 }}
+  >
+    <p><FieldTimeOutlined /> Thời gian Chỉ định: {treatmentGroup.tgyl}</p>
+    <p><FieldTimeOutlined /> Thời gian Kết quả: {treatmentGroup.tgkq}</p>
+    <Button
+      type="primary"
+      onClick={() => {
+        setSelectedXN(treatmentGroup.children); // Chỉ hiển thị dữ liệu của nhóm này
+        setIsModalVisible(true);
+      }}
+      style={{ marginTop: 10 }}
+    >
+      Xem Kết Quả
+    </Button>
+  </Card>
+))}
+
+
+      <Modal
+        title="Chi tiết kết quả xét nghiệm"
+        visible={isModalVisible}
+        onOk={() => setIsModalVisible(false)}
+        onCancel={() => setIsModalVisible(false)}
+        width={1000}
+      >
+        <Table
+          dataSource={groupResultsByParent(selectedXN)}
+          columns={columns}
+          pagination={false}
+          bordered
+          expandable={{
+            defaultExpandAllRows: (record) => record.children && record.children.length > 0,
+          }}
+        />
+      </Modal>
+    </>
+  );
+}
