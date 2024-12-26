@@ -1,7 +1,7 @@
 import { useLocation, useParams } from "react-router";
 import React, { useEffect, useState } from "react";
 import { postkqclsApi } from "../util/api";
-import { Card, notification, Button, Modal, Table, Typography  } from "antd";
+import { Card, notification, Button, Modal, Table, Typography,Space  } from "antd";
 import { CheckCircleOutlined, FieldTimeOutlined, FileProtectOutlined } from "@ant-design/icons";
 import { QRCodeCanvas } from "qrcode.react";
 
@@ -131,28 +131,6 @@ export default function TrakqPage() {
   
     return Object.values(treatmentMap);
   };
-  // const groupedData = groupResultsByTreatment(dataXN).map((treatmentGroup, index) => ({
-  //   key: index,
-  //   name: `Phiếu xét nghiệm #${treatmentGroup.treatmentid}`,
-  //   tgyl: treatmentGroup.tgyl,
-  //   tgkq: treatmentGroup.tgkq,
-  //   children: groupResultsByParent(treatmentGroup.children).map((parentItem, parentIndex) => ({
-  //     key: `${index}-${parentIndex}`,
-  //     name: parentItem.name,
-  //     result: parentItem.children.length > 0 ? "" : parentItem.data_value || "N/A",
-  //     unit: parentItem.children.length > 0 ? "" : parentItem.donvi || "N/A",
-  //     normal: parentItem.children.length > 0 ? "" : parentItem.binhthuong || "N/A",
-  //     children: parentItem.children.map((child, childIndex) => ({
-  //       key: `${index}-${parentIndex}-${childIndex}`,
-  //       name: child.name,
-  //       result: child.data_value,
-  //       unit: child.donvi || "N/A",
-  //       normal: child.binhthuong || "N/A",
-  //     })),
-  //   })),
-  // }));
-
-  //const groupedData = groupResultsByTreatment(dataXN);
 
   const columns = [
     {
@@ -219,21 +197,6 @@ const getColor = (record, field) => {
 
   return "black"; // Mặc định là màu đen nếu không có điều kiện nào khớp
 };
-
-  // const tableData = groupResultsByParent(dataXN).map((parentItem, index) => ({
-  //   key: index,
-  //   name: parentItem.name,
-  //   result: parentItem.children.length > 0 ? "" : parentItem.data_value || "N/A", // Bỏ giá trị nếu có con
-  //   unit: parentItem.children.length > 0 ? "" : parentItem.donvi || "N/A",      // Bỏ giá trị nếu có con
-  //   normal: parentItem.children.length > 0 ? "" : parentItem.binhthuong || "N/A", // Bỏ giá trị nếu có con
-  //   children: parentItem.children.map((child, childIndex) => ({
-  //     key: `${index}-${childIndex}`,
-  //     name: child.name,
-  //     result: child.data_value,
-  //     unit: child.donvi || "N/A",
-  //     normal: child.binhthuong || "N/A",
-  //   })),
-  // }));
   
   return (
     <>
@@ -268,30 +231,43 @@ const getColor = (record, field) => {
           </p>
         </Card>
       ))}
-
-{groupResultsByTreatment(dataXN).map((treatmentGroup, index) => (
   <Card
-    key={index}
-    title={`Kết quả Xét nghiệm #${treatmentGroup.treatmentid}`}
-    bordered={false}
-    style={{ width: "100%", backgroundColor: "#f5f5f5", margin: 10 }}
-  >
-    <p><FieldTimeOutlined /> Thời gian Chỉ định: {treatmentGroup.tgyl}</p>
-    <p><FieldTimeOutlined /> Thời gian Kết quả: {treatmentGroup.tgkq}</p>
-    <Button
-      type="primary"
-      onClick={() => {
-        setSelectedXN(treatmentGroup.children); // Chỉ hiển thị dữ liệu của nhóm này
-        setIsModalVisible(true);
+  title="Kết quả Xét nghiệm"
+  bordered={false}
+  style={{ width: "100%", margin: 10, backgroundColor: "#f5f5f5" }}
+>
+  {groupResultsByTreatment(dataXN).map((treatmentGroup, index) => (
+    <div
+      key={index}
+      style={{
+        display: "flex",
+        // display: "inline-flex",
+        // justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom: "15px",
       }}
-      style={{ marginTop: 10 }}
     >
-      Xem Kết Quả
-    </Button>
-  </Card>
-))}
-
-
+      <div>
+        <p>
+          <FieldTimeOutlined /> Thời gian Chỉ định: {treatmentGroup.tgyl}
+        </p>
+        <p>
+          <FieldTimeOutlined /> Thời gian Kết quả: {treatmentGroup.tgkq}
+        </p>
+      </div>
+      <Button
+        type="primary"
+        onClick={() => {
+          setSelectedXN(treatmentGroup.children); // Chỉ hiển thị dữ liệu của nhóm này
+          setIsModalVisible(true);
+        }}
+        style={{ marginLeft: "20px" }}
+      >
+        Xem Kết Quả
+      </Button>
+    </div>
+  ))}
+</Card>
       <Modal
         title="Chi tiết kết quả xét nghiệm"
         visible={isModalVisible}
