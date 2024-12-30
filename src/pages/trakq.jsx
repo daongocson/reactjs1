@@ -5,6 +5,9 @@ import { postkqclsApi } from "../util/api";
 import { Card, notification, Button, Modal, Table, Typography, Space, Carousel, Row } from "antd";
 
 import { CheckCircleOutlined, FieldTimeOutlined, FileProtectOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, FieldTimeOutlined, FileProtectOutlined, FileImageTwoTone } from "@ant-design/icons";
+
+
 import { QRCodeCanvas } from "qrcode.react";
 import banner1 from "../assets/images/banner1.jpg";
 import banner2 from "../assets/images/banner2.jpg";
