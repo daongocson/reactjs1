@@ -57,6 +57,22 @@ export default function TrakqPage() {
         setDataKH(res.dataKH);
         setDataXN(res.dataXN);
         setDataDV(res.dataDV);
+        // Gộp dữ liệu từ dataXN và dataDV
+        const combinedData = [...res.dataXN, ...res.dataDV];
+
+        // Tính số lượng DV đã có kết quả và chưa có kết quả
+        const countHasResult = combinedData.filter(
+          (item) => item.idcon === 0 && item.dm_servicedatastatusid === 3
+        ).length;
+
+        const countNoResult = combinedData.filter(
+          (item) => item.idcon === 0 && item.dm_servicedatastatusid !== 3
+        ).length;
+
+        // Cập nhật state
+        setCountHasResult(countHasResult);
+        setCountNoResult(countNoResult);
+
       } else {
         notification.error({
           message: "Unauthorized",
