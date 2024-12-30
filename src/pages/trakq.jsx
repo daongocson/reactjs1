@@ -425,8 +425,7 @@ export default function TrakqPage() {
               style={{
                 width: isDesktop ? "0" : "100%",
                 position: "absolute",
-                right: isDesktop ? "580px" : "-20px", // Canh phải của container
-                width: "0", // Không cần chiều rộng
+                right: isDesktop ? "580px" : "-20px", // Canh phải của container             
                 height: "0", // Không cần chiều cao
                 borderStyle: "solid",
                 borderWidth: "20px 35px 0 15px", // Đáy tam giác nằm phía trên, đỉnh hướng xuống
