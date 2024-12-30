@@ -4,6 +4,7 @@ import { postkqclsApi } from "../util/api";
 import { Card, notification, Button, Modal, Table, Typography,Space  } from "antd";
 import { CheckCircleOutlined, FieldTimeOutlined, FileProtectOutlined } from "@ant-design/icons";
 import { QRCodeCanvas } from "qrcode.react";
+import { useMediaQuery } from 'react-responsive';
 
 export default function TrakqPage() {
   const { id } = useParams();
