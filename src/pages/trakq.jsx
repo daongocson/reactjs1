@@ -9,7 +9,27 @@ import { useMediaQuery } from 'react-responsive';
 export default function TrakqPage() {
   const { id } = useParams();
   const location = useLocation();
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isTablet = useMediaQuery({ minWidth: 769, maxWidth: 1024 });
+  const isDesktop = useMediaQuery({ minWidth: 1025 });
 
+  const [screenSize, setScreenSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup event listener when component unmounts
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const [dataKH, setDataKH] = useState([]);
   const [dataXN, setDataXN] = useState([]);
   const [dataDV, setDataDV] = useState([]);
