@@ -1,7 +1,9 @@
 import { useLocation, useParams } from "react-router";
 import React, { useEffect, useState } from "react";
 import { postkqclsApi } from "../util/api";
-import { Card, notification, Button, Modal, Table, Typography,Space  } from "antd";
+// import { Card, notification, Button, Modal, Table, Typography,Space  } from "antd";
+import { Card, notification, Button, Modal, Table, Typography, Space, Carousel, Row } from "antd";
+
 import { CheckCircleOutlined, FieldTimeOutlined, FileProtectOutlined } from "@ant-design/icons";
 import { QRCodeCanvas } from "qrcode.react";
 import banner1 from "../assets/images/banner1.jpg";
