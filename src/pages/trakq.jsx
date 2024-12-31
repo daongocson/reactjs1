@@ -578,7 +578,7 @@ export default function TrakqPage() {
           <div style={{ fontSize: '24px', fontWeight: 'bold' }}></div>
         </Button>
 
-        <Button
+        {/* <Button
           style={{
             flex: '1', // Để hai nút có kích thước bằng nhau
             height: "70px",
@@ -594,6 +594,82 @@ export default function TrakqPage() {
           }}
           onClick={() => {
             window.open('https://www.facebook.com/messages/t/1157731030938895', '_blank'); // Mở liên kết trong tab mới
+          }}
+        >
+          <div>ĐẶT CÂU HỎI NHANH</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold' }}></div>
+        </Button> */}
+        <Button
+          style={{
+            flex: '1', // Để hai nút có kích thước bằng nhau
+            height: "70px",
+            backgroundColor: '#02A6A1',
+            color: 'white',
+            borderRadius: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 'bold',
+            fontSize: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? '17px' : '20px', // Điều chỉnh font size theo thiết bị
+          }}
+          onClick={() => {
+            const isDesktop = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent); // Kiểm tra thiết bị
+            if (isDesktop) {
+              // Mở Web Messenger
+              window.open('https://www.facebook.com/messages/t/1157731030938895', '_blank');
+            } else {
+              // Thử mở app Messenger, nếu không được thì fallback sang trình duyệt
+              const messengerAppURL = 'fb-messenger://user-thread/1157731030938895';
+
+              // Tạo một thẻ <a> ẩn để thử mở app Messenger
+              const link = document.createElement('a');
+              link.href = messengerAppURL;
+              document.body.appendChild(link);
+              link.click();
+
+              // Fallback sau 2 giây nếu app không phản hồi
+              setTimeout(() => {
+                window.open('https://www.facebook.com/messages/t/1157731030938895', '_blank');
+              }, 2000);
+            }
+          }}
+        >
+          <div>ĐẶT CÂU HỎI NHANH</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold' }}></div>
+        </Button><Button
+          style={{
+            flex: '1', // Để hai nút có kích thước bằng nhau
+            height: "70px",
+            backgroundColor: '#02A6A1',
+            color: 'white',
+            borderRadius: '8px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontWeight: 'bold',
+            fontSize: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? '17px' : '20px', // Điều chỉnh font size theo thiết bị
+          }}
+          onClick={() => {
+            const isDesktop = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent); // Kiểm tra thiết bị
+            if (isDesktop) {
+              // Mở Web Messenger
+              window.open('https://www.facebook.com/messages/t/1157731030938895', '_blank');
+            } else {
+              // Thử mở app Messenger, nếu không được thì fallback sang trình duyệt
+              const messengerAppURL = 'fb-messenger://user-thread/1157731030938895';
+
+              // Tạo một thẻ <a> ẩn để thử mở app Messenger
+              const link = document.createElement('a');
+              link.href = messengerAppURL;
+              document.body.appendChild(link);
+              link.click();
+// Fallback sau 2 giây nếu app không phản hồi
+              setTimeout(() => {
+                window.open('https://www.facebook.com/messages/t/1157731030938895', '_blank');
+              }, 2000);
+            }
           }}
         >
           <div>ĐẶT CÂU HỎI NHANH</div>
