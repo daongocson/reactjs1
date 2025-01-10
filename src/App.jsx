@@ -1,13 +1,13 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import Header from "./components/layout/header";
-import axios from "./util/axios.customize"
-import { useContext, useEffect } from "react"
+import axios from "./util/axios.customize";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "./components/context/auth.context";
 import { Spin } from "antd";
 
 function App() {
-
   const { setAuth, appLoading, setAppLoading } = useContext(AuthContext);
+  const location = useLocation(); // Lấy thông tin đường dẫn hiện tại
 
   useEffect(() => {
     const fetchAccount = async () => {
@@ -18,40 +18,41 @@ function App() {
           isAuthenticated: true,
           user: {
             email: res.email,
-            name: res.name
-          }
-        })
+            name: res.name,
+          },
+        });
       }
       setAppLoading(false);
-    }
+    };
 
-    fetchAccount()
-  }, [])
+    fetchAccount();
+  }, []);
 
-
+  // Kiểm tra nếu `pathname` chứa "ketquacls/" thì không hiển thị Header
+  const shouldHideHeader = location.pathname.includes("ketquacls/");
 
   return (
     <div>
-      {appLoading === true ?
-        <div style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)"
-        }}>
-
+      {appLoading === true ? (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
           <Spin />
-
         </div>
-        :
+      ) : (
         <>
-          <Header />
+          {/* Hiển thị Header nếu không phải đường dẫn "ketquacls/" */}
+          {!shouldHideHeader && <Header />}
           <Outlet />
         </>
-      }
-
+      )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
