@@ -9,6 +9,9 @@ import banner2 from "../assets/images/banner2.jpg";
 import banner3 from "../assets/images/banner3.jpg";
 import banner4 from "../assets/images/banner4.jpg";
 import { useMediaQuery } from 'react-responsive';
+import Footer from "../components/module/Footer";
+import '../styles/trakq.css';
+
 
 export default function TrakqPage() {
   const { id } = useParams();
@@ -272,18 +275,14 @@ export default function TrakqPage() {
     ];
 
     return (
-      <div style={{ marginBottom: "20px" }}>
+      <div className={`banner`}>
         <Carousel autoplay autoplaySpeed={2500}>
           {images.map((img, index) => (
             <div key={index}>
               <img
                 src={img}
                 alt={`Banner1 ${index + 1}`}
-                style={{
-                  width: "100%",
-                  height: "400px",
-                  objectFit: "cover",
-                }}
+                className={`banner-img`}
               />
             </div>
           ))}
@@ -294,46 +293,24 @@ export default function TrakqPage() {
 
   return (
     <>
-      <div style={{ marginBottom: "20px", width: isDesktop ? "1317px" : "100%", margin: isDesktop ? "0 auto" : "0", }}>
+      <div className="banner">
         <Carousel autoplay autoplaySpeed={2500}>
           {images.map((img, index) => (
             <div key={index}>
               <img
                 src={img}
                 alt={`Banner1 ${index + 1}`}
-                style={{
-                  width: isDesktop ? "1317px" : "100%",
-                  height: isDesktop ? "500px" : "100%",
-                  objectFit: "cover",
-                }}
+                className={`banner-img`}
               />
-            </div> 
+            </div>
           ))}
         </Carousel>
       </div>
-      <div style={{
-        width: isDesktop ? "1317px" : "100%",
-        margin: isDesktop ? "0 auto" : "0",
-        textAlign: 'center',
-        backgroundColor: '#02A6A1',
-        color: 'white',
-        fontSize: '12.5px',
-        padding: '10px 0'
-      }}>
+      <div className={`slogan`}>
         BỆNH VIỆN ĐA KHOA MINH AN <br />
         XIN GỬI TỚI QUÝ KHÁCH HÀNG KẾT QUẢ KHÁM CHỮA BỆNH
       </div>
-      <Row
-        style={{
-          width: isDesktop ? "1317px" : "100%", // 1317px
-          margin: isDesktop ? "0 auto" : "0", // Căn giữa trên desktop
-          marginTop: "1px",
-          textAlign: "left",
-          border: "1px solid #ddd", // Tạo viền cho div nếu cần
-          borderRadius: "5px", // Bo góc cho div nếu cần
-          padding: "10px",
-        }}
-      >
+      <Row className={`info ${isDesktop ? 'desktop' : ''}`}>
         <div>
           {dataKH.map((item) => (
             <div key={item.id}>
@@ -348,17 +325,7 @@ export default function TrakqPage() {
         </div>
       </Row>
 
-      <Row
-        style={{
-          width: isDesktop ? "1317px" : "100%",
-          margin: isDesktop ? "0 auto" : "0",
-          marginTop: "1px",
-          textAlign: "left",
-          border: "1px solid #ddd",
-          borderRadius: "5px",
-          padding: "10px",
-        }}
-      >
+      <Row className={`qr-code ${isDesktop ? 'desktop' : ''}`}>
         <div style={{ position: "relative", width: "fit-content" }}>
           <QRCodeCanvas
             id="qrcode-canvas"
@@ -368,48 +335,20 @@ export default function TrakqPage() {
           />
           <Button
             onClick={downloadQRCode}
-            style={{
-              position: "absolute",
-              top: "120px", // Điều chỉnh vị trí theo trục dọc
-              left: "160px", // Điều chỉnh vị trí theo trục ngang
-            }}
+            className={`qr-down`}
           >
             Download QR Code
           </Button>
         </div>
       </Row>
 
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-        <div style={{
-          width: isDesktop ? "655px" : "100%",
-          height: "70px",
-          backgroundColor: '#02A6A1',
-          color: 'white',
-          borderRadius: '8px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontWeight: 'bold',
-          fontSize: isDesktop ? '20px' : '17px',
-        }}>
+      <div className="trakq-box-container">
+        <div className={`trakq-result-box ${isDesktop ? '' : 'mobile'}`}>
           <div>DV ĐÃ CÓ KẾT QUẢ</div>
           <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{countHasResult}</div>
         </div>
 
-        <div style={{
-          width: isDesktop ? "655px" : "100%",
-          height: "70px",
-          backgroundColor: '#02A6A1',
-          color: 'white',
-          borderRadius: '8px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontWeight: 'bold',
-          fontSize: isDesktop ? '20px' : '17px',
-        }}>
+        <div className={`trakq-result-box ${isDesktop ? '' : 'mobile'}`}>
           <div>DV CHƯA CÓ KẾT QUẢ</div>
           <div style={{ fontSize: '24px', fontWeight: 'bold' }}>{countNoResult}</div>
         </div>
@@ -417,70 +356,35 @@ export default function TrakqPage() {
 
       {dataDV.map((item, i) => (
         <Card
-          key={i}
-          bordered={false}
-          style={{
-            width: isDesktop ? "1317px" : "100%",
-            margin: isDesktop ? "0 auto" : "0",
-            textAlign: "left",
-            overflow: "visible", // Đảm bảo hiển thị phần tam giác
-            marginBottom: isDesktop ? "-40px" : "-35px",
-          }}
+          key={i} bordered={false}
+          className={`trakq-dv-card ${isDesktop ? '' : 'mobile'}`}
         >
-          <div style={{ position: "relative", overflow: "visible" }}>
-            {/* Tiêu đề */}
-            <div
-              style={{
-                width: isDesktop ? "613px" : "108%",
-                backgroundColor: "#02A6A1", // Màu nền xanh
-                color: "white",
-                fontWeight: "bold",
-                fontSize: "20px",
-                padding: isDesktop ? "5px 20px" : "5px 10px",
-                borderRadius: "8px 8px 0 0", // Bo góc trên
-                marginLeft: "-25px",
-              }}
-            >
+          <div className="trakq-dv-container">
+            <div className={`trakq-dv-header ${isDesktop ? '' : 'mobile'}`}>
               {item.name}
             </div>
-            {/* Phần tam giác nhọn */}
-            <div
-              style={{
-                width: isDesktop ? "0" : "100%",
-                position: "absolute",
-                right: isDesktop ? "641px" : "-23px", // Canh phải của container
-                width: "0", // Không cần chiều rộng
-                height: "0", // Không cần chiều cao
-                borderStyle: "solid",
-                borderWidth: "19px 40px 0 5px", // Đáy tam giác nằm phía trên, đỉnh hướng xuống
-                borderColor: "#01756E transparent transparent transparent", // Màu tam giác ở cạnh trên
-              }}
-            ></div>
+            <div className={`trakq-dv-triangle ${isDesktop ? '' : 'mobile'}`}></div>
           </div>
-          {/* Nội dung bên dưới */}
-          <p>
-            <FieldTimeOutlined style={{ color: "#02A6A1" }} /> Thời gian Chỉ định: {item.tgyl}
+          <p className={`trakq-time-text ${isDesktop ? '' : 'mobile'}`}>
+            <FieldTimeOutlined style={{color: "#02A6A1" }} /> Thời gian Chỉ định: {item.tgyl}
           </p>
-          <p>
+          <p className={`trakq-time-text ${isDesktop ? '' : 'mobile'}`}>
             <FieldTimeOutlined style={{ color: "#02A6A1" }} /> Thời gian kết quả: {item.tgkq}
           </p>
-          <p>
+          <p className={`trakq-time-text ${isDesktop ? '' : 'mobile'}`}>
             <CheckCircleOutlined style={{ color: "#02A6A1" }} /> Kết quả: <b>{item.data_value}</b>
           </p>
           {/* Điều kiện hiển thị "Xem chi tiết" */}
           {item.dm_servicesubgroupid === 401 ||
             item.dm_servicesubgroupid === 407 ||
             item.dm_servicesubgroupid === 406 ? (
-            <p>
+              <p className={`trakq-time-text ${isDesktop ? '' : 'mobile'}`}>
               <FileImageTwoTone style={{ fontSize: "20px" }} />{" "}
               <a
                 href={`http://103.237.144.134:3782/viewImgsH?ris_exam_id=${item.treatmentid}&service_id=${item.id}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                }}
+                style={{ fontSize: "20px", fontWeight: "bold", }}
               >
                 Xem chi tiết
               </a>
@@ -489,62 +393,21 @@ export default function TrakqPage() {
         </Card>
       ))}
       {groupResultsByTreatment(dataXN).length > 0 && (
-        <Card
-          bordered={false}
+        <Card bordered={false}
           style={{ margin: isDesktop ? "0 auto" : "0", padding: "0px" }}
         >
-          <div
-            style={{
-              width: isDesktop ? "1317px" : "100%",
-              margin: isDesktop ? "0 auto" : "0",
-              textAlign: "left",
-              overflow: "visible", // Đảm bảo hiển thị phần tam giác
-              marginBottom: "0px",
-              paddingBottom: isDesktop ? "0" : "10px",
-              marginTop: isDesktop ? "-10px" : "-10px",
-            }}
-          >
-            {/* Tiêu đề */}
-            <div style={{ position: "relative", overflow: "visible" }}>
-              <div
-                style={{
-                  width: isDesktop ? "613px" : "107%",
-                  backgroundColor: "#02A6A1", // Màu nền xanh
-                  color: "white",
-                  fontWeight: "bold",
-                  fontSize: "20px",
-                  padding: isDesktop ? "5px 20px" : "5px 10px",
-                  borderRadius: "8px 8px 0 0", // Bo góc trên
-                  marginLeft: isDesktop ? "0px" : "-25px", // Thụt lề vào một chút
-                }}
-              >
+          <div className={`trakq-treatment-container ${isDesktop ? '' : 'mobile'}`}>
+            <div className="trakq-treatment-header">
+              <div className={`trakq-treatment-title ${isDesktop ? '' : 'mobile'}`}>
                 Kết quả Xét nghiệm
               </div>
-              {/* Phần tam giác nhọn */}
-              <div
-                style={{
-                  position: "absolute",
-                  right: isDesktop ? "665px" : "-21px",
-                  width: "0",
-                  height: "0",
-                  borderStyle: "solid",
-                  borderWidth: "19px 40px 0 5px", // Đáy tam giác nằm phía trên, đỉnh hướng xuống
-                  borderColor: "#01756E transparent transparent transparent", // Màu tam giác ở cạnh trên
-                  top: "41px",
-                }}
-              ></div>
+              <div className={`trakq-treatment-triangle ${isDesktop ? '' : 'mobile'}`}></div>
             </div>
             <div>
               {groupResultsByTreatment(dataXN).map((treatmentGroup, index) => (
                 <div
                   key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    padding: isDesktop ? "10px 20px" : "10px",
-                    marginBottom: "-20px", // Khoảng cách giữa các mục (nếu cần)
-                    marginLeft: isDesktop ? "3px" : "-12px",
-                  }}
+                  className={`trakq-treatment-item ${isDesktop ? '' : 'mobile'}`}
                 >
                   <div>
                     <p>
@@ -558,10 +421,10 @@ export default function TrakqPage() {
                   <Button
                     type="primary"
                     onClick={() => {
-                      setSelectedXN(treatmentGroup.children); // Chỉ hiển thị dữ liệu của nhóm này
+                      setSelectedXN(treatmentGroup.children);
                       setIsModalVisible(true);
                     }}
-                    style={{ marginLeft: "20px" }}
+                    style={{ marginRight: "-20px"}}
                   >
                     Xem Kết Quả
                   </Button>
@@ -572,29 +435,9 @@ export default function TrakqPage() {
         </Card>
       )}
 
-      <div
-        style={{
-          display: 'flex',
-          width: isDesktop ? "1317px" : "100%",
-          margin: isDesktop ? "0 auto" : "0",
-          justifyContent: 'space-between', // Đặt khoảng cách đều giữa các nút
-          marginBottom: "100px",
-        }}
-      >
+      <div className={`trakq-buttons-container ${isDesktop ? 'desktop' : ''}`}>
         <Button
-          style={{
-            flex: '1', // Để hai nút có kích thước bằng nhau
-            height: "70px",
-            backgroundColor: '#02A6A1',
-            color: 'white',
-            borderRadius: '8px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: isDesktop ? '20px' : '17px',
-          }}
+          className={`trakq-button ${isDesktop ? 'desktop' : ''}`}
           onClick={() => {
             window.open('https://zalo.me/s/3491350673285432173/', '_blank'); // Mở liên kết trong tab mới
           }}
@@ -604,19 +447,7 @@ export default function TrakqPage() {
         </Button>
 
         <Button
-          style={{
-            flex: '1', // Để hai nút có kích thước bằng nhau
-            height: "70px",
-            backgroundColor: '#02A6A1',
-            color: 'white',
-            borderRadius: '8px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold',
-            fontSize: /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) ? '17px' : '20px', // Điều chỉnh font size theo thiết bị
-          }}
+          className={`trakq-button ${isDesktop ? 'desktop' : ''}`}
           onClick={() => {
             const isDesktop = !/iPhone|iPad|iPod|Android/i.test(navigator.userAgent); // Kiểm tra thiết bị
             if (isDesktop) {
@@ -661,6 +492,7 @@ export default function TrakqPage() {
           }}
         />
       </Modal>
+      <Footer />
     </>
   );
 }

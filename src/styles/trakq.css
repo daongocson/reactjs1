@@ -1,0 +1,247 @@
+.banner {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .banner {
+    width: 1317px;
+    margin: 0 auto;
+  }
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (min-width: 1024px) {
+  .banner-img {
+    width: 1317px;
+    height: 500px;
+    margin: 0 auto;
+  }
+}
+
+.slogan {
+  width: 100%;
+  margin: 0;
+  text-align: center;
+  background-color: #02A6A1;
+  color: white;
+  font-size: 12.5px;
+  padding: 10px 0;
+}
+
+@media (min-width: 1024px) {
+  .slogan {
+    width: 1317px;
+    margin: 0 auto;
+  }
+}
+
+.info {
+  width: 100%;
+  text-align: left;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.info.desktop {
+  width: 1317px;
+  margin: 0 auto;
+}
+
+.qr-code {
+  width: 100%;
+  margin: 0;
+  padding: 10px;
+}
+
+.qr-code.desktop {
+  width: 1317px;
+  margin: 0 auto;
+}
+
+.qr-down {
+  position: absolute;
+  top: 120px;
+  left: 160px;
+}
+
+.trakq-box-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.trakq-result-box {
+  width: 655px;
+  height: 70px;
+  background-color: #02A6A1;
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.trakq-result-box.mobile {
+  width: 100%;
+  font-size: 16px;
+}
+
+.trakq-dv-card {
+  width: 1317px;
+  margin: 0 auto;
+  text-align: left;
+  overflow: visible;
+  margin-bottom: -40px;
+}
+
+.trakq-dv-card.mobile {
+  width: 100%;
+  margin-bottom: -35px;
+}
+
+.trakq-dv-header {
+  width: 613px;
+  background-color: #02A6A1;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px 20px;
+  border-radius: 8px 8px 0 0;
+  margin-left: -25px;
+}
+
+.trakq-dv-header.mobile {
+  width: 108%;
+  padding: 5px 10px;
+}
+
+.trakq-dv-triangle {
+  position: absolute;
+  right: 641px;
+  border-style: solid;
+  border-width: 19px 40px 0 5px;
+  border-color: #01756E transparent transparent transparent;
+}
+
+.trakq-dv-triangle.mobile {
+  right: -21px;
+}
+
+.trakq-time-text.mobile {
+  text-indent: -20px;
+}
+
+.trakq-dv-container {
+  position: relative;
+  overflow: visible;
+}
+
+.trakq-treatment-container {
+  width: 1317px;
+  margin: 0 auto;
+  text-align: left;
+  margin-top: -10px;
+}
+
+.trakq-treatment-container.mobile {
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+.trakq-treatment-header {
+  position: relative;
+  overflow: visible;
+}
+
+.trakq-treatment-title {
+  width: 613px;
+  background-color: #02A6A1;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  padding: 5px 20px;
+  border-radius: 8px 8px 0 0;
+}
+
+.trakq-treatment-title.mobile {
+  width: 107%;
+  padding: 5px 10px;
+  margin-left: -25px;
+}
+
+.trakq-treatment-triangle {
+  position: absolute;
+  right: 665px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 19px 40px 0 5px;
+  border-color: #01756E transparent transparent transparent;
+  top: 41px;
+}
+
+.trakq-treatment-triangle.mobile {
+  right: -18px;
+}
+
+.trakq-treatment-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  margin-bottom: -20px;
+  margin-left: 3px;
+}
+
+.trakq-treatment-item.mobile {
+  margin-left: -40px;
+  justify-content:  space-between ;
+}
+
+.trakq-treatment-item div {
+  display: flex;
+  flex-direction: column; 
+}
+
+.trakq-treatment-item button {
+  margin-left: 20px;
+}
+
+.trakq-buttons-container {
+  display: flex;
+  margin: 0;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.trakq-buttons-container.desktop {
+  width: 1317px;
+  margin: 0 auto;
+  gap: 10px;
+}
+
+.trakq-button {
+  flex: 1;
+  height: 70px;
+  background-color: #02A6A1;
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.trakq-button.desktop {
+  font-size:20px;
+}
