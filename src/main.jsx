@@ -22,6 +22,7 @@ import YCsuahosoPage from './pages/ycsuahoso.jsx';
 import QuantriPage from './pages/quantri.jsx';
 import YCtaonickPage from './pages/yctaonick.jsx';
 import TrakqPage from './pages/trakq.jsx';
+import TestQrPage from './pages/TestQr.jsx';
 
 const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
       {
         path: "ycsuahs",
         element: <YCsuahosoPage />
+      },
+      {
+        path: "testqr",
+        element: <TestQrPage />
       },
       {
         path: "listEror",
