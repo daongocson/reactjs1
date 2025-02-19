@@ -23,6 +23,7 @@ import QuantriPage from './pages/quantri.jsx';
 import YCtaonickPage from './pages/yctaonick.jsx';
 import TrakqPage from './pages/trakq.jsx';
 import TestQrPage from './pages/TestQr.jsx';
+import CSKHListPage from './pages/ckshList.jsx';
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: "cskh",
         element: <CSKHPage />
+      },
+      {
+        path: "cskhlist",
+        element: <CSKHListPage />
       },
       {
         path: "ylenhbs",

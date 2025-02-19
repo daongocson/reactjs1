@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import React, { Component } from 'react'
 import QrReader from 'react-qr-scanner'
+import TextArea from 'antd/es/input/TextArea';
 
 class Test extends Component {
   constructor(props){
@@ -46,23 +47,43 @@ const TestQrPage = () => {
     const navigate = useNavigate();
 
     const onFinish = async (values) => {
-        const { name, email, password } = values;
+      console.log(values);      
+      const { name } = values;
+      var arrInfo = [];
+      var arr = name.split("\n");        
+      if(arr.length<7){
+        console.log("Không đúng định dạng",arr.length);
+        return;
+      }    
+      for (let i = 0; i < arr.length; i++) {
+        var vArr=arr[i].split(":");
+        if(vArr.length<2){
+          console.log("Không đúng định dạng",vArr.length);
+          return;
+        } 
+        arrInfo.push(vArr[1]);  
+      }
+      var arrAdr = arrInfo[5].split(",");
+      console.log("giatri:",arrAdr[0],"-",arrAdr[1],"-",arrAdr[2],"-",arrAdr[3]);      
 
-        const res = await createUserApi(name, email, password);
+      console.log("giatri-",arrInfo);      
 
-        if (res) {
-            notification.success({
-                message: "CREATE USER",
-                description: "Success"
-            });
-            navigate("/login");
 
-        } else {
-            notification.error({
-                message: "CREATE USER",
-                description: "error"
-            })
-        }
+        // const res = await createUserApi(name, email, password);
+
+        // if (res) {
+        //     notification.success({
+        //         message: "CREATE USER",
+        //         description: "Success"
+        //     });
+        //     navigate("/login");
+
+        // } else {
+        //     notification.error({
+        //         message: "CREATE USER",
+        //         description: "error"
+        //     })
+        // }
 
     };
 
@@ -82,7 +103,7 @@ const TestQrPage = () => {
                         autoComplete="off"
                         layout='vertical'
                     >
-                        {/* <Form.Item
+                        <Form.Item
                             label="Name"
                             name="name"
                             rules={[
@@ -92,8 +113,9 @@ const TestQrPage = () => {
                                 },
                             ]}
                         >
-                            <Input />
-                        </Form.Item> */}
+                            <TextArea   autoSize={{ minRows: 4, maxRows: 9 }}
+                            />
+                        </Form.Item>
 
                         <Form.Item
                         >

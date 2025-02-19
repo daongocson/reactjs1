@@ -48,9 +48,20 @@ const Header = () => {
                     icon: <UsergroupAddOutlined />,
                 },
                 {
-                    label: <Link to={"/cskh"}>Hồ sơ CSKH</Link>,
-                    key: 'cskh',
+                    label: <Link to={"/cskh"}>Quản lý CSKH</Link>,
+                    key: 'qlkh',
                     icon: <UsergroupAddOutlined />,
+                    children: [
+                        {
+                            label: <Link to={"/cskh"}>BN không hài lòng</Link>,
+                            key: 'hskh',
+                            icon: <UsergroupAddOutlined />,
+                        }, {
+                            label: <Link to={"/cskhlist"}>Danh sách khách hàng</Link>,
+                            key: 'cskhlist',
+                            icon: <UsergroupAddOutlined />,
+                        }
+                    ]
                 },{
                     label: <Link to={"/ycsuahs"}>Xem yêu cầu HS</Link>,
                     key: 'dsSuahs',

@@ -1,28 +1,56 @@
 import { useEffect, useState } from "react";
-import { Tabs, Table, Button } from 'antd';
-import { getLsCskhApi} from "../util/api";
-import { Link } from "react-router-dom";
-import { UsergroupAddOutlined } from "@ant-design/icons";
-const CSKHPage = () => {       
+import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notification } from 'antd';
+import { getLsCskhApi, postbacsiApi} from "../util/api";
+import { SignatureOutlined } from "@ant-design/icons";
+const CSKHListPage = () => {       
     const [dataKh, setDataKh]= useState([]); 
+    const { Search } = Input;
+    const [fromDate, setFromDate] = useState('');
+    const [toDate, setToDate] = useState('');
+
     useEffect(() => {   
         fetchKhachhang();        
     }, [])
- 
+    const onSearch = async(value, _e, info) => {  
+    }
     const columns = [
         {
-            title: 'Mã VP',
+            title: 'Tên bệnh nhân',
             dataIndex: 'patientrecordid',
+        },              
+        {
+            title: 'Dịch vụ',
+            dataIndex: 'dichvu',
         },
         {
-            title: 'Nội dung',
+            title: 'Yêu cầu',
             dataIndex: 'ghichu',
         },
         {
-            title: 'Ngày Ra',
+            title: 'Ngày ra viện',
+            dataIndex: 'nrv',
+        },{
+            title: 'Ngày Yc',
+            dataIndex: 'nyc',
+        },{
+            title: 'Người Yc',
+            dataIndex: 'nguoiyc',
+        },{
+            title: 'Phòng',
             dataIndex: 'ngayra',
-        }
-    ];  
+        },{
+            title: 'Xử lý',
+            dataIndex: 'phongth',
+        },{
+            title: 'Duyệt',
+            dataIndex: 'id',
+            key: 'id',
+            render: (index, record) => (
+              <Button  icon={<SignatureOutlined />} onClick={() => showModal(record)} />
+            )
+          },
+          
+    ]; 
     const fetchKhachhang = async () => {
         const res = await getLsCskhApi();
         if (!res?.message) {   
@@ -35,7 +63,6 @@ const CSKHPage = () => {
         }
     }  
     const config=()=>{      
-                console.log("test call phone");
                 let config = {
                         theme: 'default', // sử dụng UI mặc định của sdk
                         debug: true, // cho phép console.log các event call và trạng thái trong sdk
@@ -200,13 +227,77 @@ const CSKHPage = () => {
         });	
         
     } 
+    const handleOnSelect=async (vOptions)=>{
+        console.log("vOptions",vOptions,fromDate,toDate);
+        const res = await postbacsiApi("abc");
+        if (!res?.message) {    
+            // setPhong(res.listphongchucnang)
+            // setQuyen(res.listphanquyen)
+            // setDataBS(res.dataBS);    
+            // setDataYL(res.dataYL);     
+            // setDataTH(res.dataTH);
+            // setDataKQ(res.dataKQ);   
+            // setBsChinhEkip(res.dataBS[0].value);      
+        } else {
+            notification.error({
+                message: "Unauthorized",
+                description: res.message
+            })
+        }
+    }
     return (
-        <div style={{ padding: 20 }}>       
+        <div style={{ padding: 20 }}>    
+        <div className="ant-col ant-col-xs-24 ant-col-xl-8">
+                
+                <Space.Compact key={"spacehs"} block>                                   
+                <DatePicker   
+                        label="Từ ngày"
+                        placeholder="Từ ngày"
+                        onChange={(date, dateString)=>{setFromDate(dateString)}}                       
+                        style={{
+                            width: '160',
+                        }}
+                    />  <DatePicker                       
+                    placeholder="Tới ngày"
+                    onChange={(date, dateString)=>{setToDate(dateString)}}                       
+                    style={{
+                        width: '160',
+                    }}
+                />  
+                    <AutoComplete
+                    style={{   
+                        width: "100%"            
+                    }}
+                    placeholder="Nhập khoa"
+                    options={[
+                        {key: '1k', label: 'Khoa khám bệnh', value: 'Khoa khám bệnh'},
+                        {key: '2n', label: 'Khoa Nội', value: 'Khoa Nội'} ,
+                        {key: '3ng', label: 'Khoa Ngoại', value: 'Khoa Ngoại'} ,
+                        {key: '3yh', label: 'Khoa YHCT', value: 'Khoa YHCT'} ,
+                        {key: '4s', label: 'Khoa Sản', value: 'Khoa sản'}     
+                                          
+                    ]}
+                    filterOption={true}
+                    onSelect={(value)=>{
+                        handleOnSelect(value);
+                    }}
+                    >
+                        
+                    </AutoComplete>               
+                     <Button
+                        type="primary"
+                        onClick={config}
+                    >
+                        Cài đặt cuộc gọi
+                    </Button> 
+             </Space.Compact>
+        </div>     
+                
            <Tabs
                 defaultActiveKey="1"
                 items={[
                 {
-                    label: 'BN không hài lòng',
+                    label: `BN chưa xử lý (${dataKh.length})`,
                     key: '1',
                     children: [ 
                         <Table   
@@ -217,18 +308,36 @@ const CSKHPage = () => {
                         /> ,
                         'Số lượng: '+ dataKh.length                     
                     ],
+                },{
+                    label: `BN không nghe máy (${dataKh.length})`,
+                    key: 'bn2',
+                    children: [ 
+                        <Table   
+                        rowKey={"idcs1kh"}                    
+                        bordered
+                        dataSource={dataKh} columns={columns}                       
+                        key="cskhkhl"
+                        /> ,
+                        'Số lượng: '+ dataKh.length                     
+                    ],
+                },{
+                    label: `Tất cả BN(${dataKh.length})`,
+                    key: 'bn3',
+                    children: [ 
+                        <Table   
+                        rowKey={"idcsk11h"}                    
+                        bordered
+                        dataSource={dataKh} columns={columns}                       
+                        key="cskhkhl"
+                        /> ,
+                        'Số lượng: '+ dataKh.length                     
+                    ],
                 }
                 ]}
-            />   
-            <Button
-                type="primary"
-                onClick={config}
-            >
-                Báo sửa HS
-            </Button>                            
+            />                                     
         </div>
     )
 }
 
-export default CSKHPage;
+export default CSKHListPage;
 
