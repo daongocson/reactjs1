@@ -53,12 +53,21 @@ const Header = () => {
                     icon: <UsergroupAddOutlined />,
                     children: [
                         {
+                            label: <Link to={"/cskhlist"}>Quản lý cuộc gọi</Link>,
+                            key: 'qlcg',
+                            icon: <UsergroupAddOutlined />,
+                        },
+                        {
                             label: <Link to={"/cskh"}>BN không hài lòng</Link>,
                             key: 'hskh',
                             icon: <UsergroupAddOutlined />,
                         }, {
-                            label: <Link to={"/cskhlist"}>Danh sách khách hàng</Link>,
+                            label: <Link to={"/cskh"}>Danh sách khách hàng</Link>,
                             key: 'cskhlist',
+                            icon: <UsergroupAddOutlined />,
+                        }, {
+                            label: <Link to={"/cskh"}>Báo cáo CSKH</Link>,
+                            key: 'bccskh',
                             icon: <UsergroupAddOutlined />,
                         }
                     ]

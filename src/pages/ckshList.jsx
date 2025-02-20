@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
 import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notification } from 'antd';
-import { getLsCskhApi, postbacsiApi} from "../util/api";
-import { SignatureOutlined } from "@ant-design/icons";
+import { getbnBynv, getLsCskhApi, postbacsiApi} from "../util/api";
+import { AudioOutlined, SignatureOutlined } from "@ant-design/icons";
 const CSKHListPage = () => {       
     const [dataKh, setDataKh]= useState([]); 
+    const [dataKhCxl, setDataKhCxl]= useState([]); 
+    const [dataKhNm, setDataKhNm]= useState([]); 
+
     const { Search } = Input;
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
+    const [keyword, setKeyword] = useState('');
 
     useEffect(() => {   
         fetchKhachhang();        
@@ -15,53 +19,65 @@ const CSKHListPage = () => {
     }
     const columns = [
         {
-            title: 'Tên bệnh nhân',
-            dataIndex: 'patientrecordid',
+            title: 'Mã BN',
+            dataIndex: 'idcskh',
         },              
         {
-            title: 'Dịch vụ',
-            dataIndex: 'dichvu',
+            title: 'Họ và tên',
+            dataIndex: 'tenbn',
         },
         {
-            title: 'Yêu cầu',
+            title: 'Phòng khám',
+            dataIndex: 'pkham',
+        },
+        {
+            title: 'Bác sĩ',
+            dataIndex: 'bacsi',
+        },{
+            title: 'Phone',
+            dataIndex: 'phone',
+        },{
+            title: 'Ngày RV',
+            dataIndex: 'ngayravien',
+        },{
+            title: 'Ghi chú',
             dataIndex: 'ghichu',
-        },
-        {
-            title: 'Ngày ra viện',
-            dataIndex: 'nrv',
-        },{
-            title: 'Ngày Yc',
-            dataIndex: 'nyc',
-        },{
-            title: 'Người Yc',
-            dataIndex: 'nguoiyc',
-        },{
-            title: 'Phòng',
-            dataIndex: 'ngayra',
-        },{
-            title: 'Xử lý',
-            dataIndex: 'phongth',
         },{
             title: 'Duyệt',
             dataIndex: 'id',
             key: 'id',
             render: (index, record) => (
-              <Button  icon={<SignatureOutlined />} onClick={() => showModal(record)} />
+              <Button  icon={<AudioOutlined />} onClick={() => showModal(record)} />
             )
           },
           
     ]; 
+    const showModal = (record) => {  
+        console.log("dfdfs>",record["phone"]);   
+        console.log("click showMessage me!!");
+        const phoneNumber = record["phone"];
+        // Initiate the call
+        omiSDK.makeCall(phoneNumber);  
+        // setmodaldata(record);
+        // setIsModalVisible(true);
+      };
     const fetchKhachhang = async () => {
-        const res = await getLsCskhApi();
+        const res = await getbnBynv("","","Phòng khám mới");
+        console.log(res);
         if (!res?.message) {   
-            setDataKh(res);              
+            setFilData(res);                      
         } else {
             notification.error({
                 message: "Unauthorized",
                 description: res.message
             })
         }
-    }  
+    }
+    const setFilData=(data)=>{
+        setDataKh(data);
+        setDataKhCxl(data.filter(item=> item.trangthai.toLowerCase()==='0'));
+        setDataKhNm(data.filter(item=> item.trangthai.toLowerCase()==='2'));
+    };  
     const config=()=>{      
                 let config = {
                         theme: 'default', // sử dụng UI mặc định của sdk
@@ -229,8 +245,10 @@ const CSKHListPage = () => {
     } 
     const handleOnSelect=async (vOptions)=>{
         console.log("vOptions",vOptions,fromDate,toDate);
-        const res = await postbacsiApi("abc");
-        if (!res?.message) {    
+        const res = await getbnBynv(fromDate,toDate,vOptions);
+        if (!res?.message) {   
+            setFilData(res);     
+            // searchTable(res);                  
             // setPhong(res.listphongchucnang)
             // setQuyen(res.listphanquyen)
             // setDataBS(res.dataBS);    
@@ -245,6 +263,13 @@ const CSKHListPage = () => {
             })
         }
     }
+    const keys  = ["pkham","tenbn"]
+    const searchTable=(data)=>{   
+        return data.filter(
+            (item)=>(
+                keys.some((key)=>item[key].toLowerCase().includes(keyword.toLowerCase())
+            )));      
+    } 
     return (
         <div style={{ padding: 20 }}>    
         <div className="ant-col ant-col-xs-24 ant-col-xl-8">
@@ -268,7 +293,7 @@ const CSKHListPage = () => {
                     style={{   
                         width: "100%"            
                     }}
-                    placeholder="Nhập khoa"
+                    placeholder="Chọn khoa"
                     options={[
                         {key: '1k', label: 'Khoa khám bệnh', value: 'Khoa khám bệnh'},
                         {key: '2n', label: 'Khoa Nội', value: 'Khoa Nội'} ,
@@ -297,38 +322,47 @@ const CSKHListPage = () => {
                 defaultActiveKey="1"
                 items={[
                 {
-                    label: `BN chưa xử lý (${dataKh.length})`,
-                    key: '1',
+                    label: `BN chưa xử lý (${dataKhCxl.length})`,
+                    key: 'b1',
                     children: [ 
+                        <Search
+                        placeholder="Nhập nội dung"
+                        key={"seachCxl"}
+                        allowClear
+                        onChange={(event)=>setKeyword(event.target.value)}                      
+                        style={{
+                            width: "30%"                        
+                        }}
+                        /> ,
                         <Table   
-                        rowKey={"idcskh"}                    
-                        bordered
-                        dataSource={dataKh} columns={columns}                       
+                        rowKey={"patientrecordid"}                    
+                        bordered                       
+                        dataSource={searchTable(dataKhCxl)} columns={columns}                 
                         key="cskhkhl"
                         /> ,
                         'Số lượng: '+ dataKh.length                     
                     ],
                 },{
-                    label: `BN không nghe máy (${dataKh.length})`,
+                    label: `BN không nghe máy (${dataKhNm.length})`,
                     key: 'bn2',
                     children: [ 
                         <Table   
-                        rowKey={"idcs1kh"}                    
+                        rowKey={"patientrecordid"}                    
                         bordered
-                        dataSource={dataKh} columns={columns}                       
-                        key="cskhkhl"
+                        dataSource={dataKhNm} columns={columns}                       
+                        key="cskhk1hl"
                         /> ,
-                        'Số lượng: '+ dataKh.length                     
+                        'Số lượng: '+ dataKhNm.length                     
                     ],
                 },{
                     label: `Tất cả BN(${dataKh.length})`,
                     key: 'bn3',
                     children: [ 
                         <Table   
-                        rowKey={"idcsk11h"}                    
+                        rowKey={"patientrecordid"}                    
                         bordered
                         dataSource={dataKh} columns={columns}                       
-                        key="cskhkhl"
+                        key="cskhk11hl"
                         /> ,
                         'Số lượng: '+ dataKh.length                     
                     ],
