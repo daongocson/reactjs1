@@ -1,16 +1,22 @@
 import { useEffect, useState } from "react";
 import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notification } from 'antd';
-import { getbnBynv, getLsCskhApi, postbacsiApi} from "../util/api";
+import { getbnBynv, getLsCskhApi, postbacsiApi, postpatientApi} from "../util/api";
 import { AudioOutlined, SignatureOutlined } from "@ant-design/icons";
+import ModelView from "../components/module/ModelView";
+import ModelViewCskh from "../components/module/ModelViewCskh";
 const CSKHListPage = () => {       
     const [dataKh, setDataKh]= useState([]); 
     const [dataKhCxl, setDataKhCxl]= useState([]); 
     const [dataKhNm, setDataKhNm]= useState([]); 
-
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const { Search } = Input;
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
     const [keyword, setKeyword] = useState('');
+    const [pid, setPid] = useState('');
+    const [phone, setPhone] = useState('');
+    const [modaldata, setModaldata] = useState([]);
+
 
     useEffect(() => {   
         fetchKhachhang();        
@@ -52,14 +58,36 @@ const CSKHListPage = () => {
           },
           
     ]; 
+    const loadDataModel=async(pid)=>{
+        console.log("beviewcskh>>",pid);         
+        const res = await postpatientApi(pid);    
+        console.log("viewcskh>>",res);                 
+        if (!res?.message) {                    
+            setModaldata(res);
+            console.log(res);
+            // setDataKH(res.dataKH)          
+            // setDataKB(res.dataKB);              
+            // setDataTH(res.dataTH);    
+            // setDataDV(res.dataDV);                   
+        } else {
+            notification.error({
+                message: "Unauthorized",
+                description: res.message
+            })
+        }
+    }
     const showModal = (record) => {  
         console.log("dfdfs>",record["phone"]);   
-        console.log("click showMessage me!!");
-        const phoneNumber = record["phone"];
+        if(record["patientrecordid"]!==''){
+            const phoneNumber = record["phone"];
+            setPid(record["patientrecordid"]);
+            setPhone(phoneNumber);
+            loadDataModel(record["patientrecordid"]);
+        }        
         // Initiate the call
-        omiSDK.makeCall(phoneNumber);  
-        // setmodaldata(record);
-        // setIsModalVisible(true);
+        // omiSDK.makeCall(phoneNumber);  
+        
+        setIsModalVisible(true);
       };
     const fetchKhachhang = async () => {
         const res = await getbnBynv("","","Phòng khám mới");
@@ -270,6 +298,12 @@ const CSKHListPage = () => {
                 keys.some((key)=>item[key].toLowerCase().includes(keyword.toLowerCase())
             )));      
     } 
+    const handleOk=()=>{
+        setIsModalVisible(false);
+    }
+    const handleCancel=()=>{
+        setIsModalVisible(false);
+    }
     return (
         <div style={{ padding: 20 }}>    
         <div className="ant-col ant-col-xs-24 ant-col-xl-8">
@@ -368,7 +402,15 @@ const CSKHListPage = () => {
                     ],
                 }
                 ]}
-            />                                     
+            />  
+            <ModelViewCskh 
+                open={isModalVisible}
+                phone={phone}
+                pid={pid}
+                modaldata={modaldata}
+                handleOk={handleOk}
+                handleCancel={handleCancel}
+            />                                   
         </div>
     )
 }
