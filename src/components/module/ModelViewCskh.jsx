@@ -1,10 +1,12 @@
 import React, { useState,useRef } from 'react';
 //import { Button, Modal } from 'antd';
-import { AutoComplete, Button, Card, Checkbox, Form, Input,Modal, Tabs } from 'antd';
+import { AutoComplete, Button, Card, Checkbox, Form, Input,Modal, Select, Tabs } from 'antd';
 import Draggable from 'react-draggable';
+import TextArea from 'antd/es/input/TextArea';
 function ModelViewCskh(props) {
     const{open,phone,pid,modaldata ,handleOk,handleCancel}=props;  
     const [disabled, setDisabled] = useState(true); 
+    const [kqSelect, setKqSelect] = useState(true); 
     const onStart = (_event, uiData) => {
       const { clientWidth, clientHeight } = window.document.documentElement;
       const targetRect = draggleRef.current?.getBoundingClientRect();
@@ -129,22 +131,26 @@ function ModelViewCskh(props) {
                       key: '14A',
                       children: [
                         <Card key="ab2" title="Kết quả phản hồi bệnh nhân" size="small">
-                          <AutoComplete
-                          style={{   
-                              width: "100%"            
-                          }}                
-                          placeholder="Nhập yêu cầu"
-                          options={[
-                              {key: '1', label: 'Hài lòng', value: 'Hài lòng'},
-                              {key: '2', label: 'Không hài lòng', value: 'Không hài lòng'},
-                              {key: '3', label: 'Không nghe máy', value: 'Không nghe máy'},
-                              {key: '4', label: 'Sai số', value: 'Sai số'},
-                              {key: '5', label: 'Chưa xử lý', value: 'Chưa xử lý'}
+                            <Select
+                            defaultValue="jack"
+                            style={{ width: '100%' }}
+                            onChange={(value)=>setKqSelect(value)}
+                            options={[
+                              { value: 'jack', label: 'Hài lòng' },
+                              { value: 'lucy', label: 'Không hài lòng' },
+                              { value: 'Yiminghe', label: 'Không nghe máy' },
+                              { value: 'disabled', label: 'Sai số' },
+                              { value: 'fghj', label: 'Chưa xử lý' },
                             ]}
-                          filterOption={true}                               
-                          >
-                              
-                          </AutoComplete>
+                          />   ,
+                           <TextArea
+                            showCount
+                            maxLength={100}
+                            onChange={(value)=>setKqSelect(value)}
+                            placeholder="Nhập ghi chú bệnh nhân"
+                            style={{ height: 120, resize: 'none' }}
+                          />                          
+                          {/* </AutoComplete> */}
                         </Card>                                            
                       ]
                     },
