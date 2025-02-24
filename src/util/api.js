@@ -92,7 +92,6 @@ const getbnBynv =(tungay, denngay, nhanvien) => {
     return axios.post(URL_API, data)
 }
 const postkqGoiApi =(data) => {
-    console.log("postkqGodfdfdi>>",data);
     const URL_API = "/v1/api/postkqgoi";   
     return axios.post(URL_API, data)
 }
