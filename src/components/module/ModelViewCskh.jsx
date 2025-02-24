@@ -1,6 +1,6 @@
 import React, { useState,useRef } from 'react';
 //import { Button, Modal } from 'antd';
-import { AutoComplete, Button, Card, Checkbox, Form, Input,Modal, notification, Select, Space, Tabs } from 'antd';
+import { AutoComplete, Button, Card, Checkbox, Form, Input,Modal, notification, Select, Space, Table, Tabs } from 'antd';
 import Draggable from 'react-draggable';
 import TextArea from 'antd/es/input/TextArea';
 import { PhoneOutlined } from '@ant-design/icons';
@@ -22,7 +22,27 @@ function ModelViewCskh(props) {
         top: -targetRect.top + uiData.y,
         bottom: clientHeight - (targetRect.bottom - uiData.y),
       });
-  }    
+  }  
+  const columns = [
+    {
+      title: 'Tên DV',
+      dataIndex: 'tendv',
+    },              
+    {
+        title: 'SL',
+        dataIndex: 'soluong',
+    }, {
+      title: 'Đơn giá',
+      dataIndex: 'dongia',
+    },
+    {
+        title: 'Loại DV',
+        dataIndex: 'loaidv',
+    }, {
+      title: 'Bác sĩ',
+      dataIndex: 'bacsi',
+  }
+  ];  
     const onFinish = (values) => {
         // console.log('Success:',">>>",form.getFieldsValue());
         postkqGoi(form.getFieldsValue());
@@ -30,12 +50,10 @@ function ModelViewCskh(props) {
       };
       const postkqGoi = async (values) => {
           if(values?.ketqua&&values?.note){
-            const res = await postkqGoiApi({"idcskh":pid,ketqua:values.ketqua,note:values.note});
-            console.log("refetch343434>>",res);
+            const res = await postkqGoiApi({"idcskh":pid,ketqua:values.ketqua,note:values.note});            
             if (!res?.success) {   
               form.resetFields();
               setOpen(false);
-              console.log("refetch>>");
               refetch();
               // setFilData(res);                      
             } else {
@@ -45,7 +63,6 @@ function ModelViewCskh(props) {
                 })
             }          
         }else{
-          console.log("postkqGoimmmm>>");
           notification.error({
             message: "Cần nhập kết quả cuộc gọi",
             description: "Thiếu dữ liệu"
@@ -119,49 +136,71 @@ function ModelViewCskh(props) {
                   items={[
                     {
                       label: 'Bệnh nhân',
-                      key: '1A',
+                      key: 'bnhan',
                       children: [
                         <Card key="ab" title="Thông tin bệnh nhân" size="small">
-                          <li>Mã CSKH: {pid}</li>
-                          <li>Phone: {phone}</li>
+                          {/* <p>Mã CSKH: {pid}</p> */}
+                          <p>Phone: {phone}</p>
                           {modaldata.length==0?"loading...":(
-                          <>
-                           {modaldata.dataKH.map((item) => (
-                              <li key={item.id}>{item.name}:{item.value}</li>
-                            ))}
-                          </>
-                        ) }
-                        </Card>                                            
+                            <div>
+                            <p><strong> {modaldata.dataKH[0].value}({modaldata.dataKH[3].value})</strong></p>
+                            <p style={{ color: 'blue' }}>{modaldata.dataKH[4].value}</p>     
+                            <p>{modaldata.dataKH[2].value}</p>                           
+                            <p>{modaldata.dataKH[6].name}:{modaldata.dataKH[6].value}</p>                            
+                            <p>{modaldata.dataKH[7].name}:{modaldata.dataKH[7].value}</p>                            
+                            <p><b>{modaldata.dataKH[9].value=="13"?"Chuyển Tuyến":""}</b></p>
+                            </div>
+                          )}
+                        </Card>
+                        
+                        
+                      ]
+                    },
+                    {
+                      label: 'Dịch vụ',
+                      key: '1A',
+                      children: [
+                        // <Card key="ab" title="Thông tin bệnh nhân" size="small">
+                        //   <li>Mã CSKH: {pid}</li>
+                        //   <li>Phone: {phone}</li>
+                        //   {modaldata.length==0?"loading...":(
+                        //   <>
+                        //    {modaldata.dataKH.map((item) => (
+                        //       <li key={item.id}>{item.name}:{item.value}</li>
+                        //     ))}
+                        //   </>
+                        // ) }
+                        // </Card>    
+                        <Table   
+                        rowKey={"id"}                    
+                       // bordered                       
+                        dataSource={modaldata.khDV} columns={columns}                 
+                        key="cskhkhl"
+                        />                                         
                       ]
                     },
                     {
                       label: 'Thuốc',
                       key: '12A',
                       children: [
-                        <Card key="ab2" title="Danh sách Thuốc" size="small">
-                            {modaldata.length==0?"loading...":(
-                          <>
-                           {modaldata.dataTH.map((item) => (
-                              <li key={item.id}>{item.name}:{item.value}</li>
-                              ))}
-                            </>
-                          )}                         
-                        </Card>                                            
+                        <Table   
+                        rowKey={"id"}                    
+                        bordered                       
+                        dataSource={modaldata.khTH} columns={columns}                 
+                        key="cskhkhl"
+                        />                                              
                       ]
                     },
                     {
-                      label: 'Dịch vụ',
+                      label: 'Xét nghiệm',
                       key: '13A',
                       children: [
-                        <Card key="ab3" title="Danh sách dịch vụ" size="small">
-                            {modaldata.length==0?"loading...":(
-                          <>
-                           {modaldata.dataDV.map((item) => (
-                              <li key={item.id}>{item.name}:{item.value}</li>
-                              ))}
-                            </>
-                          )}                         
-                        </Card>                                           
+                        <Table   
+                        rowKey={"id"}                    
+                        bordered                       
+                        dataSource={modaldata.khXN} columns={columns}                 
+                        key="cskhkhl"
+                        />                                              
                       ]
                     },{
                       label: 'Cập nhật kết quả',
@@ -207,8 +246,7 @@ function ModelViewCskh(props) {
                               ]}
                             >
                               <TextArea
-                              showCount
-                                  maxLength={100}                                 
+                              showCount                                                    
                                   placeholder="Nhập ghi chú bệnh nhân"
                                   style={{ height: 120, resize: 'none' }}
                               />

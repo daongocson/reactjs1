@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notification } from 'antd';
-import { getbnBynv, getLsCskhApi, postbacsiApi, postpatientApi} from "../util/api";
+import { getbnBynv, getLsCskhApi, postbacsiApi, postcskhPidApi, postpatientApi} from "../util/api";
 import { AudioOutlined, SignatureOutlined } from "@ant-design/icons";
 import ModelView from "../components/module/ModelView";
 import ModelViewCskh from "../components/module/ModelViewCskh";
@@ -62,8 +62,9 @@ const CSKHListPage = () => {
     ]; 
     const loadDataModel=async(pid)=>{    
         setLoading(true);             
-        const res = await postpatientApi(pid);    
-        // console.log("viewcskh>>",res);                 
+        // const res = await postpatientApi(pid);  
+        const res = await postcskhPidApi(pid);      
+        console.log("viewcskh>>",res);                 
         if (!res?.message) {                    
             setLoading(false);
             setModaldata(res);
