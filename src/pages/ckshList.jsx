@@ -64,15 +64,10 @@ const CSKHListPage = () => {
         setLoading(true);             
         // const res = await postpatientApi(pid);  
         const res = await postcskhPidApi(pid);      
-        console.log("viewcskh>>",res);                 
+        // console.log("viewcskh>>",res);                 
         if (!res?.message) {                    
             setLoading(false);
             setModaldata(res);
-            // console.log(res);
-            // setDataKH(res.dataKH)          
-            // setDataKB(res.dataKB);              
-            // setDataTH(res.dataTH);    
-            // setDataDV(res.dataDV);                   
         } else {
             notification.error({
                 message: "Unauthorized",

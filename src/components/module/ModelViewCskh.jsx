@@ -138,20 +138,24 @@ function ModelViewCskh(props) {
                       label: 'Bệnh nhân',
                       key: 'bnhan',
                       children: [
-                        <Card key="ab" title="Thông tin bệnh nhân" size="small">
-                          {/* <p>Mã CSKH: {pid}</p> */}
-                          <p>Phone: {phone}</p>
-                          {modaldata.length==0?"loading...":(
-                            <div>
-                            <p><strong> {modaldata.dataKH[0].value}({modaldata.dataKH[3].value})</strong></p>
-                            <p style={{ color: 'blue' }}>{modaldata.dataKH[4].value}</p>     
-                            <p>{modaldata.dataKH[2].value}</p>                           
-                            <p>{modaldata.dataKH[6].name}:{modaldata.dataKH[6].value}</p>                            
-                            <p>{modaldata.dataKH[7].name}:{modaldata.dataKH[7].value}</p>                            
-                            <p><b>{modaldata.dataKH[9].value=="13"?"Chuyển Tuyến":""}</b></p>
-                            </div>
-                          )}
-                        </Card>
+                        <div key={"bnhaninfo"}>
+                          {modaldata.length==0?"loading...":
+                          (<Card key="ab" title={modaldata.dataKH[0].value+"("+modaldata.dataKH[3].value+")"} size="small">
+                            {/* <p>Mã CSKH: {pid}</p> */}
+                              <p style={{ color: 'blue' }}>{modaldata.dataKH[4].value}</p>     
+                              <p>Mã VP: {modaldata.dataKH[1].value}</p>   
+                              <p>Phone: {phone}</p>     
+                              
+                              {/* <p><strong> {modaldata.dataKH[0].value}({modaldata.dataKH[3].value})</strong></p> */}
+                             
+                              <p>{modaldata.dataKH[2].value}</p>                           
+                              <p>{modaldata.dataKH[6].name}:{modaldata.dataKH[6].value}</p>                            
+                              <p>{modaldata.dataKH[7].name}:{modaldata.dataKH[7].value}</p>                            
+                              <p><b>{modaldata.dataKH[8].value=="13"?"Chuyển Tuyến":""}</b></p>
+                          </Card>)
+                          }
+                        </div>
+                        
                         
                         
                       ]
