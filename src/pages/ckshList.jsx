@@ -9,6 +9,8 @@ const CSKHListPage = () => {
     const [dataKhCxl, setDataKhCxl]= useState([]); 
     const [dataKhNm, setDataKhNm]= useState([]); 
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [loading, setLoading] = useState(true);
+
     const { Search } = Input;
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
@@ -58,13 +60,14 @@ const CSKHListPage = () => {
           },
           
     ]; 
-    const loadDataModel=async(pid)=>{
-        console.log("beviewcskh>>",pid);         
+    const loadDataModel=async(pid)=>{    
+        setLoading(true);             
         const res = await postpatientApi(pid);    
-        console.log("viewcskh>>",res);                 
+        // console.log("viewcskh>>",res);                 
         if (!res?.message) {                    
+            setLoading(false);
             setModaldata(res);
-            console.log(res);
+            // console.log(res);
             // setDataKH(res.dataKH)          
             // setDataKB(res.dataKB);              
             // setDataTH(res.dataTH);    
@@ -77,10 +80,9 @@ const CSKHListPage = () => {
         }
     }
     const showModal = (record) => {  
-        console.log("dfdfs>",record["phone"]);   
         if(record["patientrecordid"]!==''){
             const phoneNumber = record["phone"];
-            setPid(record["patientrecordid"]);
+            setPid(record["idcskh"]);
             setPhone(phoneNumber);
             loadDataModel(record["patientrecordid"]);
         }        
@@ -91,7 +93,7 @@ const CSKHListPage = () => {
       };
     const fetchKhachhang = async () => {
         const res = await getbnBynv("","","Phòng khám mới");
-        console.log(res);
+        // console.log(res);
         if (!res?.message) {   
             setFilData(res);                      
         } else {
@@ -272,7 +274,7 @@ const CSKHListPage = () => {
         
     } 
     const handleOnSelect=async (vOptions)=>{
-        console.log("vOptions",vOptions,fromDate,toDate);
+        // console.log("vOptions",vOptions,fromDate,toDate);
         const res = await getbnBynv(fromDate,toDate,vOptions);
         if (!res?.message) {   
             setFilData(res);     
@@ -405,7 +407,10 @@ const CSKHListPage = () => {
             />  
             <ModelViewCskh 
                 open={isModalVisible}
+                setOpen={setIsModalVisible}
+                refetch={fetchKhachhang}
                 phone={phone}
+                loading={loading}
                 pid={pid}
                 modaldata={modaldata}
                 handleOk={handleOk}

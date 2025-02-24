@@ -91,6 +91,11 @@ const getbnBynv =(tungay, denngay, nhanvien) => {
     }
     return axios.post(URL_API, data)
 }
+const postkqGoiApi =(data) => {
+    console.log("postkqGodfdfdi>>",data);
+    const URL_API = "/v1/api/postkqgoi";   
+    return axios.post(URL_API, data)
+}
 const postmaquyenApi = (data) => {
     const URL_API = "/v1/api/postmaquyen";
     return axios.post(URL_API, data)
@@ -124,5 +129,5 @@ const getLsphongkhamApi  = () => {
     return axios.get(URL_API)
 }
 export {
-    getbnBynv,postkqclsApi,fetchycbydateApi,postmaquyenApi,getuserduyetApi,createnickbsApi,postDoctorApi,postycbydateApi,postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
+    postkqGoiApi,getbnBynv,postkqclsApi,fetchycbydateApi,postmaquyenApi,getuserduyetApi,createnickbsApi,postDoctorApi,postycbydateApi,postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
 }
