@@ -24,6 +24,7 @@ import YCtaonickPage from './pages/yctaonick.jsx';
 import TrakqPage from './pages/trakq.jsx';
 import TestQrPage from './pages/TestQr.jsx';
 import CSKHListPage from './pages/ckshList.jsx';
+import TracuuICDPage from './pages/tracuuicd.jsx';
 
 const router = createBrowserRouter([
   {
@@ -53,6 +54,9 @@ const router = createBrowserRouter([
       {
         path: "tracuubn",
         element: <TracuubnPage />
+      }, {
+        path: "tracuuicd",
+        element: <TracuuICDPage />
       },
       {
         path:"/ketquacls/:id",

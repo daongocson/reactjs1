@@ -93,8 +93,24 @@ const Header = () => {
             
             ]
         },,{
-            label: <Link to={"/quantri"}>Quản trị EHC</Link>,
+            label: <Link to={"/quantri"}>Quản trị& Báo cáo</Link>,
             key: 'quantriehc',
+            children: [
+                {
+                    label: <Link to={"/quantri"}>Quản trị IT</Link>,
+                    key: 'quantriit',
+                    icon: <UsergroupAddOutlined />,
+                },
+                {
+                    label: <Link to={"/tracuuicd"}>Báo cáo ICD</Link>,
+                    key: 'tracuuicd',
+                    icon: <UsergroupAddOutlined />,
+                }, {
+                    label: <Link to={"/khambenh"}>Tra cứu Phòng khám</Link>,
+                    key: 'khambenhqt',
+                    icon: <UsergroupAddOutlined />,
+                }
+            ]
         }       
         ] : []),
         {
