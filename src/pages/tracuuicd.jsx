@@ -12,6 +12,8 @@ const TracuuICDPage = () => {
     const [dataBaocao, setDataBaocao] = useState([]); 
     const [icd, setICD] = useState(''); 
     const [dataCaptoa, setDataCaptoa]= useState([]); 
+    const [dataNhapvien, setDataNhapvien]= useState([]); 
+    const [keyword, setKeyword] = useState('');
     const [dataChuyentuyen, setDataChuyentuyen]= useState([]); 
 
     const columns = [
@@ -66,9 +68,7 @@ const TracuuICDPage = () => {
       }
       const OnClickHs = async () => {           
             let data = {...dateOp,icd};            
-            const res = await postbaocaoIcdApi(data);
-            console.log("datarav>>>",res);            
-        
+            const res = await postbaocaoIcdApi(data);   
             if (!res?.message) { 
                 if(res?.thongbao){
                     notification.success({
@@ -87,22 +87,23 @@ const TracuuICDPage = () => {
         
       };    
     const setFilData=(data)=>{
-        setDataBaocao(data);
-        // console.log("sestffff>>>>",data);
-        setDataCaptoa(data.filter(item=> item.dm_hinhthucravienid===2));       
-        console.log("datacccsestffff>>>>",dataCaptoa); 
+        setDataBaocao(data);       
+        setDataCaptoa(data.filter(item=> item.dm_hinhthucravienid===2));   
         setDataChuyentuyen(data.filter(item=> item.dm_hinhthucravienid===13));
+        setDataNhapvien(data.filter(item=> item.dm_hinhthucravienid===4));        
     };  
       const onChangeDate = (date, dateString) => {        
         // console.log("date", dateString);
         setDateOp(dateString);
       };
-      const searchTable=(data)=>{   
-        return data;
-        // return data.filter(
-        //     (item)=>(
-        //         keys.some((key)=>item[key].toLowerCase().includes(keyword.toLowerCase())
-        //     )));      
+      const searchTable=(data)=>{  
+        if(keyword=="")
+            return data;
+        else
+            return data.filter(
+                (item)=>(
+                    keys.some((key)=>item[key]!=null&&item[key].toString().toLowerCase().includes(keyword)
+                )));      
     }
     return (
         <>         
@@ -155,28 +156,19 @@ const TracuuICDPage = () => {
                     items={[
                     {
                         label: `BN Chuyển tuyến (${dataChuyentuyen.length})`,
-                        key: 'b1',
-                        children: [ 
-                            <Search
-                            placeholder="Nhập nội dung"
-                            key={"seachCxl"}
-                            allowClear
-                            onChange={(event)=>setKeyword(event.target.value)}                      
-                            style={{
-                                width: "30%"                        
-                            }}
-                            /> ,
+                        key: 'chuyentuyen',
+                        children: [                           
                             <Table   
                             rowKey={"medicalrecordid"}                    
                             bordered                       
-                            dataSource={searchTable(dataChuyentuyen)} columns={columns}                 
+                            dataSource={dataChuyentuyen} columns={columns}                 
                             key="cskhkhl"
                             /> ,
                             'Số lượng: '+ dataChuyentuyen.length                     
                         ],
                     },{
                         label: `Cấp toa cho về (${dataCaptoa.length})`,
-                        key: 'bn2',
+                        key: 'captoa',
                         children: [ 
                             <Table   
                             rowKey={"medicalrecordid"}                    
@@ -187,13 +179,38 @@ const TracuuICDPage = () => {
                             'Số lượng: '+ dataCaptoa.length                     
                         ],
                     },{
-                        label: `Tất cả BN(${dataBaocao.length})`,
-                        key: 'bn3',
+                        label: `Nhập viện (${dataNhapvien.length})`,
+                        key: 'nhapvien',
                         children: [ 
+                            <Table   
+                            rowKey={"medicalrecordid"}                    
+                            bordered
+                            dataSource={dataNhapvien} columns={columns}                       
+                            key="cskhk3hl"
+                            /> ,
+                            'Số lượng: '+ dataNhapvien.length                     
+                        ],
+                    },{
+                        label: `Tất cả BN(${dataBaocao.length})`,
+                        key: 'allbn',
+                        children: [ 
+                            <Search
+                            placeholder="Nhập nội dung"
+                            key={"seachCxl"}
+                            allowClear
+                            onChange={(event)=>{
+                                console.log("insert>>>",event.target.value);
+                                setKeyword(event.target.value)
+                            }}                      
+                            style={{
+                                width: "30%"                        
+                            }}
+                            /> ,
                             <Table
                                 rowKey={"medicalrecordid"}
                                 bordered
-                                dataSource={dataBaocao} columns={columns}                                              
+                                dataSource={searchTable(dataBaocao)} columns={columns}      
+                                key="cskhk3hlxx"                                        
                             />  ,
                             'Số lượng: '+ dataBaocao.length                     
                         ],

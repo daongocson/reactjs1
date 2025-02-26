@@ -354,7 +354,7 @@ const CSKHListPage = () => {
                 defaultActiveKey="1"
                 items={[
                 {
-                    label: `BN chưa xử lý (${dataKhCxl.length})`,
+                    label: `BN chưa gọi (${dataKhCxl.length})`,
                     key: 'b1',
                     children: [ 
                         <Search
