@@ -43,7 +43,6 @@ const postbaocaoIcdApi = (data) => {
     return axios.post(URL_API, data)
 }
 const postbaocaodieutriApi = (data) => {
-    console.log("postbaocaodieutriApi>>>",data);
     const URL_API = "/v1/api/postbaocaodieutri";    
     return axios.post(URL_API, data)
 }

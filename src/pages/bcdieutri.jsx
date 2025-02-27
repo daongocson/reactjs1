@@ -26,7 +26,7 @@ const BCDieutriPage = () => {
             dataIndex: 'patientrecordid_vp',
         },{
             title: 'Số ngày điều trị',
-            dataIndex: 'ngayrv',
+            dataIndex: 'medicalrecorddate_out',
         } ,{
             title: 'Ngày ĐT Trung bình',
             dataIndex: 'loairv',
@@ -86,7 +86,8 @@ const BCDieutriPage = () => {
                         description: res.thongbao
                     })
                 }else
-                setFilData(res);                
+                setFilData(res.bnngoaitru);                
+                setDataBaocao(res.bnnoitru)
             } else {
                 setPending(false);
                 notification.error({
@@ -130,7 +131,20 @@ const BCDieutriPage = () => {
                     {
                         label: `Bệnh Nhân nội trú (${dataBaocao.length})`,
                         key: 'noitru',
-                        children: [                           
+                        children: [
+                            <Select
+                                key={"slkhoa"}
+                                showSearch
+                                placeholder="Chọn khoa điều trị"
+                                filterOption={(input, option) =>
+                                (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                                }
+                                options={[
+                                    {value: '1',label: 'Khoa Nội'},
+                                    {value: '2',label: 'Khoa Ngoại'},
+                                    {value: '3',label: 'Khoa Sản'},
+                                ]}
+                            />,                              
                             <Table   
                             rowKey={"medicalrecordid"}                    
                             bordered                       
