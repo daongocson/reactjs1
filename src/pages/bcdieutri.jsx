@@ -1,6 +1,6 @@
 import { AutoComplete, Button, DatePicker, Input, notification, Select, Space, Spin, Table, Tabs } from "antd";
 import { useState } from "react";
-import { postbaocaoIcdApi, postDoctorApi, postIcdApi } from "../util/api";
+import { postbaocaodieutriApi, postbaocaoIcdApi, postDoctorApi, postIcdApi } from "../util/api";
 import { SearchOutlined } from "@ant-design/icons";
 
 const BCDieutriPage = () => {   
@@ -11,8 +11,8 @@ const BCDieutriPage = () => {
     const [dateOp, setDateOp] = useState([]); 
     const [dataBaocao, setDataBaocao] = useState([]); 
     const [icd, setICD] = useState(''); 
-    const [dataCaptoa, setDataCaptoa]= useState([]); 
-    const [dataNhapvien, setDataNhapvien]= useState([]); 
+    const [dataYhct, setDataYhct]= useState([]); 
+    const [dataThannt, setdataThannt]= useState([]); 
     const [keyword, setKeyword] = useState('');
     const [dataChuyentuyen, setDataChuyentuyen]= useState([]); 
 
@@ -34,49 +34,50 @@ const BCDieutriPage = () => {
     ];  
     const columns_nt = [
         {
-            title: 'Khoa điều trị',
+            title: 'Mã VP',
             dataIndex: 'patientrecordid',
         },
         {
-            title: 'Số lượt',
-            dataIndex: 'patientrecordid_vp',
+            title: 'Thời gian',
+            dataIndex: 'ngayrv',
         }
     ];  
     const keys  = ["loairv","patientrecordid","patientrecordid_vp"]
-    const handleOnSearch = async(values) => {   
-        if(values.length==2)  {
-            const res = await postIcdApi(values);
-            if (!res?.message) {                    
-                const Options = res.map(res => ({
-                    key:res.id,
-                    value: res.dm_icd10code,
-                    label: res.dm_icd10code+"->"+res.dm_icd10name,                    
-                    isLeaf: false    
-                  }));                   
-                setDataOp(Options);              
-            } else {
-                notification.error({
-                    message: "Unauthorized",
-                    description: res.message
-                })
-            }
-        }else {
-            if(values.length>2&&dataOp.length<1){
-                const res = await postIcdApi(values);
-            }else{
-                //filter(khi data có rồi thì filter)
-            }            
-        }      
+    // const handleOnSearch = async(values) => {   
+    //     if(values.length==2)  {
+    //         const res = await postIcdApi(values);
+    //         if (!res?.message) {                    
+    //             const Options = res.map(res => ({
+    //                 key:res.id,
+    //                 value: res.dm_icd10code,
+    //                 label: res.dm_icd10code+"->"+res.dm_icd10name,                    
+    //                 isLeaf: false    
+    //               }));                   
+    //             setDataOp(Options);              
+    //         } else {
+    //             notification.error({
+    //                 message: "Unauthorized",
+    //                 description: res.message
+    //             })
+    //         }
+    //     }else {
+    //         if(values.length>2&&dataOp.length<1){
+    //             const res = await postIcdApi(values);
+    //         }else{
+    //             //filter(khi data có rồi thì filter)
+    //         }            
+    //     }      
       
-      };
-      const handleOnSelect = async(values,option) => {             
-            setICD(values);       
-      }
+    //   };
+    //   const handleOnSelect = async(values,option) => {             
+    //         setICD(values);       
+    //   }
       const OnClickHs = async () => {      
             setDataBaocao([]);    
             setPending(true);               
-            let data = {...dateOp,icd};            
-            const res = await postbaocaoIcdApi(data);   
+            let data = {...dateOp};            
+            const res = await postbaocaodieutriApi(data);  
+            console.log("dieutri>>",res); 
             if (!res?.message) { 
                 setPending(false);
                 if(res?.thongbao){
@@ -97,10 +98,10 @@ const BCDieutriPage = () => {
         
       };    
     const setFilData=(data)=>{
-        setDataBaocao(data);       
-        setDataCaptoa(data.filter(item=> item.dm_medicalrecordstatusid===99 && item.dm_hinhthucravienid===2));   
-        setDataChuyentuyen(data.filter(item=> item.dm_hinhthucravienid===13));
-        setDataNhapvien(data.filter(item=> item.dm_hinhthucravienid===4));        
+        // setDataBaocao(data);       
+        setDataYhct(data.filter(item=> item.departmentid_next===45));   
+        // setDataChuyentuyen(data.filter(item=> item.dm_hinhthucravienid===13));
+        setdataThannt(data.filter(item=> item.departmentid_next===69));        
     };  
       const onChangeDate = (date, dateString) => {        
         // console.log("date", dateString);
@@ -127,70 +128,47 @@ const BCDieutriPage = () => {
                     defaultActiveKey="1"
                     items={[
                     {
-                        label: `Bệnh Nhân nội trú (${dataChuyentuyen.length})`,
-                        key: 'chuyentuyen',
+                        label: `Bệnh Nhân nội trú (${dataBaocao.length})`,
+                        key: 'noitru',
                         children: [                           
                             <Table   
                             rowKey={"medicalrecordid"}                    
                             bordered                       
-                            dataSource={dataChuyentuyen} columns={columns}                 
-                            key="cskhkhl"
+                            dataSource={dataBaocao} columns={columns}                 
+                            key="tbnoitru"
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
-                            'Số lượng: '+ dataChuyentuyen.length                     
+                            'Số lượng: '+ dataBaocao.length                     
                         ],
                     },{
-                        label: `Điều trị ngoại trú (${dataCaptoa.length})`,
-                        key: 'captoa',
+                        label: `ĐT ngoại trú YHCT (${dataYhct.length})`,
+                        key: 'ntyhct',
                         children: [ 
                             <Table   
                             rowKey={"medicalrecordid"}                    
                             bordered
-                            dataSource={dataCaptoa} columns={columns_nt}                       
-                            key="cskhk1hl"
+                            dataSource={dataYhct} columns={columns_nt}                       
+                            key="tbyhct"
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
-                            'Số lượng: '+ dataCaptoa.length                     
+                            'Số lượng: '+ dataYhct.length                     
                         ],
                     },
-                    // {
-                    //     label: `Nhập viện (${dataNhapvien.length})`,
-                    //     key: 'nhapvien',
-                    //     children: [ 
-                    //         <Table   
-                    //         rowKey={"medicalrecordid"}                    
-                    //         bordered
-                    //         dataSource={dataNhapvien} columns={columns}                       
-                    //         key="cskhk3hl"
-                    //         loading={{ indicator: <div><Spin /></div>, spinning:pending}}
-                    //         /> ,
-                    //         'Số lượng: '+ dataNhapvien.length                     
-                    //     ],
-                    // },{
-                    //     label: `Tất cả BN(${dataBaocao.length})`,
-                    //     key: 'allbn',
-                    //     children: [ 
-                    //         <Search
-                    //         placeholder="Nhập nội dung tìm kiếm"
-                    //         key={"seachCxl"}
-                    //         allowClear
-                    //         onChange={(event)=>{
-                    //             setKeyword(event.target.value)
-                    //         }}                      
-                    //         style={{
-                    //             width: "30%"                        
-                    //         }}
-                    //         /> ,
-                    //         <Table
-                    //             rowKey={"medicalrecordid"}
-                    //             bordered
-                    //             dataSource={searchTable(dataBaocao)} columns={columns}      
-                    //             loading={{ indicator: <div><Spin /></div>, spinning:true}}
-                    //             key="cskhk3hlxx"                                        
-                    //         />  ,
-                    //         'Số lượng: '+ dataBaocao.length                     
-                    //     ],
-                    // }
+                    {
+                        label: `ĐT ngoại trú ThậnNT (${dataThannt.length})`,
+                        key: 'ntthannt',
+                        children: [ 
+                            <Table   
+                            rowKey={"medicalrecordid"}                    
+                            bordered
+                            dataSource={dataThannt} columns={columns_nt}                       
+                            key="tbntthannt"
+                            loading={{ indicator: <div><Spin /></div>, spinning:pending}}
+                            /> ,
+                            'Số lượng: '+ dataThannt.length                     
+                        ],
+                    }
+                   
                     ]}
                 />                 
         </>
