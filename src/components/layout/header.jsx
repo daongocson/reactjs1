@@ -105,7 +105,13 @@ const Header = () => {
                     label: <Link to={"/tracuuicd"}>Báo cáo ICD</Link>,
                     key: 'tracuuicd',
                     icon: <UsergroupAddOutlined />,
-                }, {
+                },
+                {
+                    label: <Link to={"/bcdieutri"}>BC Điều Trị</Link>,
+                    key: 'bcnoitru',
+                    icon: <UsergroupAddOutlined />,
+                },
+                {
                     label: <Link to={"/khambenh"}>Tra cứu Phòng khám</Link>,
                     key: 'khambenhqt',
                     icon: <UsergroupAddOutlined />,

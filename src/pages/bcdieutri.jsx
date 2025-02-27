@@ -3,7 +3,7 @@ import { useState } from "react";
 import { postbaocaoIcdApi, postDoctorApi, postIcdApi } from "../util/api";
 import { SearchOutlined } from "@ant-design/icons";
 
-const TracuuICDPage = () => {   
+const BCDieutriPage = () => {   
     const { Search } = Input;
     const { RangePicker } = DatePicker;
     const [pending, setPending]= useState(false);  
@@ -18,20 +18,29 @@ const TracuuICDPage = () => {
 
     const columns = [
         {
-            title: 'Mã VP',
+            title: 'Khoa nội trú',
             dataIndex: 'patientrecordid',
         },
         {
-            title: 'Mã VP(ĐTNT)',
+            title: 'Số lượt',
             dataIndex: 'patientrecordid_vp',
         },{
-            title: 'Ngày RV',
+            title: 'Số ngày điều trị',
             dataIndex: 'ngayrv',
         } ,{
-            title: 'Xử trí',
+            title: 'Ngày ĐT Trung bình',
             dataIndex: 'loairv',
         }      
-
+    ];  
+    const columns_nt = [
+        {
+            title: 'Khoa điều trị',
+            dataIndex: 'patientrecordid',
+        },
+        {
+            title: 'Số lượt',
+            dataIndex: 'patientrecordid_vp',
+        }
     ];  
     const keys  = ["loairv","patientrecordid","patientrecordid_vp"]
     const handleOnSearch = async(values) => {   
@@ -109,20 +118,7 @@ const TracuuICDPage = () => {
     return (
         <>         
           <Space.Compact key={"spacehs"} block>
-            <RangePicker onChange={onChangeDate}/>                          
-            <AutoComplete
-                        style={{   
-                            width: "50%"            
-                        }}                
-                        placeholder="Nhập mã ICD"
-                        options={dataOp}
-                        filterOption={true}               
-                        onSearch={(value)=>handleOnSearch(value)}
-                        onSelect={(value,option)=>{
-                            handleOnSelect(value,option);
-                        }}
-                        >                            
-            </AutoComplete>  
+            <RangePicker onChange={onChangeDate}/> 
             <Button type="primary" 
                  onClick={OnClickHs}
                 ><SearchOutlined /></Button>
@@ -131,7 +127,7 @@ const TracuuICDPage = () => {
                     defaultActiveKey="1"
                     items={[
                     {
-                        label: `BN Chuyển tuyến (${dataChuyentuyen.length})`,
+                        label: `Bệnh Nhân nội trú (${dataChuyentuyen.length})`,
                         key: 'chuyentuyen',
                         children: [                           
                             <Table   
@@ -144,60 +140,61 @@ const TracuuICDPage = () => {
                             'Số lượng: '+ dataChuyentuyen.length                     
                         ],
                     },{
-                        label: `Cấp toa cho về (${dataCaptoa.length})`,
+                        label: `Điều trị ngoại trú (${dataCaptoa.length})`,
                         key: 'captoa',
                         children: [ 
                             <Table   
                             rowKey={"medicalrecordid"}                    
                             bordered
-                            dataSource={dataCaptoa} columns={columns}                       
+                            dataSource={dataCaptoa} columns={columns_nt}                       
                             key="cskhk1hl"
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
                             'Số lượng: '+ dataCaptoa.length                     
                         ],
-                    },{
-                        label: `Nhập viện (${dataNhapvien.length})`,
-                        key: 'nhapvien',
-                        children: [ 
-                            <Table   
-                            rowKey={"medicalrecordid"}                    
-                            bordered
-                            dataSource={dataNhapvien} columns={columns}                       
-                            key="cskhk3hl"
-                            loading={{ indicator: <div><Spin /></div>, spinning:pending}}
-                            /> ,
-                            'Số lượng: '+ dataNhapvien.length                     
-                        ],
-                    },{
-                        label: `Tất cả BN(${dataBaocao.length})`,
-                        key: 'allbn',
-                        children: [ 
-                            <Search
-                            placeholder="Nhập nội dung tìm kiếm"
-                            key={"seachCxl"}
-                            allowClear
-                            onChange={(event)=>{
-                                setKeyword(event.target.value)
-                            }}                      
-                            style={{
-                                width: "30%"                        
-                            }}
-                            /> ,
-                            <Table
-                                rowKey={"medicalrecordid"}
-                                bordered
-                                dataSource={searchTable(dataBaocao)} columns={columns}      
-                                loading={{ indicator: <div><Spin /></div>, spinning:true}}
-                                key="cskhk3hlxx"                                        
-                            />  ,
-                            'Số lượng: '+ dataBaocao.length                     
-                        ],
-                    }
+                    },
+                    // {
+                    //     label: `Nhập viện (${dataNhapvien.length})`,
+                    //     key: 'nhapvien',
+                    //     children: [ 
+                    //         <Table   
+                    //         rowKey={"medicalrecordid"}                    
+                    //         bordered
+                    //         dataSource={dataNhapvien} columns={columns}                       
+                    //         key="cskhk3hl"
+                    //         loading={{ indicator: <div><Spin /></div>, spinning:pending}}
+                    //         /> ,
+                    //         'Số lượng: '+ dataNhapvien.length                     
+                    //     ],
+                    // },{
+                    //     label: `Tất cả BN(${dataBaocao.length})`,
+                    //     key: 'allbn',
+                    //     children: [ 
+                    //         <Search
+                    //         placeholder="Nhập nội dung tìm kiếm"
+                    //         key={"seachCxl"}
+                    //         allowClear
+                    //         onChange={(event)=>{
+                    //             setKeyword(event.target.value)
+                    //         }}                      
+                    //         style={{
+                    //             width: "30%"                        
+                    //         }}
+                    //         /> ,
+                    //         <Table
+                    //             rowKey={"medicalrecordid"}
+                    //             bordered
+                    //             dataSource={searchTable(dataBaocao)} columns={columns}      
+                    //             loading={{ indicator: <div><Spin /></div>, spinning:true}}
+                    //             key="cskhk3hlxx"                                        
+                    //         />  ,
+                    //         'Số lượng: '+ dataBaocao.length                     
+                    //     ],
+                    // }
                     ]}
                 />                 
         </>
     )
 }
 
-export default TracuuICDPage;
+export default BCDieutriPage;

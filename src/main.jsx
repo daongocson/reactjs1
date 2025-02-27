@@ -25,6 +25,7 @@ import TrakqPage from './pages/trakq.jsx';
 import TestQrPage from './pages/TestQr.jsx';
 import CSKHListPage from './pages/ckshList.jsx';
 import TracuuICDPage from './pages/tracuuicd.jsx';
+import BCDieutriPage from './pages/bcdieutri.jsx';
 
 const router = createBrowserRouter([
   {
@@ -54,9 +55,14 @@ const router = createBrowserRouter([
       {
         path: "tracuubn",
         element: <TracuubnPage />
-      }, {
+      }, 
+      {
         path: "tracuuicd",
         element: <TracuuICDPage />
+      },
+      {
+        path: "bcdieutri",
+        element: <BCDieutriPage />
       },
       {
         path:"/ketquacls/:id",
