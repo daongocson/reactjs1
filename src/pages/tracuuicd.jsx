@@ -33,7 +33,7 @@ const TracuuICDPage = () => {
         }      
 
     ];  
-    const keys  = ["loairv","patientrecordid"]
+    const keys  = ["loairv","patientrecordid","patientrecordid_vp"]
     const handleOnSearch = async(values) => {   
         if(values.length==2)  {
             const res = await postIcdApi(values);
@@ -60,11 +60,8 @@ const TracuuICDPage = () => {
         }      
       
       };
-      const handleOnSelect = async(values,option) => {  
-            console.log("Test>>abc",values,option);
-            setICD(values);
-            
-       
+      const handleOnSelect = async(values,option) => {             
+            setICD(values);       
       }
       const OnClickHs = async () => {           
             let data = {...dateOp,icd};            
@@ -87,8 +84,9 @@ const TracuuICDPage = () => {
         
       };    
     const setFilData=(data)=>{
+        console.log("data>>",data);
         setDataBaocao(data);       
-        setDataCaptoa(data.filter(item=> item.dm_hinhthucravienid===2));   
+        setDataCaptoa(data.filter(item=> item.dm_medicalrecordstatusid===99 && item.dm_hinhthucravienid===2));   
         setDataChuyentuyen(data.filter(item=> item.dm_hinhthucravienid===13));
         setDataNhapvien(data.filter(item=> item.dm_hinhthucravienid===4));        
     };  
@@ -195,11 +193,10 @@ const TracuuICDPage = () => {
                         key: 'allbn',
                         children: [ 
                             <Search
-                            placeholder="Nhập nội dung"
+                            placeholder="Nhập nội dung tìm kiếm"
                             key={"seachCxl"}
                             allowClear
                             onChange={(event)=>{
-                                console.log("insert>>>",event.target.value);
                                 setKeyword(event.target.value)
                             }}                      
                             style={{
