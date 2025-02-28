@@ -25,18 +25,17 @@ const BCDieutriPage = () => {
           this.sobn = sobn;
           this.songay = songay;
           this.trungbinh=trungbinh;
-        }
-        bark() {
-            return `${this.name} sủa: Gâu Gâu!`;
-        }
+        }      
         add(bn,sl) {
            this.sobn+=bn;
            this.songay+=sl;
         } 
-        trungbinhcomp() {            
-            this.trungbinh=(this.songay/this.sobn).toFixed(2); 
-            //(a / b).toFixed(2);           
-            console.log(this.name,"tb>>",this.trungbinh);
+        trungbinhcomp() {  
+            if(this.sobn==0)this.trungbinh==0.00;
+            else{
+                this.trungbinh=(this.songay/this.sobn).toFixed(2);                                 
+            }          
+            
          }
       }
     const columns = [
@@ -116,10 +115,7 @@ const BCDieutriPage = () => {
     //   const handleOnSelect = async(values,option) => {             
     //         setICD(values);       
     //   }
-    const showModal = () => {
-        // const myDog = new infoKhoa(41,"Buddy",0);
-        console.log("datadataTbLuot>",dataTbLuot);
-        // console.log(myDog.bark()); // "Buddy sủa: Gâu Gâu!"
+    const showModal = () => {     
         setIsModalOpen(true);
       };
     
@@ -276,7 +272,7 @@ const BCDieutriPage = () => {
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
                             'Số lượng: '+ dataKhoa.length                     
-                        ],
+                        ]
                     },{
                         label: `ĐT ngoại trú YHCT (${dataYhct.length})`,
                         key: 'ntyhct',
