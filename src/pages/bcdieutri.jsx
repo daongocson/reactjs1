@@ -10,6 +10,8 @@ const BCDieutriPage = () => {
     const [dataOp, setDataOp] = useState([]); 
     const [dateOp, setDateOp] = useState([]); 
     const [dataBaocao, setDataBaocao] = useState([]); 
+    const [dataKhoa, setDataKhoa] = useState([]); 
+
     const [icd, setICD] = useState(''); 
     const [dataYhct, setDataYhct]= useState([]); 
     const [dataThannt, setdataThannt]= useState([]); 
@@ -18,19 +20,22 @@ const BCDieutriPage = () => {
 
     const columns = [
         {
-            title: 'Khoa nội trú',
+            title: 'Mã VP',
             dataIndex: 'patientrecordid',
         },
         {
-            title: 'Số lượt',
-            dataIndex: 'patientrecordid_vp',
+            title: 'Khoa',
+            dataIndex: 'departmentname',
         },{
-            title: 'Số ngày điều trị',
-            dataIndex: 'medicalrecorddate_out',
+            title: 'Ngày Vào',
+            dataIndex: 'ngayvao',
         } ,{
-            title: 'Ngày ĐT Trung bình',
-            dataIndex: 'loairv',
-        }      
+            title: 'Ngày Ra',
+            dataIndex: 'ngayrv',
+        },{
+            title: 'Ngày ĐT',
+            dataIndex: 'songay',
+        }        
     ];  
     const columns_nt = [
         {
@@ -85,9 +90,12 @@ const BCDieutriPage = () => {
                         message: "Thành công",
                         description: res.thongbao
                     })
-                }else
-                setFilData(res.bnngoaitru);                
-                setDataBaocao(res.bnnoitru)
+                }else{
+                    setFilData(res.bnngoaitru);                
+                    setDataBaocao(res.bnnoitru);
+                    setDataKhoa(res.bnnoitru);
+                }
+                
             } else {
                 setPending(false);
                 notification.error({
@@ -117,6 +125,10 @@ const BCDieutriPage = () => {
                     keys.some((key)=>item[key]!=null&&item[key].toString().toLowerCase().includes(keyword)
                 )));      
     }
+    const changeKhoa=(a,b)=>{
+        console.log("dfadfadf>",a,b);
+        setDataKhoa(dataBaocao.filter(item=> item.khoaid.toString()===a));        
+    }
     return (
         <>         
           <Space.Compact key={"spacehs"} block>
@@ -135,24 +147,31 @@ const BCDieutriPage = () => {
                             <Select
                                 key={"slkhoa"}
                                 showSearch
+                                style={{
+                                    width: '40%',
+                                    cursor: 'move',
+                                  }}
+                                onChange={changeKhoa}
                                 placeholder="Chọn khoa điều trị"
                                 filterOption={(input, option) =>
                                 (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                                 }
                                 options={[
-                                    {value: '1',label: 'Khoa Nội'},
-                                    {value: '2',label: 'Khoa Ngoại'},
-                                    {value: '3',label: 'Khoa Sản'},
+                                    {value: '67',label: 'Khoa Nội Nhi'},
+                                    {value: '54',label: 'Khoa Liên chuyên khoa'},
+                                    {value: '61',label: 'Khoa Sản'},
+                                     {value: '45',label: 'Khoa YHCT-PHCN'},
+                                     {value: '46',label: 'Khoa Ngoại'},
                                 ]}
                             />,                              
                             <Table   
-                            rowKey={"medicalrecordid"}                    
+                            rowKey={"patientrecordid"}                    
                             bordered                       
-                            dataSource={dataBaocao} columns={columns}                 
+                            dataSource={dataKhoa} columns={columns}                 
                             key="tbnoitru"
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
-                            'Số lượng: '+ dataBaocao.length                     
+                            'Số lượng: '+ dataKhoa.length                     
                         ],
                     },{
                         label: `ĐT ngoại trú YHCT (${dataYhct.length})`,
