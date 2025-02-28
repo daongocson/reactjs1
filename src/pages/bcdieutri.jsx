@@ -161,18 +161,36 @@ const BCDieutriPage = () => {
         setdataThannt(data.filter(item=> item.departmentid_next===69));   
              
     };  
-    const setFilDataNoitru=(data)=>{       
-        setDataBaocao(data);
-        setDataKhoa(data);     
-        computingBaocao(data);     
+    const setFilDataNoitru=(data)=>{  
+        const dataMatTMH = data.map(item => {
+            if(item.khoaid==54){
+                console.log("lck>>",item);
+                if(item.roomid_in=="392"){                    
+                    item.khoaid="5411"; 
+                    item.departmentname="Khoa LCK-TMH";                    
+                }else{
+                    item.khoaid="5410";                    
+                    item.departmentname="Khoa LCK-Mắt";    
+                }
+                    
+
+            }            
+            return item;
+          });
+
+        console.log("setFilDataNoitru>",dataMatTMH);     
+        setDataBaocao(dataMatTMH);
+        setDataKhoa(dataMatTMH);     
+        computingBaocao(dataMatTMH);     
     };  
     const computingBaocao=(items)=>{
         var arrayKQ = [];
         const khoa1 = new infoKhoa('67','Khoa Nội Nhi',0,0,0);
-        const khoa2 = new infoKhoa('54','Khoa LCK',0,0,0);
-        const khoa3 = new infoKhoa('61','Khoa Sản',0,0,0);
-        const khoa4 = new infoKhoa('45','Khoa YHCT-PHCN',0,0,0);
-        const khoa5 = new infoKhoa('46','Khoa Ngoại',0,0,0);
+        const khoa2 = new infoKhoa('5410','Khoa LCK-Mắt',0,0,0);
+        const khoa3 = new infoKhoa('5411','Khoa LCK-TMH',0,0,0);
+        const khoa4 = new infoKhoa('61','Khoa Sản',0,0,0);
+        const khoa5 = new infoKhoa('45','Khoa YHCT-PHCN',0,0,0);
+        const khoa6 = new infoKhoa('46','Khoa Ngoại',0,0,0);
         for (const item of items) {
             if(item.khoaid==khoa1.id)               
                 khoa1.add(1,item.songay);
@@ -239,7 +257,8 @@ const BCDieutriPage = () => {
                                 }
                                 options={[
                                     {value: '67',label: 'Khoa Nội Nhi'},
-                                    {value: '54',label: 'Khoa Liên chuyên khoa'},
+                                    {value: '5410',label: 'Khoa LCK-Mắt'},
+                                    {value: '5411',label: 'Khoa LCK-TMH'},
                                     {value: '61',label: 'Khoa Sản'},
                                      {value: '45',label: 'Khoa YHCT-PHCN'},
                                      {value: '46',label: 'Khoa Ngoại'},
