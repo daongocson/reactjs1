@@ -8,12 +8,15 @@ const CSKHListPage = () => {
     const [dataKh, setDataKh]= useState([]); 
     const [dataKhCxl, setDataKhCxl]= useState([]); 
     const [dataKhNm, setDataKhNm]= useState([]); 
+    const [dataKhLast, setDataKhLast]= useState([]); 
+
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(true);
 
     const { Search } = Input;
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
+    const [autoKhoa, setAutoKhoa] = useState('');
     const [keyword, setKeyword] = useState('');
     const [pid, setPid] = useState('');
     const [phone, setPhone] = useState('');
@@ -60,6 +63,34 @@ const CSKHListPage = () => {
           },
           
     ]; 
+    const columnlast = [
+        {
+            title: 'Mã BN',
+            dataIndex: 'idcskh',
+        },              
+        {
+            title: 'Họ và tên',
+            dataIndex: 'tenbn',
+        },        
+        {
+            title: 'Bác sĩ',
+            dataIndex: 'bacsi',
+        },{
+            title: 'Phone',
+            dataIndex: 'phone',
+        },{
+            title: 'Ngày goi',
+            dataIndex: 'ngaycapnhat',
+        },{
+            title: 'Duyệt',
+            dataIndex: 'id',
+            key: 'id',
+            render: (index, record) => (
+              <Button  icon={<AudioOutlined />} onClick={() => showModal(record)} />
+            )
+          },
+          
+    ]; 
     const loadDataModel=async(pid)=>{    
         setLoading(true);             
         // const res = await postpatientApi(pid);  
@@ -88,10 +119,11 @@ const CSKHListPage = () => {
         setIsModalVisible(true);
       };
     const fetchKhachhang = async () => {
-        const res = await getbnBynv("","","Phòng khám mới");
-        // console.log(res);
+        const res = await getbnBynv(fromDate,toDate,"Phòng khám mới");
+        console.log(res);
         if (!res?.message) {   
-            setFilData(res);                      
+            setFilData(res.khgoi); 
+            setDataKhLast(res.khvuagoi)                     
         } else {
             notification.error({
                 message: "Unauthorized",
@@ -269,19 +301,11 @@ const CSKHListPage = () => {
         });	
         
     } 
-    const handleOnSelect=async (vOptions)=>{
-        // console.log("vOptions",vOptions,fromDate,toDate);
-        const res = await getbnBynv(fromDate,toDate,vOptions);
+    const handleOnSelect=async ()=>{
+        console.log("vOptions>>",autoKhoa,fromDate,toDate);
+        const res = await getbnBynv(fromDate,toDate,autoKhoa);
         if (!res?.message) {   
-            setFilData(res);     
-            // searchTable(res);                  
-            // setPhong(res.listphongchucnang)
-            // setQuyen(res.listphanquyen)
-            // setDataBS(res.dataBS);    
-            // setDataYL(res.dataYL);     
-            // setDataTH(res.dataTH);
-            // setDataKQ(res.dataKQ);   
-            // setBsChinhEkip(res.dataBS[0].value);      
+            setFilData(res.khgoi);    
         } else {
             notification.error({
                 message: "Unauthorized",
@@ -335,17 +359,16 @@ const CSKHListPage = () => {
                                           
                     ]}
                     filterOption={true}
-                    onSelect={(value)=>{
-                        handleOnSelect(value);
-                    }}
+                    onSelect={(value)=>{setAutoKhoa(value)}}
                     >
                         
-                    </AutoComplete>               
+                    </AutoComplete>   
+                    <Button type="dashed" onClick={handleOnSelect}>Lọc cuộc gọi</Button>             
                      <Button
                         type="primary"
                         onClick={config}
                     >
-                        Cài đặt cuộc gọi
+                        Cài đặt
                     </Button> 
              </Space.Compact>
         </div>     
@@ -374,6 +397,18 @@ const CSKHListPage = () => {
                         /> ,
                         'Số lượng: '+ dataKh.length                     
                     ],
+                },{
+                    label: `BN Vừa gọi (${dataKhLast.length})`,
+                    key: 'bnvuagoi',
+                    children: [ 
+                        <Table   
+                        rowKey={"patientrecordid"}                    
+                        bordered
+                        dataSource={dataKhLast} columns={columnlast}                       
+                        key="cskhk1hl"
+                        /> ,
+                        'Số lượng: '+ dataKhLast.length                     
+                    ]
                 },{
                     label: `BN không nghe máy (${dataKhNm.length})`,
                     key: 'bn2',
