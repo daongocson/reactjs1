@@ -188,7 +188,7 @@ const TracuuICDPage = () => {
                                 rowKey={"medicalrecordid"}
                                 bordered
                                 dataSource={searchTable(dataBaocao)} columns={columns}      
-                                loading={{ indicator: <div><Spin /></div>, spinning:true}}
+                                loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                                 key="cskhk3hlxx"                                        
                             />  ,
                             'Số lượng: '+ dataBaocao.length                     

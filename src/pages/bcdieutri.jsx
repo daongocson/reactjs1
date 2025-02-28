@@ -285,7 +285,7 @@ const BCDieutriPage = () => {
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
                             'Số lượng: '+ dataYhct.length                     
-                        ],
+                        ]
                     },
                     {
                         label: `ĐT ngoại trú ThậnNT (${dataThannt.length})`,
@@ -299,11 +299,11 @@ const BCDieutriPage = () => {
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
                             'Số lượng: '+ dataThannt.length                     
-                        ],
+                        ]
                     }
                    
                     ]}
-                />,
+                />
                  <Modal key={"viewkhoa"} title="Thống kê khoa" open={isModalOpen} onOk={handleOk} onCancel={handleOk}>
                  <Table   
                             rowKey={"id"}                    
