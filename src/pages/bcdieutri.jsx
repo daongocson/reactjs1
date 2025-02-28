@@ -1,4 +1,4 @@
-import { AutoComplete, Button, DatePicker, Input, notification, Select, Space, Spin, Table, Tabs } from "antd";
+import { AutoComplete, Button, DatePicker, Input, Modal, notification, Select, Space, Spin, Table, Tabs } from "antd";
 import { useState } from "react";
 import { postbaocaodieutriApi, postbaocaoIcdApi, postDoctorApi, postIcdApi } from "../util/api";
 import { SearchOutlined } from "@ant-design/icons";
@@ -16,8 +16,29 @@ const BCDieutriPage = () => {
     const [dataYhct, setDataYhct]= useState([]); 
     const [dataThannt, setdataThannt]= useState([]); 
     const [keyword, setKeyword] = useState('');
-    const [dataChuyentuyen, setDataChuyentuyen]= useState([]); 
-
+    const [dataTbLuot, setDataTbLuot]= useState([]); 
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    class infoKhoa {        
+        constructor(id, name,sobn,songay,trungbinh) {
+          this.id = id;
+          this.name = name;
+          this.sobn = sobn;
+          this.songay = songay;
+          this.trungbinh=trungbinh;
+        }
+        bark() {
+            return `${this.name} sủa: Gâu Gâu!`;
+        }
+        add(bn,sl) {
+           this.sobn+=bn;
+           this.songay+=sl;
+        } 
+        trungbinhcomp() {            
+            this.trungbinh=(this.songay/this.sobn).toFixed(2); 
+            //(a / b).toFixed(2);           
+            console.log(this.name,"tb>>",this.trungbinh);
+         }
+      }
     const columns = [
         {
             title: 'Mã VP',
@@ -47,6 +68,24 @@ const BCDieutriPage = () => {
             dataIndex: 'ngayrv',
         }
     ];  
+    const columns_th = [
+        {
+            title: 'Tên khoa',
+            dataIndex: 'name',
+        },
+        {
+            title: 'BN',
+            dataIndex: 'sobn',
+        },
+        {
+            title: 'Ngày ĐT',
+            dataIndex: 'songay',
+        },,
+        {
+            title: 'TBNĐT',
+            dataIndex: 'trungbinh',
+        }
+    ]; 
     const keys  = ["loairv","patientrecordid","patientrecordid_vp"]
     // const handleOnSearch = async(values) => {   
     //     if(values.length==2)  {
@@ -77,6 +116,16 @@ const BCDieutriPage = () => {
     //   const handleOnSelect = async(values,option) => {             
     //         setICD(values);       
     //   }
+    const showModal = () => {
+        // const myDog = new infoKhoa(41,"Buddy",0);
+        console.log("datadataTbLuot>",dataTbLuot);
+        // console.log(myDog.bark()); // "Buddy sủa: Gâu Gâu!"
+        setIsModalOpen(true);
+      };
+    
+      const handleOk = () => {
+        setIsModalOpen(false);
+      };
       const OnClickHs = async () => {      
             setDataBaocao([]);    
             setPending(true);               
@@ -91,9 +140,8 @@ const BCDieutriPage = () => {
                         description: res.thongbao
                     })
                 }else{
-                    setFilData(res.bnngoaitru);                
-                    setDataBaocao(res.bnnoitru);
-                    setDataKhoa(res.bnnoitru);
+                    setFilData(res.bnngoaitru);  
+                    setFilDataNoitru(res.bnnoitru);                                    
                 }
                 
             } else {
@@ -110,12 +158,45 @@ const BCDieutriPage = () => {
         // setDataBaocao(data);       
         setDataYhct(data.filter(item=> item.departmentid_next===45));   
         // setDataChuyentuyen(data.filter(item=> item.dm_hinhthucravienid===13));
-        setdataThannt(data.filter(item=> item.departmentid_next===69));        
+        setdataThannt(data.filter(item=> item.departmentid_next===69));   
+             
     };  
-      const onChangeDate = (date, dateString) => {        
+    const setFilDataNoitru=(data)=>{       
+        setDataBaocao(data);
+        setDataKhoa(data);     
+        computingBaocao(data);     
+    };  
+    const computingBaocao=(items)=>{
+        var arrayKQ = [];
+        const khoa1 = new infoKhoa('67','Khoa Nội Nhi',0,0,0);
+        const khoa2 = new infoKhoa('54','Khoa LCK',0,0,0);
+        const khoa3 = new infoKhoa('61','Khoa Sản',0,0,0);
+        const khoa4 = new infoKhoa('45','Khoa YHCT-PHCN',0,0,0);
+        const khoa5 = new infoKhoa('46','Khoa Ngoại',0,0,0);
+        for (const item of items) {
+            if(item.khoaid==khoa1.id)               
+                khoa1.add(1,item.songay);
+            if(item.khoaid==khoa2.id)               
+                khoa2.add(1,item.songay);
+            if(item.khoaid==khoa3.id)               
+                khoa3.add(1,item.songay);
+            if(item.khoaid==khoa4.id)               
+                khoa4.add(1,item.songay);
+            if(item.khoaid==khoa5.id)               
+                khoa5.add(1,item.songay);
+        }
+        khoa1.trungbinhcomp();arrayKQ.push(khoa1);
+        khoa2.trungbinhcomp();arrayKQ.push(khoa2);
+        khoa3.trungbinhcomp();arrayKQ.push(khoa3);
+        khoa4.trungbinhcomp();arrayKQ.push(khoa4);
+        khoa5.trungbinhcomp();arrayKQ.push(khoa5);
+        console.log("baocaotonghop>>",arrayKQ);
+        setDataTbLuot(arrayKQ);
+    }
+    const onChangeDate = (date, dateString) => {        
         // console.log("date", dateString);
         setDateOp(dateString);
-      };
+    };
       const searchTable=(data)=>{  
         if(keyword=="")
             return data;
@@ -163,7 +244,8 @@ const BCDieutriPage = () => {
                                      {value: '45',label: 'Khoa YHCT-PHCN'},
                                      {value: '46',label: 'Khoa Ngoại'},
                                 ]}
-                            />,                              
+                            />, 
+                            <Button key={"btnKhoa"} type="dashed" onClick={showModal}> Báo cáo tổng</Button>,                             
                             <Table   
                             rowKey={"patientrecordid"}                    
                             bordered                       
@@ -203,7 +285,15 @@ const BCDieutriPage = () => {
                     }
                    
                     ]}
-                />                 
+                />,
+                 <Modal key={"viewkhoa"} title="Thống kê khoa" open={isModalOpen} onOk={handleOk} onCancel={handleOk}>
+                 <Table   
+                            rowKey={"id"}                    
+                            bordered
+                            dataSource={dataTbLuot} columns={columns_th}                       
+                            key="modeltbntthannt"                           
+                            /> 
+                </Modal>                 
         </>
     )
 }
