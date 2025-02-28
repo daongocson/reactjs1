@@ -202,12 +202,15 @@ const BCDieutriPage = () => {
                 khoa4.add(1,item.songay);
             if(item.khoaid==khoa5.id)               
                 khoa5.add(1,item.songay);
+            if(item.khoaid==khoa6.id)               
+                khoa6.add(1,item.songay);
         }
         khoa1.trungbinhcomp();arrayKQ.push(khoa1);
         khoa2.trungbinhcomp();arrayKQ.push(khoa2);
         khoa3.trungbinhcomp();arrayKQ.push(khoa3);
         khoa4.trungbinhcomp();arrayKQ.push(khoa4);
         khoa5.trungbinhcomp();arrayKQ.push(khoa5);
+        khoa6.trungbinhcomp();arrayKQ.push(khoa6);
         console.log("baocaotonghop>>",arrayKQ);
         setDataTbLuot(arrayKQ);
     }
