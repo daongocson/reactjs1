@@ -85,36 +85,7 @@ const BCDieutriPage = () => {
             dataIndex: 'trungbinh',
         }
     ]; 
-    const keys  = ["loairv","patientrecordid","patientrecordid_vp"]
-    // const handleOnSearch = async(values) => {   
-    //     if(values.length==2)  {
-    //         const res = await postIcdApi(values);
-    //         if (!res?.message) {                    
-    //             const Options = res.map(res => ({
-    //                 key:res.id,
-    //                 value: res.dm_icd10code,
-    //                 label: res.dm_icd10code+"->"+res.dm_icd10name,                    
-    //                 isLeaf: false    
-    //               }));                   
-    //             setDataOp(Options);              
-    //         } else {
-    //             notification.error({
-    //                 message: "Unauthorized",
-    //                 description: res.message
-    //             })
-    //         }
-    //     }else {
-    //         if(values.length>2&&dataOp.length<1){
-    //             const res = await postIcdApi(values);
-    //         }else{
-    //             //filter(khi data có rồi thì filter)
-    //         }            
-    //     }      
-      
-    //   };
-    //   const handleOnSelect = async(values,option) => {             
-    //         setICD(values);       
-    //   }
+    const keys  = ["loairv","patientrecordid","patientrecordid_vp"]   
     const showModal = () => {     
         setIsModalOpen(true);
       };
@@ -127,7 +98,6 @@ const BCDieutriPage = () => {
             setPending(true);               
             let data = {...dateOp};            
             const res = await postbaocaodieutriApi(data);  
-            console.log("dieutri>>",res); 
             if (!res?.message) { 
                 setPending(false);
                 if(res?.thongbao){
@@ -159,8 +129,7 @@ const BCDieutriPage = () => {
     };  
     const setFilDataNoitru=(data)=>{  
         const dataMatTMH = data.map(item => {
-            if(item.khoaid==54){
-                console.log("lck>>",item);
+            if(item.khoaid==54){              
                 if(item.roomid_in=="392"){                    
                     item.khoaid="5411"; 
                     item.departmentname="Khoa LCK-TMH";                    
@@ -168,12 +137,25 @@ const BCDieutriPage = () => {
                     item.khoaid="5410";                    
                     item.departmentname="Khoa LCK-Mắt";    
                 }
+            } 
+            if(item.khoaid==67){
+                if(item.roomid_in =="497"){
+                    item.khoaid="1149"; 
+                    item.departmentname="Điều Trị Cc";   
+                }
                     
-
+            }
+            if(item.khoaid==46){               
+                if(item.roomid_in =="498"){
+                    console.log('phongcc>',item);
+                    item.khoaid="1149"; 
+                    item.departmentname="Điều Trị Cc";   
+                }
+                    
             }            
             return item;
           });
-
+          
         console.log("setFilDataNoitru>",dataMatTMH);     
         setDataBaocao(dataMatTMH);
         setDataKhoa(dataMatTMH);     
@@ -187,6 +169,8 @@ const BCDieutriPage = () => {
         const khoa4 = new infoKhoa('61','Khoa Sản',0,0,0);
         const khoa5 = new infoKhoa('45','Khoa YHCT-PHCN',0,0,0);
         const khoa6 = new infoKhoa('46','Khoa Ngoại',0,0,0);
+        const khoa7 = new infoKhoa('1149','Điều Trị Cc',0,0,0);
+
         for (const item of items) {
             if(item.khoaid==khoa1.id)               
                 khoa1.add(1,item.songay);
@@ -200,6 +184,8 @@ const BCDieutriPage = () => {
                 khoa5.add(1,item.songay);
             if(item.khoaid==khoa6.id)               
                 khoa6.add(1,item.songay);
+            if(item.khoaid==khoa7.id)               
+                khoa7.add(1,item.songay);
         }
         khoa1.trungbinhcomp();arrayKQ.push(khoa1);
         khoa2.trungbinhcomp();arrayKQ.push(khoa2);
@@ -207,6 +193,7 @@ const BCDieutriPage = () => {
         khoa4.trungbinhcomp();arrayKQ.push(khoa4);
         khoa5.trungbinhcomp();arrayKQ.push(khoa5);
         khoa6.trungbinhcomp();arrayKQ.push(khoa6);
+        khoa7.trungbinhcomp();arrayKQ.push(khoa7);
         console.log("baocaotonghop>>",arrayKQ);
         setDataTbLuot(arrayKQ);
     }
@@ -261,6 +248,7 @@ const BCDieutriPage = () => {
                                     {value: '61',label: 'Khoa Sản'},
                                      {value: '45',label: 'Khoa YHCT-PHCN'},
                                      {value: '46',label: 'Khoa Ngoại'},
+                                     {value: '1149',label: 'Điều Trị Cc'}                                    
                                 ]}
                             />, 
                             <Button key={"btnKhoa"} type="dashed" onClick={showModal}> Báo cáo tổng</Button>,                             
