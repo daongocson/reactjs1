@@ -1,6 +1,6 @@
 import { AutoComplete, Button, DatePicker, Input, Modal, notification, Select, Space, Spin, Table, Tabs } from "antd";
 import { useState } from "react";
-import { postbaocaodieutriApi, postbaocaoIcdApi, postDoctorApi, postIcdApi } from "../util/api";
+import { postbaocaodieutriApi, postbaocaoIcdApi, postbaocaoLuotTNTdieutriApi, postDoctorApi, postIcdApi } from "../util/api";
 import { SearchOutlined } from "@ant-design/icons";
 
 const BCDieutriPage = () => {   
@@ -11,13 +11,18 @@ const BCDieutriPage = () => {
     const [dateOp, setDateOp] = useState([]); 
     const [dataBaocao, setDataBaocao] = useState([]); 
     const [dataKhoa, setDataKhoa] = useState([]); 
+    const [cnt, setCnt] = useState(0); 
 
     const [icd, setICD] = useState(''); 
     const [dataYhct, setDataYhct]= useState([]); 
     const [dataThannt, setdataThannt]= useState([]); 
+    const [dataLuotThannt, setdataLuotThannt]= useState([]); 
+    const [pendingtnt, setPendingtnt]= useState(false);  
+
     const [keyword, setKeyword] = useState('');
     const [dataTbLuot, setDataTbLuot]= useState([]); 
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpentnt, setIsModalOpentnt] = useState(false);
     class infoKhoa {        
         constructor(id, name,sobn,songay,trungbinh) {
           this.id = id;
@@ -57,6 +62,16 @@ const BCDieutriPage = () => {
             dataIndex: 'songay',
         }        
     ];  
+    const columns_luottnt = [
+        {
+            title: 'Mã VP',
+            dataIndex: 'patientrecordid',
+        },
+        {
+            title: 'Số lượt',
+            dataIndex: 'soluot',
+        }
+    ];  
     const columns_nt = [
         {
             title: 'Mã VP',
@@ -66,7 +81,7 @@ const BCDieutriPage = () => {
             title: 'Thời gian',
             dataIndex: 'ngayrv',
         }
-    ];  
+    ]; 
     const columns_th = [
         {
             title: 'Tên khoa',
@@ -88,12 +103,42 @@ const BCDieutriPage = () => {
     const keys  = ["loairv","patientrecordid","patientrecordid_vp"]   
     const showModal = () => {     
         setIsModalOpen(true);
-      };
-    
-      const handleOk = () => {
+    };
+    const handleOk = () => {
         setIsModalOpen(false);
-      };
-      const OnClickHs = async () => {      
+    };
+    const showModalTNT =async () => {    
+        setPendingtnt(true);     
+        setIsModalOpentnt(true);          
+        let data = {...dateOp};            
+        const res = await postbaocaoLuotTNTdieutriApi(data);  
+        // console.log("showModalTNT",dateOp,res);           
+        // setPendingtnt(false);     
+        if (!res?.message) { 
+            setPendingtnt(false);
+            if(res?.thongbao){
+                notification.success({
+                    message: "Thành công",
+                    description: res.thongbao
+                })
+            }else{
+                setdataLuotThannt(res);
+                computingLuotTN(res)                  
+            }
+            
+        } else {
+            setPendingtnt(false);
+            notification.error({
+                message: "Unauthorized",
+                description: res.message
+            })
+        } 
+        
+    };
+    const handleOktnt = () => {     
+        setIsModalOpentnt(false);
+    };
+    const OnClickHs = async () => {      
             setDataBaocao([]);    
             setPending(true);               
             let data = {...dateOp};            
@@ -146,21 +191,25 @@ const BCDieutriPage = () => {
                     
             }
             if(item.khoaid==46){               
-                if(item.roomid_in =="498"){
-                    console.log('phongcc>',item);
+                if(item.roomid_in =="498"){                  
                     item.khoaid="1149"; 
                     item.departmentname="Điều Trị Cc";   
                 }
                     
             }            
             return item;
-          });
-          
-        console.log("setFilDataNoitru>",dataMatTMH);     
+          });          
         setDataBaocao(dataMatTMH);
         setDataKhoa(dataMatTMH);     
         computingBaocao(dataMatTMH);     
     };  
+    const computingLuotTN= (items)=>{
+        let count=0;
+        for (const item of items) {
+            count+=Number(item.soluot);            
+        }
+        setCnt(count);
+    }           
     const computingBaocao=(items)=>{
         var arrayKQ = [];
         const khoa1 = new infoKhoa('67','Khoa Nội Nhi',0,0,0);
@@ -194,7 +243,6 @@ const BCDieutriPage = () => {
         khoa5.trungbinhcomp();arrayKQ.push(khoa5);
         khoa6.trungbinhcomp();arrayKQ.push(khoa6);
         khoa7.trungbinhcomp();arrayKQ.push(khoa7);
-        console.log("baocaotonghop>>",arrayKQ);
         setDataTbLuot(arrayKQ);
     }
     const onChangeDate = (date, dateString) => {        
@@ -279,6 +327,7 @@ const BCDieutriPage = () => {
                         label: `ĐT ngoại trú ThậnNT (${dataThannt.length})`,
                         key: 'ntthannt',
                         children: [ 
+                            <Button key={"btnThannt"} type="dashed" onClick={showModalTNT}> BC lượt chạy thận</Button>,                             
                             <Table   
                             rowKey={"medicalrecordid"}                    
                             bordered
@@ -299,7 +348,21 @@ const BCDieutriPage = () => {
                             dataSource={dataTbLuot} columns={columns_th}                       
                             key="modeltbntthannt"                           
                             /> 
-                </Modal>                 
+                </Modal> ,  
+                <Modal key={"viewluottnt"} title="Thống kê lượt chạy thận nhân tạo" 
+                    open={isModalOpentnt}
+                    onOk={handleOktnt} 
+                    onCancel={handleOktnt}
+                    loading={pendingtnt}
+                    >
+                 <p><strong>Số BN:{ dataThannt.length}(Số Lượt:{cnt}</strong>)</p>
+                 <Table   
+                            rowKey={"patientrecordid"}                    
+                            bordered
+                            dataSource={dataLuotThannt} columns={columns_luottnt}                       
+                            key="modeltbntthannt"                           
+                            /> 
+                </Modal>                   
         </>
     )
 }
