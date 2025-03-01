@@ -110,6 +110,10 @@ const Header = () => {
                     label: <Link to={"/bcdieutri"}>BC Điều Trị</Link>,
                     key: 'bcnoitru',
                     icon: <UsergroupAddOutlined />,
+                }, {
+                    label: <Link to={"/bcngoaitru"}>BC Ngoại trú</Link>,
+                    key: 'bcngoaitru',
+                    icon: <UsergroupAddOutlined />,
                 },
                 {
                     label: <Link to={"/khambenh"}>Tra cứu Phòng khám</Link>,

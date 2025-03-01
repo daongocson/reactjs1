@@ -191,7 +191,8 @@ const BCDieutriPage = () => {
                     
             }
             if(item.khoaid==46){               
-                if(item.roomid_in =="498"){                  
+                if(item.roomid_in =="498"){
+                    console.log('phongcc>',item);
                     item.khoaid="1149"; 
                     item.departmentname="Điều Trị Cc";   
                 }
@@ -355,7 +356,7 @@ const BCDieutriPage = () => {
                     onCancel={handleOktnt}
                     loading={pendingtnt}
                     >
-                 <p><strong>Số BN:{ dataThannt.length}(Số Lượt:{cnt}</strong>)</p>
+                 <p><strong>Số BN:{ dataThannt.length}(Số Lượt:{cnt}</strong></p>
                  <Table   
                             rowKey={"patientrecordid"}                    
                             bordered
