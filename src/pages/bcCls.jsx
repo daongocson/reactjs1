@@ -7,6 +7,7 @@ const BCClsPage = () => {
     const { RangePicker } = DatePicker;
     const [pending, setPending]= useState(false);  
     const [numha, setNumha]= useState(0);  
+    const [numxn, setNumxn]= useState(0);  
     const [dateOp, setDateOp] = useState([]);   
     const [dataxn, setDataxn]= useState([]); 
     const [dataHinhanh, setdataHinhanh]= useState([]);    
@@ -65,10 +66,12 @@ const BCClsPage = () => {
         var arrayXn = [];
         var arrayHinhanh = [];
         var sluong=0;
+        var sluongxn=0;
         for (const item of items) {
             if(item.dm_servicegroupid==3){
+                sluongxn+=Number(item.soluong);
                 arrayXn.push(item);
-            }
+            }           
             else{
                 //(nhomcon == "403" || nhomcon == "40013" || nhomcon == "40014" || nhomcon == "40015") && !servicename.ToUpper().Contains("PHỤ THU")               
                
@@ -84,7 +87,8 @@ const BCClsPage = () => {
                                    
             }
         }
-        setNumha(sluong);          
+        setNumha(sluong);  
+        setNumxn(sluongxn);        
         setDataxn(arrayXn);    
         // setdataChuyentuyen(items.filter(item=> item.dm_hinhthucravienid.toString()==='13'));  
         // setdataKhamxtri(arrayKham.filter(item=> item.ngayrv.toString()!=='01/01 00:00'));    
@@ -108,7 +112,7 @@ const BCClsPage = () => {
                     defaultActiveKey="1"
                     items={[
                     {
-                        label: `Lượt Xét Nghiệm (${dataxn.length})`,
+                        label: `Lượt Xét Nghiệm (${numxn})`,
                         key: 'luotxn',
                         children: [ 
                             <Table   
