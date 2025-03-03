@@ -114,6 +114,10 @@ const Header = () => {
                     label: <Link to={"/bcngoaitru"}>BC Ngoại trú</Link>,
                     key: 'bcngoaitru',
                     icon: <UsergroupAddOutlined />,
+                },{
+                    label: <Link to={"/bccls"}>Báo cáo CLS</Link>,
+                    key: 'bccls',
+                    icon: <UsergroupAddOutlined />,
                 },
                 {
                     label: <Link to={"/khambenh"}>Tra cứu Phòng khám</Link>,

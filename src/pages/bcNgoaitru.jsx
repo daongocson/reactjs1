@@ -27,7 +27,6 @@ const BCNgoaitruPage = () => {
             setPending(true);               
             let data = {...dateOp};            
             const res = await postbaocaongoaitruApi(data); 
-            console.log("postbaocaongoaitruApi>>>",res); 
             if (!res?.message) { 
                 setPending(false);
                 if(res?.thongbao){
@@ -50,7 +49,6 @@ const BCNgoaitruPage = () => {
         
       }; 
     const changeKhoaKB=(a,b)=>{
-        console.log("dfadfadf>",a,b);
         setdataKhamkkb (dataKhamxtri.filter(item=> item.roomid.toString()===a));        
     }   
     const setFilData=(items)=>{
@@ -160,7 +158,7 @@ const BCNgoaitruPage = () => {
                         ]
                     },
                     {
-                        label: `BN Khám ngoại trú (${dataKham.length})`,
+                        label: `BN Khám Cả viện (${dataKham.length})`,
                         key: 'ntthan3nt',
                         children: [ 
                             <Table   
