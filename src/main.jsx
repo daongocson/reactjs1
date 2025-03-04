@@ -28,6 +28,7 @@ import TracuuICDPage from './pages/tracuuicd.jsx';
 import BCDieutriPage from './pages/bcdieutri.jsx';
 import BCNgoaitruPage from './pages/bcNgoaitru.jsx';
 import BCClsPage from './pages/bcCls.jsx';
+import BCPtttPage from './pages/bcPttt.jsx';
 
 const router = createBrowserRouter([
   {
@@ -72,6 +73,9 @@ const router = createBrowserRouter([
       }, {
         path: "bccls",
         element: <BCClsPage />
+      },{
+        path: "bcpttt",
+        element: <BCPtttPage />
       },
       {
         path:"/ketquacls/:id",

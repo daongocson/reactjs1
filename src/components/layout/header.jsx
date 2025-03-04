@@ -120,8 +120,8 @@ const Header = () => {
                     icon: <UsergroupAddOutlined />,
                 },
                 {
-                    label: <Link to={"/khambenh"}>Tra cứu Phòng khám</Link>,
-                    key: 'khambenhqt',
+                    label: <Link to={"/bcpttt"}>Báo cáo PTTT</Link>,
+                    key: 'bcpttt',
                     icon: <UsergroupAddOutlined />,
                 }
             ]
