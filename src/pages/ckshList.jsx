@@ -120,7 +120,6 @@ const CSKHListPage = () => {
       };
     const fetchKhachhang = async () => {
         const res = await getbnBynv(fromDate,toDate,"Phòng khám mới");
-        console.log(res);
         if (!res?.message) {   
             setFilData(res.khgoi); 
             setDataKhLast(res.khvuagoi)                     

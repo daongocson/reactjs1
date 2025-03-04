@@ -1,21 +1,22 @@
 import { Button, DatePicker, notification, Select, Space, Spin, Table, Tabs } from "antd";
 import { useState } from "react";
 import { postbaocaoptttApi } from "../util/api";
-import { SearchOutlined } from "@ant-design/icons";
+import { FileExcelOutlined, SearchOutlined } from "@ant-design/icons";
+import { CSVLink } from "react-csv";
 
 const BCPtttPage = () => {   
     const { RangePicker } = DatePicker;
     const [pending, setPending]= useState(false);  
-    const [numha, setNumha]= useState(0);  
+    const [numpt, setNumPt]= useState(0);  
     const [numxn, setNumxn]= useState(0);  
     const [dateOp, setDateOp] = useState([]);   
     const [dataxn, setDataxn]= useState([]); 
-    const [dataHinhanh, setdataHinhanh]= useState([]);    
-    const [dataHinhanhnhom, setDataHinhanhnhom]= useState([]);    
+    const [dataPttt, setdataPttt]= useState([]);    
+    const [dataPtttnhom, setDataPtttnhom]= useState([]);    
     const columns_nt = [
         {
             title: 'Mã DV',
-            dataIndex: 'serviceid',
+            dataIndex: 'servicecode',
         }, {
             title: 'Tên dịch vụ',
             dataIndex: 'servicename',
@@ -30,7 +31,6 @@ const BCPtttPage = () => {
             setPending(true);               
             let data = {...dateOp};            
             const res = await postbaocaoptttApi(data); 
-            console.log("cls>>",res);
             if (!res?.message) { 
                 setPending(false);
                 if(res?.thongbao){
@@ -52,15 +52,15 @@ const BCPtttPage = () => {
         
         
       }; 
-    const changeNhomHA=(a,b)=>{        
+    const changeNhomPT=(a,b)=>{        
         var sluong=0;
-        setDataHinhanhnhom(dataHinhanh.filter(item=> {
+        setDataPtttnhom(dataPttt.filter(item=> {
             if(item.departmentid.toString()===a){
                 sluong+=Number(item.soluong);             
                 return true;    
             }            
         })); 
-        setNumha(sluong);
+        setNumPt(sluong);
     }   
     const setFilData=(items)=>{
         var arrayXn = [];
@@ -73,9 +73,8 @@ const BCPtttPage = () => {
                 arrayXn.push(item);
             }           
             else{
-                //(nhomcon == "403" || nhomcon == "40013" || nhomcon == "40014" || nhomcon == "40015") && !servicename.ToUpper().Contains("PHỤ THU")               
-               
-                console.log(sluong);
+                //(nhomcon == "403" || nhomcon == "40013" || nhomcon == "40014" || nhomcon == "40015") && !servicename.ToUpper().Contains("PHỤ THU")  
+              
                 if(item.dm_servicesubgroupid ==403||item.dm_servicesubgroupid==40013||item.dm_servicesubgroupid==40014){
                     if(!item.servicename.toUpperCase().includes("PHỤ THU"))
                         item.dm_servicesubgroupid="403403";   
@@ -87,11 +86,11 @@ const BCPtttPage = () => {
                                    
             }
         }
-        setNumha(sluong);  
+        setNumPt(sluong);  
         setNumxn(sluongxn);        
         setDataxn(arrayXn);      
-        setdataHinhanh(arrayHinhanh);    
-        setDataHinhanhnhom(arrayHinhanh);    
+        setdataPttt(arrayHinhanh);    
+        setDataPtttnhom(arrayHinhanh);    
     };     
     const onChangeDate = (date, dateString) => {        
         // console.log("date", dateString);
@@ -103,13 +102,13 @@ const BCPtttPage = () => {
             <RangePicker onChange={onChangeDate}/> 
             <Button type="primary" 
                  onClick={OnClickHs}
-                ><SearchOutlined /></Button>
+                ><SearchOutlined /></Button>           
             </Space.Compact>    
                 <Tabs
                     defaultActiveKey="1"
                     items={[                    
                     {
-                        label: `Lượt PTTT Nội trú (${numha})`,
+                        label: `Lượt PTTT Nội trú (${numpt})`,
                         key: 'luotcdha',
                         children: [ 
                             <Select
@@ -119,7 +118,7 @@ const BCPtttPage = () => {
                                 width: '40%',
                                 cursor: 'move',
                               }}
-                            onChange={changeNhomHA}
+                            onChange={changeNhomPT}
                             placeholder="Chọn loại CLS"
                             filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
@@ -131,15 +130,21 @@ const BCPtttPage = () => {
                                 {value: '45',label: 'Khoa YHCT-PHCN'},
                                 {value: '67',label: 'Khoa Nội Nhi'}                      
                             ]}
-                        />, 
+                        />,  <CSVLink 
+                                        filename={"Tonghop-hosoyeucau.csv"}   
+                                        icon={<FileExcelOutlined />}                        
+                                        data={dataPtttnhom}><Button
+                                        icon={<FileExcelOutlined />}
+                                        type="default"/>
+                        </CSVLink>,
                             <Table   
                             rowKey={"serviceid"}                    
                             bordered
-                            dataSource={dataHinhanhnhom} columns={columns_nt}                       
+                            dataSource={dataPtttnhom} columns={columns_nt}                       
                             key="tbluotcdha"
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
-                            'Số lượng: '+ dataHinhanhnhom.length                     
+                            'Số lượng: '+ dataPtttnhom.length                     
                         ]
                     },{
                         label: `Lượt PTTT Phòng Khám(${numxn})`,

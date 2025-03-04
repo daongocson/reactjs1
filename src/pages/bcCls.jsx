@@ -30,7 +30,6 @@ const BCClsPage = () => {
             setPending(true);               
             let data = {...dateOp};            
             const res = await postbaocaoclsApi(data); 
-            console.log("cls>>",res);
             if (!res?.message) { 
                 setPending(false);
                 if(res?.thongbao){

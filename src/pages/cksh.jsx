@@ -35,7 +35,6 @@ const CSKHPage = () => {
         }
     }  
     const config=()=>{      
-                console.log("test call phone");
                 let config = {
                         theme: 'default', // sử dụng UI mặc định của sdk
                         debug: true, // cho phép console.log các event call và trạng thái trong sdk
