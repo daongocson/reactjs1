@@ -29,6 +29,7 @@ import BCDieutriPage from './pages/bcdieutri.jsx';
 import BCNgoaitruPage from './pages/bcNgoaitru.jsx';
 import BCClsPage from './pages/bcCls.jsx';
 import BCPtttPage from './pages/bcPttt.jsx';
+import NhapCskhPage from './pages/NhapCskh.jsx';
 
 const router = createBrowserRouter([
   {
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
       {
         path: "cskhlist",
         element: <CSKHListPage />
+      },
+      {
+        path: "nhapcskh",
+        element: <NhapCskhPage />
       },
       {
         path: "ylenhbs",

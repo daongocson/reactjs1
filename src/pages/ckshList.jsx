@@ -4,6 +4,7 @@ import { getbnBynv, getLsCskhApi, postbacsiApi, postcskhPidApi, postpatientApi} 
 import { AudioOutlined, SignatureOutlined } from "@ant-design/icons";
 import ModelView from "../components/module/ModelView";
 import ModelViewCskh from "../components/module/ModelViewCskh";
+import ModelNapCskh from "../components/module/ModelNapCskh";
 const CSKHListPage = () => {       
     const [dataKh, setDataKh]= useState([]); 
     const [dataKhCxl, setDataKhCxl]= useState([]); 
@@ -12,6 +13,7 @@ const CSKHListPage = () => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [isModalNap, setIsModalNap] = useState(false);
 
     const { Search } = Input;
     const [fromDate, setFromDate] = useState('');
@@ -117,6 +119,9 @@ const CSKHListPage = () => {
         // omiSDK.makeCall(phoneNumber);  
         
         setIsModalVisible(true);
+      };
+      const showNap = () => {  
+        setIsModalNap(true);
       };
     const fetchKhachhang = async () => {
         const res = await getbnBynv(fromDate,toDate,"Phòng khám mới");
@@ -230,7 +235,7 @@ const CSKHListPage = () => {
                         width: '160',
                     }}
                 />  
-                    <AutoComplete
+                    {/* <AutoComplete
                     style={{   
                         width: "100%"            
                     }}
@@ -247,13 +252,19 @@ const CSKHListPage = () => {
                     onSelect={(value)=>{setAutoKhoa(value)}}
                     >
                         
-                    </AutoComplete>   
-                    <Button type="dashed" onClick={handleOnSelect}>Lọc cuộc gọi</Button>             
-                     <Button
-                        type="primary"
+                    </AutoComplete>    */}
+                    <Button type="primary" onClick={handleOnSelect}>Lọc cuộc gọi</Button>             
+                    &nbsp;<Button
+                        type="dashed"
                         onClick={config}
                     >
                         Cài đặt
+                    </Button> &nbsp;
+                    <Button 
+                        type="dashed"
+                        onClick={showNap}
+                    >
+                        Nạp Khách Hàng
                     </Button> 
              </Space.Compact>
         </div>     
@@ -331,7 +342,12 @@ const CSKHListPage = () => {
                 modaldata={modaldata}
                 handleOk={handleOk}
                 handleCancel={handleCancel}
-            />                                   
+            />   
+             <ModelNapCskh
+                open={isModalNap}
+                setOpen={setIsModalNap}
+                refetch={fetchKhachhang}               
+            />                                  
         </div>
     )
 }

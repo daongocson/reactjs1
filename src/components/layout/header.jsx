@@ -62,7 +62,7 @@ const Header = () => {
                             key: 'hskh',
                             icon: <UsergroupAddOutlined />,
                         }, {
-                            label: <Link to={"/cskh"}>Danh sách khách hàng</Link>,
+                            label: <Link to={"/nhapcskh"}>Nhập CSKH</Link>,
                             key: 'cskhlist',
                             icon: <UsergroupAddOutlined />,
                         }, {
