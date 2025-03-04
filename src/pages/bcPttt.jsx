@@ -7,12 +7,13 @@ import { CSVLink } from "react-csv";
 const BCPtttPage = () => {   
     const { RangePicker } = DatePicker;
     const [pending, setPending]= useState(false);  
-    const [numpt, setNumPt]= useState(0);  
-    const [numxn, setNumxn]= useState(0);  
+    const [numpt, setNumPt]= useState(0);      
+    const [numPhauthuat, setNumPhauthuat]= useState(0);  
     const [dateOp, setDateOp] = useState([]);   
-    const [dataxn, setDataxn]= useState([]); 
     const [dataPttt, setdataPttt]= useState([]);    
     const [dataPtttnhom, setDataPtttnhom]= useState([]);    
+    const [dataPhauthuat, setDataPhauthuat]= useState([]);    
+    const [dataPhauthuatnhom, setDataPhauthuatnhom]= useState([]);    
     const columns_nt = [
         {
             title: 'Mã DV',
@@ -62,14 +63,24 @@ const BCPtttPage = () => {
         })); 
         setNumPt(sluong);
     }   
+    const changeNhomPhauThuat=(a,b)=>{        
+        var sluong=0;
+        setDataPhauthuatnhom(dataPhauthuat.filter(item=> {
+            if(item.departmentid.toString()===a){
+                sluong+=Number(item.soluong);             
+                return true;    
+            }            
+        })); 
+        setNumPhauthuat(sluong);
+    }   
     const setFilData=(items)=>{
         var arrayXn = [];
-        var arrayHinhanh = [];
+        var arrayPttt = [];
+        var arrayPhauthuat = [];
         var sluong=0;
-        var sluongxn=0;
+        var sluongphaut=0;
         for (const item of items) {
-            if(item.dm_servicegroupid==3){
-                sluongxn+=Number(item.soluong);
+            if(item.dm_servicegroupid==3){                
                 arrayXn.push(item);
             }           
             else{
@@ -81,16 +92,22 @@ const BCPtttPage = () => {
                 }                
                 if(!item.servicename.toUpperCase().includes("PHỤ THU")){                    
                     sluong+=Number(item.soluong);
-                    arrayHinhanh.push(item);     
+                    arrayPttt.push(item);     
+                    if(item.dm_pttt_loaiid==1||item.dm_pttt_loaiid==2||item.dm_pttt_loaiid==3||item.dm_pttt_loaiid==4){
+                        sluongphaut+=Number(item.soluong);
+                        arrayPhauthuat.push(item);
+                    }
+                        
                 }
                                    
             }
         }
         setNumPt(sluong);  
-        setNumxn(sluongxn);        
-        setDataxn(arrayXn);      
-        setdataPttt(arrayHinhanh);    
-        setDataPtttnhom(arrayHinhanh);    
+        setNumPhauthuat(sluongphaut);                
+        setdataPttt(arrayPttt);    
+        setDataPtttnhom(arrayPttt);    
+        setDataPhauthuat(arrayPhauthuat);
+        setDataPhauthuatnhom(arrayPhauthuat);
     };     
     const onChangeDate = (date, dateString) => {        
         // console.log("date", dateString);
@@ -119,7 +136,7 @@ const BCPtttPage = () => {
                                 cursor: 'move',
                               }}
                             onChange={changeNhomPT}
-                            placeholder="Chọn loại CLS"
+                            placeholder="Chọn Khoa"
                             filterOption={(input, option) =>
                             (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
                             }
@@ -147,17 +164,44 @@ const BCPtttPage = () => {
                             'Số lượng: '+ dataPtttnhom.length                     
                         ]
                     },{
-                        label: `Lượt PTTT Phòng Khám(${numxn})`,
+                        
+                        label: `Lượt Phẫu thuật(${numPhauthuat})`,
                         key: 'luotxn',
                         children: [ 
+                            <Select
+                            key={"slPhauthuat"}
+                            showSearch
+                            style={{
+                                width: '40%',
+                                cursor: 'move',
+                              }}
+                            onChange={changeNhomPhauThuat}
+                            placeholder="Chọn khoa"
+                            filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={[
+                                {value: '54',label: 'Khoa Liên chuyên khoa'},
+                                {value: '46',label: 'Khoa Ngoại'},
+                                {value: '61',label: 'Khoa Sản'},
+                                {value: '45',label: 'Khoa YHCT-PHCN'},
+                                {value: '67',label: 'Khoa Nội Nhi'}                      
+                            ]}
+                        />,  <CSVLink 
+                                        filename={"Tonghop-hosoyeucau.csv"}   
+                                        icon={<FileExcelOutlined />}                        
+                                        data={dataPhauthuatnhom}><Button
+                                        icon={<FileExcelOutlined />}
+                                        type="default"/>
+                        </CSVLink>,
                             <Table   
                             rowKey={"serviceid"}                    
                             bordered
-                            dataSource={dataxn} columns={columns_nt}                       
+                            dataSource={dataPhauthuatnhom} columns={columns_nt}                       
                             key="tbluotxn"
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
-                            'Số lượng: '+ dataxn.length                     
+                            'Số lượng: '+ dataPhauthuatnhom.length                     
                         ]
                     }                 
                    

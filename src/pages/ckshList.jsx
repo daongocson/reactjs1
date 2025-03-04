@@ -188,7 +188,6 @@ const CSKHListPage = () => {
         
     } 
     const handleOnSelect=async ()=>{
-        console.log("vOptions>>",autoKhoa,fromDate,toDate);
         const res = await getbnBynv(fromDate,toDate,autoKhoa);
         if (!res?.message) {   
             setFilData(res.khgoi);    

@@ -17,6 +17,9 @@ const CSKHPage = () => {
         {
             title: 'Nội dung',
             dataIndex: 'ghichu',
+        }, {
+            title: 'Nội dung',
+            dataIndex: 'phone',
         },
         {
             title: 'Ngày Ra',
