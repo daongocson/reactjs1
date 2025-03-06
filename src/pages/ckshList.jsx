@@ -216,9 +216,9 @@ const CSKHListPage = () => {
     const handleCancel=()=>{
         setIsModalVisible(false);
     }
-    return (
-        <div style={{ padding: 20 }}>    
-        <div className="ant-col ant-col-xs-24 ant-col-xl-8">
+    return (        
+        <div style={{ padding: 30 }}>    
+            <div className="ant-col ant-col-xs-24 ant-col-xl-8">
                 
                 <Space.Compact key={"spacehs"} block>                                   
                 <DatePicker   

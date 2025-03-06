@@ -1,7 +1,7 @@
 import { AutoComplete, Button, DatePicker, Input, Modal, notification, Select, Space, Spin, Table, Tabs } from "antd";
 import { useState } from "react";
 import { postbaocaodieutriApi, postbaocaoIcdApi, postbaocaoLuotTNTdieutriApi, postbaocaongoaitruApi, postDoctorApi, postIcdApi } from "../util/api";
-import { SearchOutlined } from "@ant-design/icons";
+import { MehOutlined, SearchOutlined } from "@ant-design/icons";
 
 const BCNgoaitruPage = () => {   
     const { RangePicker } = DatePicker;
@@ -12,6 +12,7 @@ const BCNgoaitruPage = () => {
     const [dataKhamxtri, setdataKhamxtri]= useState([]);    
     const [dataKhamkkb, setdataKhamkkb]= useState([]);    
     const [dataChuyentuyen, setdataChuyentuyen]= useState([]);   
+    const [dataChuyentuyencc, setdataChuyentuyencc]= useState([]);   
     const columns_nt = [
         {
             title: 'Mã VP',
@@ -64,23 +65,28 @@ const BCNgoaitruPage = () => {
                 }
             }
         }
-        setDatacc(arrayCC);    
+        setDatacc(arrayCC);            
         setdataChuyentuyen(items.filter(item=> item.dm_hinhthucravienid.toString()==='13'));  
         setdataKhamxtri(arrayKham.filter(item=> item.ngayrv.toString()!=='01/01 00:00'));    
         setdataKhamkkb(arrayKham.filter(item=> item.ngayrv.toString()!=='01/01 00:00'));    
         setdataKham(items);    
+        setdataChuyentuyencc(items.filter(item=>item.roomid==464 && item.dm_hinhthucravienid.toString()==='13'));  
     };     
     const onChangeDate = (date, dateString) => {        
         // console.log("date", dateString);
         setDateOp(dateString);
     };     
     return (
-        <>         
+        <>  
+        <div style={{ padding: 20 }}>
           <Space.Compact key={"spacehs"} block>
             <RangePicker onChange={onChangeDate}/> 
             <Button type="primary" 
                  onClick={OnClickHs}
                 ><SearchOutlined /></Button>
+              <Button type="dashed" 
+                 onClick={OnClickHs}
+                ><MehOutlined />Chi tiết BHYT</Button>
             </Space.Compact>    
                 <Tabs
                     defaultActiveKey="1"
@@ -88,7 +94,7 @@ const BCNgoaitruPage = () => {
                     {
                         label: `BN Khám Cấp cứu (${datacc.length})`,
                         key: 'bncapcuu',
-                        children: [ 
+                        children: [                            
                             <Table   
                             rowKey={"patientrecordid"}                    
                             bordered
@@ -100,8 +106,22 @@ const BCNgoaitruPage = () => {
                         ]
                     },
                     {
+                        label: `CT Cấp cứu (${dataChuyentuyencc.length})`,
+                        key: 'bnchuyentuyencc',
+                        children: [ 
+                            <Table   
+                            rowKey={"patientrecordid"}                    
+                            bordered
+                            dataSource={dataChuyentuyencc} columns={columns_nt}                       
+                            key="tbchuyentuyen"
+                            loading={{ indicator: <div><Spin /></div>, spinning:pending}}
+                            /> ,
+                            'Số lượng: '+ dataChuyentuyencc.length                     
+                        ]
+                    },
+                    {
                         label: `BN chuyển tuyến (${dataChuyentuyen.length})`,
-                        key: 'nttha22nnt',
+                        key: 'bnchuyentuyen',
                         children: [ 
                             <Table   
                             rowKey={"patientrecordid"}                    
@@ -173,7 +193,8 @@ const BCNgoaitruPage = () => {
                     }
                    
                     ]}
-                />        
+                />       
+            </div> 
         </>
     )
 }
