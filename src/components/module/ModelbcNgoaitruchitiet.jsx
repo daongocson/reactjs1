@@ -50,10 +50,10 @@ function ModelbcNgoaitruchitiet(props) {
       // console.log(date, dateString);
         setDateStr(dateString);
     };    
-    const getTitle = (items) => {
-      let bh = items.filter(item=>item.dm_patientobjectid.toString()==='1')
-      let vp = items.filter(item=>item.dm_patientobjectid.toString()==='2')
+    const getTitle = (items) => {    
       if (items?.length > 0) {
+        let bh = items.filter(item=>item.dm_patientobjectid.toString()==='1')
+        let vp = items.filter(item=>item.dm_patientobjectid.toString()==='2')
         return "("+items?.length+")(BH:"+bh.length+" "+"VP:"+vp.length+")";
       } else {
         return "(0)";
