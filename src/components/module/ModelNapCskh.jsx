@@ -93,6 +93,7 @@ function ModelNapCskh(props) {
             style={{
               top: 30
             }}
+            loading={loading}
             open={open}
             onOk={() => setOpen(false)}
             okText="Nạp dữ liệu"
@@ -119,7 +120,7 @@ function ModelNapCskh(props) {
           <Table   
             rowKey={"patientrecordid"}                    
             bordered    
-            loading={{ indicator: <div><Spin /></div>, spinning:loading}}          
+          //  loading={{ indicator: <div><Spin /></div>, spinning:loading}}          
             dataSource={dataBn} columns={columns}                 
             key="cskhkhl"
           />            
