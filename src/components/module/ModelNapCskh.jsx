@@ -26,7 +26,7 @@ function ModelNapCskh(props) {
     },
     {
         title: 'Ngày RV',
-        dataIndex: 'medicalrecorddate_out',
+        dataIndex: 'ngayra',
     }, {
       title: 'Khoa điều trị',
       dataIndex: 'khoadieutri',
@@ -95,7 +95,7 @@ function ModelNapCskh(props) {
             }}
             loading={loading}
             open={open}
-            onOk={() => setOpen(false)}
+            onOk={postNapbn}
             okText="Nạp dữ liệu"
             onCancel={() => setOpen(false)}
             width={1000}           
