@@ -1,11 +1,14 @@
 import { AutoComplete, Button, DatePicker, Input, Modal, notification, Select, Space, Spin, Table, Tabs } from "antd";
 import { useState } from "react";
-import { postbaocaodieutriApi, postbaocaoIcdApi, postbaocaoLuotTNTdieutriApi, postbaocaongoaitruApi, postDoctorApi, postIcdApi } from "../util/api";
+import { postbaocaodieutriApi, postbaocaoIcdApi, postbaocaoLuotTNTdieutriApi, postbaocaongoaitruApi, postbaocaongoaitruChitietApi, postDoctorApi, postIcdApi } from "../util/api";
 import { MehOutlined, SearchOutlined } from "@ant-design/icons";
+import ModelbcNgoaitruchitiet from "../components/module/ModelbcNgoaitruchitiet";
 
 const BCNgoaitruPage = () => {   
     const { RangePicker } = DatePicker;
     const [pending, setPending]= useState(false);  
+    const [pendingChitiet, setPendingChitiet]= useState(true);  
+
     const [dateOp, setDateOp] = useState([]);   
     const [datacc, setDatacc]= useState([]); 
     const [dataKham, setdataKham]= useState([]);    
@@ -13,6 +16,9 @@ const BCNgoaitruPage = () => {
     const [dataKhamkkb, setdataKhamkkb]= useState([]);    
     const [dataChuyentuyen, setdataChuyentuyen]= useState([]);   
     const [dataChuyentuyencc, setdataChuyentuyencc]= useState([]);   
+    const [isModalChitiet, setIsModalChitiet] = useState(false);
+    const [dataChitiet, setDataChitiet]= useState([]);   
+
     const columns_nt = [
         {
             title: 'Mã VP',
@@ -23,6 +29,9 @@ const BCNgoaitruPage = () => {
             dataIndex: 'tgkham',
         }
     ]; 
+    const fetchKhachhang=async()=>{       
+        console.log("test")
+    }
     const OnClickHs = async () => {      
             // setDataBaocao([]);    
             setPending(true);               
@@ -76,6 +85,46 @@ const BCNgoaitruPage = () => {
         // console.log("date", dateString);
         setDateOp(dateString);
     };     
+    const setFildataChitiet = (items) => {     
+        console.log("setFildataChitiet",items);
+        if(items?.length){
+            var arrayCC = [];
+            var arrayKham = [];
+            for (const item of items) {
+                if(item.roomid==464){
+                    arrayCC.push(item);
+                }
+                else{
+                    if(item.roomid!=666&&item.roomid!=548&&item.roomid!=541){
+                        arrayKham.push(item);
+                    }
+                }
+            }
+            let vdata={
+                datacc:arrayCC,
+                dataChuyentuyencc:arrayCC.filter(item=>item.dm_hinhthucravienid.toString()==='13'),
+                dataChuyentuyen:arrayKham.filter(item=>item.dm_hinhthucravienid.toString()==='13'),
+                dataKham:arrayKham.filter(item=>item.ngayrv.toString()!=='01/01 00:00'),
+            }
+            setDataChitiet(vdata);
+        }else{
+            let vdata={
+                datacc:[],
+                dataChuyentuyencc:[],
+                dataChuyentuyen:[],
+                dataKham:[]
+            }
+            setDataChitiet(vdata);
+        }
+
+    }; 
+    const ShowChitiet = async() => {        
+        setIsModalChitiet(true);       
+        setPendingChitiet(true);
+        const res = await postbaocaongoaitruChitietApi(dateOp); 
+        setFildataChitiet(res);      
+        setPendingChitiet(false);        
+    };
     return (
         <>  
         <div style={{ padding: 20 }}>
@@ -85,7 +134,7 @@ const BCNgoaitruPage = () => {
                  onClick={OnClickHs}
                 ><SearchOutlined /></Button>
               <Button type="dashed" 
-                 onClick={OnClickHs}
+                 onClick={ShowChitiet}
                 ><MehOutlined />Chi tiết BHYT</Button>
             </Space.Compact>    
                 <Tabs
@@ -195,6 +244,12 @@ const BCNgoaitruPage = () => {
                     ]}
                 />       
             </div> 
+            <ModelbcNgoaitruchitiet
+                open={isModalChitiet}
+                setOpen={setIsModalChitiet}
+                loading={pendingChitiet}
+                data={dataChitiet}               
+            />    
         </>
     )
 }
