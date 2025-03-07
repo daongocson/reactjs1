@@ -86,7 +86,6 @@ const BCNgoaitruPage = () => {
         setDateOp(dateString);
     };     
     const setFildataChitiet = (items) => {     
-        console.log("setFildataChitiet",items);
         if(items?.length){
             var arrayCC = [];
             var arrayKham = [];
@@ -96,7 +95,8 @@ const BCNgoaitruPage = () => {
                 }
                 else{
                     if(item.roomid!=666&&item.roomid!=548&&item.roomid!=541){
-                        arrayKham.push(item);
+                        if(item.ngayrv.toString()!=='01/01 00:00')
+                            arrayKham.push(item);
                     }
                 }
             }
@@ -104,7 +104,7 @@ const BCNgoaitruPage = () => {
                 datacc:arrayCC,
                 dataChuyentuyencc:arrayCC.filter(item=>item.dm_hinhthucravienid.toString()==='13'),
                 dataChuyentuyen:arrayKham.filter(item=>item.dm_hinhthucravienid.toString()==='13'),
-                dataKham:arrayKham.filter(item=>item.ngayrv.toString()!=='01/01 00:00'),
+                dataKham:arrayKham
             }
             setDataChitiet(vdata);
         }else{
@@ -143,8 +143,8 @@ const BCNgoaitruPage = () => {
                     {
                         label: `BN Khám Cấp cứu (${datacc.length})`,
                         key: 'bncapcuu',
-                        children: [                            
-                            <Table   
+                        children: [                                                      
+                            <Table
                             rowKey={"patientrecordid"}                    
                             bordered
                             dataSource={datacc} columns={columns_nt}                       

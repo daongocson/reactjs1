@@ -1,7 +1,8 @@
 import { AutoComplete, Button, DatePicker, Input, notification, Select, Space, Spin, Table, Tabs } from "antd";
-import { useState } from "react";
-import { postbaocaoIcdApi, postDoctorApi, postIcdApi } from "../util/api";
-import { SearchOutlined } from "@ant-design/icons";
+import { useEffect, useState } from "react";
+import { getbnBynv, postbaocaoIcdApi, postDoctorApi, postIcdApi } from "../util/api";
+import { AudioOutlined, SearchOutlined } from "@ant-design/icons";
+import ModelNapCskh from "../components/module/ModelNapCskh";
 
 const NhapCskhPage = () => {   
     const { Search } = Input;
@@ -9,60 +10,49 @@ const NhapCskhPage = () => {
     const [pending, setPending]= useState(false);  
     const [dataOp, setDataOp] = useState([]); 
     const [dateOp, setDateOp] = useState([]); 
-    const [dataBaocao, setDataBaocao] = useState([]); 
-    const [icd, setICD] = useState(''); 
-    const [dataCaptoa, setDataCaptoa]= useState([]); 
-    const [dataNhapvien, setDataNhapvien]= useState([]); 
+    const [icd, setICD] = useState('');   
     const [keyword, setKeyword] = useState('');
-    const [dataChuyentuyen, setDataChuyentuyen]= useState([]); 
-
+    const [dataKhachhang, setDataKhachhang]= useState([]); 
+    const [isModalNap, setIsModalNap] = useState(false);
+    useEffect(() => {   
+        fetchKhachhang();        
+    }, []);
     const columns = [
         {
-            title: 'Mã VP',
-            dataIndex: 'patientrecordid',
+            title: 'Mã BN',
+            dataIndex: 'idcskh',
+        },              
+        {
+            title: 'Họ và tên',
+            dataIndex: 'tenbn',
         },
         {
-            title: 'Mã VP(ĐTNT)',
-            dataIndex: 'patientrecordid_vp',
+            title: 'Phòng khám',
+            dataIndex: 'pkham',
+        },
+        {
+            title: 'Bác sĩ',
+            dataIndex: 'bacsi',
+        },{
+            title: 'Phone',
+            dataIndex: 'phone',
         },{
             title: 'Ngày RV',
-            dataIndex: 'ngayrv',
-        } ,{
-            title: 'Xử trí',
-            dataIndex: 'loairv',
-        }      
-
-    ];  
-    const keys  = ["loairv","patientrecordid","patientrecordid_vp"]
-    const handleOnSearch = async(values) => {   
-        if(values.length==2)  {
-            const res = await postIcdApi(values);
-            if (!res?.message) {                    
-                const Options = res.map(res => ({
-                    key:res.id,
-                    value: res.dm_icd10code,
-                    label: res.dm_icd10code+"->"+res.dm_icd10name,                    
-                    isLeaf: false    
-                  }));                   
-                setDataOp(Options);              
-            } else {
-                notification.error({
-                    message: "Unauthorized",
-                    description: res.message
-                })
-            }
-        }else {
-            if(values.length>2&&dataOp.length<1){
-                const res = await postIcdApi(values);
-            }else{
-                //filter(khi data có rồi thì filter)
-            }            
-        }      
-      
-      };
-      const handleOnSelect = async(values,option) => {             
-            setICD(values);       
-      }
+            dataIndex: 'ngayravien',
+        },{
+            title: 'Ghi chú',
+            dataIndex: 'ghichu',
+        },{
+            title: 'Duyệt',
+            dataIndex: 'id',
+            key: 'id',
+            render: (index, record) => (
+              <Button  icon={<AudioOutlined />} onClick={() => showModal(record)} />
+            )
+          },
+          
+    ];   
+    const keys  = ["loairv","patientrecordid","patientrecordid_vp"] 
       const OnClickHs = async () => {      
             setDataBaocao([]);    
             setPending(true);               
@@ -88,23 +78,25 @@ const NhapCskhPage = () => {
         
       };    
     const setFilData=(data)=>{
-        setDataBaocao(data);       
-        setDataCaptoa(data.filter(item=> item.dm_medicalrecordstatusid===99 && item.dm_hinhthucravienid===2));   
-        setDataChuyentuyen(data.filter(item=> item.dm_hinhthucravienid===13));
-        setDataNhapvien(data.filter(item=> item.dm_hinhthucravienid===4));        
+        setDataKhachhang(data.filter(item=> item.trangthai.toLowerCase()==='0'));  
     };  
-      const onChangeDate = (date, dateString) => {        
-        // console.log("date", dateString);
-        setDateOp(dateString);
-      };
-      const searchTable=(data)=>{  
-        if(keyword=="")
-            return data;
-        else
-            return data.filter(
-                (item)=>(
-                    keys.some((key)=>item[key]!=null&&item[key].toString().toLowerCase().includes(keyword)
-                )));      
+    const onChangeDate = (date, dateString) => {        
+       // console.log("date", dateString);
+       setDateOp(dateString);
+    };  
+    const showNap = () => {  
+        setIsModalNap(true);
+    };
+    const fetchKhachhang = async () => {
+        const res = await getbnBynv("","","Phòng khám mới");
+        if (!res?.message) {   
+               setFilData(res.khgoi); 
+        } else {
+            notification.error({
+                message: "Unauthorized",
+                description: res.message
+            })
+        }
     }
     return (
         <> 
@@ -114,28 +106,40 @@ const NhapCskhPage = () => {
             <Button type="primary" 
                  onClick={OnClickHs}
                 ><SearchOutlined /></Button>
+              <Button 
+                        type="dashed"
+                        onClick={showNap}
+                    >
+                        Nạp Khách Hàng
+                    </Button> 
             </Space.Compact>    
                 <Tabs
                     defaultActiveKey="1"
                     items={[
                     {
-                        label: `Danh sách khách hàng (${dataChuyentuyen.length})`,
+                        label: `Danh sách chưa gọi (${dataKhachhang.length})`,
                         key: 'chuyentuyen',
                         children: [                           
                             <Table   
-                            rowKey={"medicalrecordid"}                    
+                            rowKey={"patientrecordid"}                    
                             bordered                       
-                            dataSource={dataChuyentuyen} columns={columns}                 
+                            dataSource={dataKhachhang} columns={columns}                 
                             key="cskhkhl"
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
-                            'Số lượng: '+ dataChuyentuyen.length                     
+                            'Số lượng: '+ dataKhachhang.length                     
                         ],
                     }
                     ]}
                 />  
+                  <ModelNapCskh
+                    open={isModalNap}
+                    setOpen={setIsModalNap}
+                    refetch={fetchKhachhang}               
+                   />    
         </div>                       
         </>
+       
     )
 }
 

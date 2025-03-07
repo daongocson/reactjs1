@@ -2,7 +2,7 @@ import React, { useState, } from 'react';
 //import { Button, Modal } from 'antd';
 import {Button, DatePicker, Form,Modal, notification, Space, Spin, Table} from 'antd';
 
-import { postkqGoiApi, postLoadcskhApi } from '../../util/api';
+import { postkqGoiApi, postLoadcskhApi, postNapcskhApi } from '../../util/api';
 function ModelNapCskh(props) {
     const{open,setOpen,refetch}=props;  
     const [loading, setLoading] = React.useState(false);
@@ -21,20 +21,48 @@ function ModelNapCskh(props) {
       dataIndex: 'patientphone',
     },
     {
-        title: 'Loại DV',
-        dataIndex: 'loaidv',
+      title: 'Phòng',
+      dataIndex: 'phongkham',
+    },
+    {
+        title: 'Ngày RV',
+        dataIndex: 'medicalrecorddate_out',
     }, {
-      title: 'Bác sĩ',
-      dataIndex: 'bacsi',
+      title: 'Khoa điều trị',
+      dataIndex: 'khoadieutri',
   }
   ];  
- 
+      const postNapbn = async () => {
+        if (dataBn?.length > 0) {
+          setLoading(true);
+          const res = await postNapcskhApi(datestr); 
+          if (res?.success) {   
+            notification.success({
+              message: "Thành công",
+              description: res.message
+          })
+            setLoading(false); 
+            setOpen(false);
+            refetch();                             
+          } else {
+            setLoading(false);            
+              notification.error({
+                  message: "Unauthorized",
+                  description: res.message
+              })
+          }      
+        }else{
+          notification.error({
+            message: "Thiếu",
+            description: "Không có dữ liệu nạp"
+        })
+        }
+      }
       const postkqGoi = async () => {
-
           if(datestr){
             setLoading(true);
             const res = await postLoadcskhApi(datestr);    
-            console.log(res);        
+              
             if (!res?.success) {   
               setLoading(false);            
               // setOpen(false);
@@ -78,15 +106,16 @@ function ModelNapCskh(props) {
               onClick={postkqGoi}
               >
               Tải khách hàng
-            </Button>          
-          </Space.Compact>
-          <p><strong>SL khách hàng: {dataBn.length}</strong></p>
-          <Button 
+            </Button> &nbsp;&nbsp;         
+            <Button 
               type="primary"
-              onClick={postkqGoi}
+              onClick={postNapbn}
               >
               Đồng ý Nạp
-            </Button>     
+            </Button>    
+          </Space.Compact>
+          <p><strong>SL khách hàng: {dataBn.length}</strong></p>
+          
           <Table   
             rowKey={"patientrecordid"}                    
             bordered    

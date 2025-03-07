@@ -13,8 +13,6 @@ const CSKHListPage = () => {
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [isModalNap, setIsModalNap] = useState(false);
-
     const { Search } = Input;
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
@@ -119,10 +117,7 @@ const CSKHListPage = () => {
         // omiSDK.makeCall(phoneNumber);  
         
         setIsModalVisible(true);
-      };
-      const showNap = () => {  
-        setIsModalNap(true);
-      };
+      };      
     const fetchKhachhang = async () => {
         const res = await getbnBynv(fromDate,toDate,"Phòng khám mới");
         if (!res?.message) {   
@@ -259,13 +254,7 @@ const CSKHListPage = () => {
                         onClick={config}
                     >
                         Cài đặt
-                    </Button> &nbsp;
-                    <Button 
-                        type="dashed"
-                        onClick={showNap}
-                    >
-                        Nạp Khách Hàng
-                    </Button> 
+                    </Button>                  
              </Space.Compact>
         </div>     
                 
@@ -342,12 +331,7 @@ const CSKHListPage = () => {
                 modaldata={modaldata}
                 handleOk={handleOk}
                 handleCancel={handleCancel}
-            />   
-             <ModelNapCskh
-                open={isModalNap}
-                setOpen={setIsModalNap}
-                refetch={fetchKhachhang}               
-            />                                  
+            />                                               
         </div>
     )
 }

@@ -1,40 +1,6 @@
-import React, { useEffect, useState, } from 'react';
-//import { Button, Modal } from 'antd';
-import {Button, DatePicker, Form,Modal, notification, Space, Spin, Table, Tabs} from 'antd';
-
-import { postbaocaongoaitruApi, postkqGoiApi, postLoadcskhApi } from '../../util/api';
+import {Modal,Table, Tabs} from 'antd';
 function ModelbcNgoaitruchitiet(props) {
-    const{open,setOpen,data,loading}=props;  
-    // const [loading, setLoading] = React.useState(false);
-    const [pending, setPending] = React.useState(false);
-    const [datestr, setDateStr] = React.useState(false);
-    const [dataBn, setDataBn] = React.useState([]);
-    const [datacc, setDatacc]= useState([]); 
-    const [dataKham, setdataKham]= useState([]);    
-    const [dataKhamxtri, setdataKhamxtri]= useState([]);    
-    const [dataKhamkkb, setdataKhamkkb]= useState([]);    
-    const [dataChuyentuyen, setdataChuyentuyen]= useState([]);   
-    const [dataChuyentuyencc, setdataChuyentuyencc]= useState([]);   
-  const columns = [
-    {
-      title: 'Mã VP',
-      dataIndex: 'patientrecordid',
-    },              
-    {
-        title: 'Tên BN',
-        dataIndex: 'patientname',
-    }, {
-      title: 'Điện thoại',
-      dataIndex: 'patientphone',
-    },
-    {
-        title: 'Loại DV',
-        dataIndex: 'loaidv',
-    }, {
-      title: 'Bác sĩ',
-      dataIndex: 'bacsi',
-  }
-  ];  
+    const{open,setOpen,data,loading}=props;    
   const columns_nt = [
     {
         title: 'Mã VP',
@@ -54,14 +20,10 @@ function ModelbcNgoaitruchitiet(props) {
       if (items?.length > 0) {
         let bh = items.filter(item=>item.dm_patientobjectid.toString()==='1')
         let vp = items.filter(item=>item.dm_patientobjectid.toString()==='2')
-        return "("+items?.length+")(BH:"+bh.length+" "+"VP:"+vp.length+")";
+        return ""+items?.length+"(BH:"+bh.length+" "+"VP:"+vp.length+")";
       } else {
         return "(0)";
       }
-       return "(001-"+items?.length+")";
-      //data.datacc?.length})(BH${data.datacc.filter(item=>item.dm_patientobjectid.toString()==='1').length}
-      // console.log(date, dateString);
-        
     };
     return (
         <>         
@@ -81,48 +43,51 @@ function ModelbcNgoaitruchitiet(props) {
                     defaultActiveKey="1"
                     items={[
                     {
-                        label: `BN Khám Cấp cứu ${getTitle(data.datacc)}`,
-                          //numbers.filter(num => num > 25)
-                        key: 'bncapcuu',
-                        children: [                            
+                        label: `BN Khám Cấp cứu`,
+                        key: 'ctbncapcuu',
+                        children: [ 
+                          <strong key={"ctcctext"}>Tổng: {getTitle(data.datacc)}</strong>,                           
                             <Table   
-                            rowKey={"patientrecordid"}                    
-                            bordered
-                            dataSource={data.datacc} columns={columns_nt}                       
-                            key="tbyhct"                          
+                              rowKey={"patientrecordid"}                    
+                              bordered
+                              dataSource={data.datacc} columns={columns_nt}                       
+                              key="cttbyhct"                          
                             /> ,
                             'Số lượng: '+ data.datacc?.length                     
                         ]
                     },
                     {
-                        label: `CT Cấp cứu ${getTitle(data.dataChuyentuyencc)}`,
-                        key: 'bnchuyentuyencc',
-                        children: [                            
+                        label: `CT Cấp cứu `,
+                        key: 'ctbnchuyentuyencc',
+                        children: [   
+                            <strong key={"ctcctext1"}>Tổng: {getTitle(data.dataChuyentuyencc)}</strong>,                             
                             <Table   
-                            rowKey={"patientrecordid"}                    
-                            bordered
-                            dataSource={data.dataChuyentuyencc} columns={columns_nt}                       
-                            key="tbchuyentuyen"                           
+                              rowKey={"patientrecordid"}                    
+                              bordered
+                              dataSource={data.dataChuyentuyencc} columns={columns_nt}                       
+                              key="cttbchuyentuyen"                           
                             /> ,
                             'Số lượng: '+data.dataChuyentuyencc?.length                    
                         ]
                     },
                     {
-                        label: `CT Khám bệnh ${getTitle(data.dataChuyentuyen)}`,
+                        label: `CT Khám bệnh`,
                         key: 'ctbnchuyentuyen',
                         children: [ 
+                            <strong  key={"ctcctext2"}>Tổng: {getTitle(data.dataChuyentuyen)}</strong>, 
                             <Table   
-                            rowKey={"patientrecordid"}                    
-                            bordered
-                            dataSource={data.dataChuyentuyen} columns={columns_nt}                       
-                            key="tbchuyentuyen"                           
+                              rowKey={"patientrecordid"}                    
+                              bordered
+                              dataSource={data.dataChuyentuyen} columns={columns_nt}                       
+                              key="cttbchuyentuyen"                           
                             /> ,
                             'Số lượng: '+ data.dataChuyentuyen?.length                    
                         ]
                     },{
-                      label: `BN Khám bệnh ${getTitle(data.dataKham)}`,
+                      label: `BN Khám bệnh`,
                       key: 'ctbnkham',
                       children: [ 
+                          <strong  key={"ctcctext3"}>Tổng: {getTitle(data.dataKham)}</strong>, 
                           <Table   
                           rowKey={"patientrecordid"}                    
                           bordered
