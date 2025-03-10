@@ -35,7 +35,7 @@ function ModelNapCskh(props) {
       const postNapbn = async () => {
         if (dataBn?.length > 0) {
           setLoading(true);
-          const res = await postNapcskhApi(datestr); 
+          const res = await postNapcskhApi(datestr);           
           if (res?.success) {   
             notification.success({
               message: "Thành công",
@@ -62,7 +62,7 @@ function ModelNapCskh(props) {
           if(datestr){
             setLoading(true);
             const res = await postLoadcskhApi(datestr);    
-              
+            
             if (!res?.success) {   
               setLoading(false);            
               // setOpen(false);

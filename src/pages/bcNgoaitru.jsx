@@ -12,6 +12,8 @@ const BCNgoaitruPage = () => {
     const [dateOp, setDateOp] = useState([]);   
     const [datacc, setDatacc]= useState([]); 
     const [dataKham, setdataKham]= useState([]);    
+    const [dataKhamKhoa, setdataKhamKhoa]= useState([]);    
+
     const [dataKhamxtri, setdataKhamxtri]= useState([]);    
     const [dataKhamkkb, setdataKhamkkb]= useState([]);    
     const [dataChuyentuyen, setdataChuyentuyen]= useState([]);   
@@ -60,7 +62,10 @@ const BCNgoaitruPage = () => {
       }; 
     const changeKhoaKB=(a,b)=>{
         setdataKhamkkb (dataKhamxtri.filter(item=> item.roomid.toString()===a));        
-    }   
+    } 
+    const changeKhoaKhoa=(a,b)=>{
+        setdataKhamKhoa (dataKham.filter(item=> item.roomid.toString()===a));        
+    }  
     const setFilData=(items)=>{
         var arrayCC = [];
         var arrayKham = [];
@@ -79,6 +84,7 @@ const BCNgoaitruPage = () => {
         setdataKhamxtri(arrayKham.filter(item=> item.ngayrv.toString()!=='01/01 00:00'));    
         setdataKhamkkb(arrayKham.filter(item=> item.ngayrv.toString()!=='01/01 00:00'));    
         setdataKham(items);    
+        setdataKhamKhoa(items);    
         setdataChuyentuyencc(items.filter(item=>item.roomid==464 && item.dm_hinhthucravienid.toString()==='13'));  
     };     
     const onChangeDate = (date, dateString) => {        
@@ -230,14 +236,48 @@ const BCNgoaitruPage = () => {
                         label: `BN Khám Cả viện (${dataKham.length})`,
                         key: 'ntthan3nt',
                         children: [ 
+                            <Select
+                            key={"slvien"}
+                            showSearch
+                            style={{
+                                width: '40%',
+                                cursor: 'move',
+                              }}
+                            onChange={changeKhoaKhoa}
+                            placeholder="Chọn khoa Khám bệnh"
+                            filterOption={(input, option) =>
+                            (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+                            }
+                            options={[
+                                {value: '434',label: 'Phòng khám số 01'},
+                                {value: '436',label: 'Phòng khám số 07'},
+                                {value: '437',label: 'Phòng khám số 04'},
+                                {value: '438',label: 'Phòng khám số 05'},
+                                {value: '439',label: 'Phòng khám số 06'},
+                                {value: '440',label: 'Phòng khám số 03'},
+                                {value: '441',label: 'Phòng khám số 08'},
+                                {value: '442',label: 'Phòng khám số 09'},                                    
+                                {value: '443',label: 'Phòng khám số 10'},
+                                {value: '444',label: 'Phòng khám số 11'},
+                                {value: '447',label: 'Phòng khám số 13 (PK RHM)'},
+                                {value: '448',label: 'Phòng khám số 12 (PK MẮT)'},
+                                {value: '501',label: 'Phòng Tiêm chủng'},
+                                {value: '509',label: 'Phòng sao bệnh án'},
+                                {value: '594',label: 'Phòng khám Y Học Cổ Truyền'},
+                                {value: '605',label: 'Phòng khám 16'},
+                                {value: '541',label: 'PHÒNG KHÁM SỨC KHỎE'},
+                                {value: '548',label: 'Khám Sức Khỏe Quốc Tế'},
+                                {value: '666',label: 'Phòng khám sức khỏe lái xe'}                                                 
+                            ]}
+                        />, 
                             <Table   
                             rowKey={"patientrecordid"}                    
                             bordered
-                            dataSource={dataKham} columns={columns_nt}                       
+                            dataSource={dataKhamKhoa} columns={columns_nt}                       
                             key="tbnngoaitru"
                             loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
-                            'Số lượng: '+ dataKham.length                     
+                            'Số lượng: '+ dataKhamKhoa.length                     
                         ]
                     }
                    
