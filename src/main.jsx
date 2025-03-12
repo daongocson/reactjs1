@@ -30,6 +30,7 @@ import BCNgoaitruPage from './pages/bcNgoaitru.jsx';
 import BCClsPage from './pages/bcCls.jsx';
 import BCPtttPage from './pages/bcPttt.jsx';
 import NhapCskhPage from './pages/NhapCskh.jsx';
+import BaocaoCskhPage from './pages/BaocaoCskh.jsx';
 
 const router = createBrowserRouter([
   {
@@ -105,6 +106,9 @@ const router = createBrowserRouter([
       {
         path: "nhapcskh",
         element: <NhapCskhPage />
+      },{
+        path: "bccskh",
+        element: <BaocaoCskhPage />
       },
       {
         path: "ylenhbs",
