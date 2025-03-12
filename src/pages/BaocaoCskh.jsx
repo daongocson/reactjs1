@@ -1,6 +1,6 @@
 import { AutoComplete, Button, Col, DatePicker, Input, Layout, notification, Row, Select, Space, Spin, Table, Tabs } from "antd";
 import { useEffect, useState } from "react";
-import { getbnBynv, getLsCskhApi, postbaocaoIcdApi, postcskhPidApi, postDoctorApi, postIcdApi } from "../util/api";
+import { getbnBynv, getLsCskhApi, postbaocaocskhApi, postbaocaoIcdApi, postcskhPidApi, postDoctorApi, postIcdApi } from "../util/api";
 import { AudioOutlined, SearchOutlined } from "@ant-design/icons";
 import ModelNapCskh from "../components/module/ModelNapCskh";
 import { Content } from "antd/es/layout/layout";
@@ -8,60 +8,19 @@ import ChartComponent from "../components/module/ChartComponent";
 import BlogList from "../components/module/BlogList";
 
 const BaocaoCskhPage = () => {   
-    const { Search } = Input;
-    const { RangePicker } = DatePicker;
-    const [pending, setPending]= useState(false);  
-    const [dataOp, setDataOp] = useState([]); 
+    const { RangePicker } = DatePicker;  
     const [dateOp, setDateOp] = useState([]); 
-    const [icd, setICD] = useState('');   
-    const [keyword, setKeyword] = useState('');
-    const [dataKhachhang, setDataKhachhang]= useState([]); 
-    const [isModalNap, setIsModalNap] = useState(false);
     const [dataKh, setDataKh]= useState([]); 
+    const [dataKhS4, setDataKhS4]= useState([]); 
+    const [loadingPost, setLoadingPost] = useState(false);
+    const [dataChart, setDataChart]= useState([]);     
     useEffect(() => {   
         fetchKhachhang();        
-    }, [])
- 
-    const columns = [
-        {
-            title: 'Mã BN',
-            dataIndex: 'idcskh',
-        },              
-        {
-            title: 'Họ và tên',
-            dataIndex: 'tenbn',
-        },
-        {
-            title: 'Phòng khám',
-            dataIndex: 'pkham',
-        },
-        {
-            title: 'Bác sĩ',
-            dataIndex: 'bacsi',
-        },{
-            title: 'Phone',
-            dataIndex: 'phone',
-        },{
-            title: 'Ngày RV',
-            dataIndex: 'ngayravien',
-        },{
-            title: 'Ghi chú',
-            dataIndex: 'ghichu',
-        },{
-            title: 'Duyệt',
-            dataIndex: 'id',
-            key: 'id',
-            render: (index, record) => (
-              <Button  icon={<AudioOutlined />} onClick={() => showModal(record)} />
-            )
-          },
-          
-    ];   
+    }, [])    
     const fetchKhachhang = async () => {
         const res = await getLsCskhApi();
-        console.log("bacocao>>",res);
         if (!res?.message) {   
-            setDataKh(res);              
+            setDataKhS4(res);              
         } else {
             notification.error({
                 message: "Unauthorized",
@@ -84,14 +43,11 @@ const BaocaoCskhPage = () => {
             })
         }
     }
-    const keys  = ["loairv","patientrecordid","patientrecordid_vp"] 
-      const OnClickHs = async () => {      
-            setDataBaocao([]);    
-            setPending(true);               
-            let data = {...dateOp,icd};            
-            const res = await postbaocaoIcdApi(data);   
+      const OnClickBaocao = async () => { 
+            setLoadingPost(true);  
+            const res = await postbaocaocskhApi(dateOp);   
             if (!res?.message) { 
-                setPending(false);
+                setLoadingPost(false);
                 if(res?.thongbao){
                     notification.success({
                         message: "Thành công",
@@ -100,7 +56,7 @@ const BaocaoCskhPage = () => {
                 }else
                 setFilData(res);                
             } else {
-                setPending(false);
+                setLoadingPost(false);
                 notification.error({
                     message: "Unauthorized",
                     description: res.message
@@ -109,8 +65,31 @@ const BaocaoCskhPage = () => {
         
         
       };    
-    const setFilData=(data)=>{
-        setDataKhachhang(data.filter(item=> item.trangthai.toLowerCase()==='0'));  
+      const setFilData=(data)=>{       
+        // { value: '0', label: 'Chưa xử lý' },
+        // { value: '1', label: 'Không có SĐT' },
+        // { value: '2', label: 'Không nghe máy' },
+        // { value: '3', label: 'Hài lòng' },
+        // { value: '4', label: 'Không hài lòng' },
+        // { value: '5', label: 'Sai số' }       
+        let arrchart =[];        
+        // const arrS0 = data.filter(item=> item.trangthai.toLowerCase()==='0'); 
+        // arrchart.push({name:"Chưa xử lý",value:arrS0.length});
+        const arrS1 = data.filter(item=> item.trangthai.toLowerCase()==='1'); 
+        arrchart.push({name:"Không có SĐT",value:arrS1.length});
+
+        const arrS2 = data.filter(item=> item.trangthai.toLowerCase()==='2'); 
+        arrchart.push({name:"Không nghe máy",value:arrS2.length});
+
+        const arrS3 = data.filter(item=> item.trangthai.toLowerCase()==='3'); 
+        arrchart.push({name:"Hài lòng",value:arrS3.length});
+
+        const arrS4 = data.filter(item=> item.trangthai.toLowerCase()==='4'); 
+        arrchart.push({name:"Không hài lòng",value:arrS4.length});
+        const arrS5 = data.filter(item=> item.trangthai.toLowerCase()==='5'); 
+        arrchart.push({name:"Sai số",value:arrS5.length});
+        setDataChart(arrchart);   
+        setDataKhS4(arrS4);  
     };  
     const onChangeDate = (date, dateString) => {        
        // console.log("date", dateString);
@@ -118,43 +97,31 @@ const BaocaoCskhPage = () => {
     };  
     const showNap = () => {  
         setIsModalNap(true);
-    };
-  
-    const posts = [
-        { id: 1, title: "Học ReactJS cơ 1", excerpt: "React là thư viện mạnh mẽ cho UI..." },
-        { id: 2, title: "Tìm hiểu về Ant 2", excerpt: "Ant Design giúp tạo UI chuyên nghiệp..." },
-        { id: 3, title: "Tìm hiểu về Ant 3", excerpt: "Ant Design giúp tạo UI chuyên nghiệp..." },
-        { id: 4, title: "Tìm hiểu về Ant 4", excerpt: "Ant Design giúp tạo UI chuyên nghiệp..." },
-        { id: 5, title: "Tìm hiểu về Ant 5", excerpt: "Ant Design giúp tạo UI chuyên nghiệp..." },
-        { id: 11, title: "Học ReactJS cơ bản", excerpt: "React là thư viện mạnh mẽ cho UI..." },
-        { id: 12, title: "Tìm hiểu về Ant Design", excerpt: "Download the Chrome extension to switch your default search engine to ChatGPT, and get instant answers from trusted sources with every search...." },
-        { id: 13, title: "Tìm hiểu về Ant Design", excerpt: "Ant Design giúp tạo UI chuyên nghiệp..." },
-        { id: 14, title: "Tìm hiểu về Ant Design", excerpt: "Ant Design giúp tạo UI chuyên nghiệp..." },
-        { id: 15, title: "Tìm hiểu về Ant Design", excerpt: "Download the Chrome extension to switch your default search engine to ChatGPT, and get instant answers from trusted sources with every search...." }
-      ];
+    };  
+    
     return (
         <> 
          <div style={{ padding: 20 }}>
           <Space.Compact key={"spacehs"} block>
             <RangePicker onChange={onChangeDate}/>    
             <Button type="primary" 
-                 onClick={OnClickHs}
+                 onClick={OnClickBaocao}
                 ><SearchOutlined /></Button>
               <Button 
                         type="dashed"
                         onClick={showNap}
                     >
-                        Báo cáo CSKH
+                Báo cáo CSKH
                     </Button> 
             </Space.Compact>    
             <Layout style={{ padding: "20px" }}>
                 <Content>
                     <Row gutter={[16, 16]}>
                     <Col xs={24} md={12}>
-                        <BlogList posts={dataKh} />
+                        <BlogList posts={dataKhS4} loadingPost={loadingPost} />
                     </Col>
                     <Col xs={24} md={12}>
-                        <ChartComponent />
+                        <ChartComponent data={dataChart}/>
                     </Col>
                     </Row>
                 </Content>
