@@ -1,7 +1,7 @@
 import { AutoComplete, Button, DatePicker, Input, notification, Select, Space, Spin, Table, Tabs } from "antd";
 import { useEffect, useState } from "react";
 import { getbnBynv, postbaocaoIcdApi, postDoctorApi, postIcdApi } from "../util/api";
-import { AudioOutlined, SearchOutlined } from "@ant-design/icons";
+import { AudioOutlined, PhoneOutlined, SearchOutlined } from "@ant-design/icons";
 import ModelNapCskh from "../components/module/ModelNapCskh";
 
 const NhapCskhPage = () => {   
@@ -47,7 +47,7 @@ const NhapCskhPage = () => {
             dataIndex: 'id',
             key: 'id',
             render: (index, record) => (
-              <Button  icon={<AudioOutlined />} onClick={() => showModal(record)} />
+              <Button  icon={<PhoneOutlined />} onClick={() => showModal(record)} />
             )
           },
           

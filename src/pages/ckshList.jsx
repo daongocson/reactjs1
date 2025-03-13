@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notification } from 'antd';
 import { getbnBynv, getLsCskhApi, postbacsiApi, postcskhPidApi, postpatientApi} from "../util/api";
-import { AudioOutlined, SignatureOutlined } from "@ant-design/icons";
+import { AudioOutlined, PhoneOutlined, SignatureOutlined } from "@ant-design/icons";
 import ModelView from "../components/module/ModelView";
 import ModelViewCskh from "../components/module/ModelViewCskh";
 import ModelNapCskh from "../components/module/ModelNapCskh";
@@ -9,6 +9,8 @@ const CSKHListPage = () => {
     const [dataKh, setDataKh]= useState([]); 
     const [dataKhCxl, setDataKhCxl]= useState([]); 
     const [dataKhNm, setDataKhNm]= useState([]); 
+    const [dataKhHL, setDataKhHL]= useState([]); 
+
     const [dataKhLast, setDataKhLast]= useState([]); 
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -54,11 +56,11 @@ const CSKHListPage = () => {
             title: 'Ghi chú',
             dataIndex: 'ghichu',
         },{
-            title: 'Duyệt',
+            title: 'Gọi',
             dataIndex: 'id',
             key: 'id',
             render: (index, record) => (
-              <Button  icon={<AudioOutlined />} onClick={() => showModal(record)} />
+              <Button  icon={<PhoneOutlined />} onClick={() => showModal(record)} />
             )
           },
           
@@ -82,11 +84,11 @@ const CSKHListPage = () => {
             title: 'Ngày goi',
             dataIndex: 'ngaycapnhat',
         },{
-            title: 'Duyệt',
+            title: 'Gọi',
             dataIndex: 'id',
             key: 'id',
             render: (index, record) => (
-              <Button  icon={<AudioOutlined />} onClick={() => showModal(record)} />
+              <Button  icon={<PhoneOutlined />} onClick={() => showModal(record)} />
             )
           },
           
@@ -134,6 +136,7 @@ const CSKHListPage = () => {
         setDataKh(data);
         setDataKhCxl(data.filter(item=> item.trangthai.toLowerCase()==='0'));
         setDataKhNm(data.filter(item=> item.trangthai.toLowerCase()==='2'));
+        setDataKhHL(data.filter(item=> item.trangthai.toLowerCase()==='4'));
     };  
     const config=()=>{      
                 let config = {
@@ -305,6 +308,18 @@ const CSKHListPage = () => {
                         key="cskhk1hl"
                         /> ,
                         'Số lượng: '+ dataKhNm.length                     
+                    ],
+                },{
+                    label: `BN không hài lòng (${dataKhHL.length})`,
+                    key: 'bnkhl',
+                    children: [ 
+                        <Table   
+                        rowKey={"patientrecordid"}                    
+                        bordered
+                        dataSource={dataKhHL} columns={columns}                       
+                        key="cskhkhl1"
+                        /> ,
+                        'Số lượng: '+ dataKhHL.length                     
                     ],
                 },{
                     label: `Tất cả BN(${dataKh.length})`,
