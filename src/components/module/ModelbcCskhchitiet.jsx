@@ -1,42 +1,46 @@
-import {Modal,Table, Tabs} from 'antd';
+import { FileExcelOutlined } from '@ant-design/icons';
+import {Button, Modal,Table, Tabs} from 'antd';
+import { CSVLink } from 'react-csv';
 function ModelbcCskhchitiet(props) {
     const{open,setOpen,data,loading}=props;    
   const columns_nt = [
     {
         title: 'Phòng bệnh',
-        dataIndex: 'patientrecordid',
+        dataIndex: 'name',
     }, {
       title: 'Không có SĐT',
-      dataIndex: 'tgkham',
+      dataIndex: 'ksdt',
     },{
       title: 'Không nghe máy',
-      dataIndex: 'tgkham',
+      dataIndex: 'knm',
     },{
       title: 'Hài Lòng',
-      dataIndex: 'tgkham',
+      dataIndex: 'hl',
     },
     {
         title: 'Không hài lòng',
-        dataIndex: 'tgkham',
-    },,
+        dataIndex: 'khl',
+    },
     {
         title: 'Sai số',
-        dataIndex: 'tgkham',
-    }
+        dataIndex: 'ss',
+    },{
+      title: 'Tổng BN',
+      dataIndex: 'tong',
+  }
 ]; 
     const onChange = (date, dateString) => {
       //data.datacc?.length})(BH${data.datacc.filter(item=>item.dm_patientobjectid.toString()==='1').length}
       // console.log(date, dateString);
         setDateStr(dateString);
     };    
-    const getTitle = (items) => {    
-      if (items?.length > 0) {
-        let bh = items.filter(item=>item.dm_patientobjectid.toString()==='1')
-        let vp = items.filter(item=>item.dm_patientobjectid.toString()==='2')
-        return ""+items?.length+"(BH:"+bh.length+" "+"VP:"+vp.length+")";
-      } else {
-        return "(0)";
+    const getTitle = (items) => {
+      let all =0;    
+      for (let item of items) {
+        all+=item.tong;
+        console.log("tessttt>",item.tong);        
       }
+      return all.toString();
     };
     return (
         <>         
@@ -56,60 +60,26 @@ function ModelbcCskhchitiet(props) {
                     defaultActiveKey="1"
                     items={[
                     {
-                        label: `BN Khám Cấp cứu`,
+                        label: `Báo cáo theo phòng`,
                         key: 'ctbncapcuu',
                         children: [ 
-                          <strong key={"ctcctext"}>Tổng: {getTitle(data.datacc)}</strong>,                           
+                          <strong key={"ctcctext"}>Tổng BN Khảo sát: ({getTitle(data)})</strong>,                           
                             <Table   
-                              rowKey={"patientrecordid"}                    
+                              rowKey={"roomid"}                    
                               bordered
-                              dataSource={data.datacc} columns={columns_nt}                       
+                              dataSource={data} columns={columns_nt}                       
                               key="cttbyhct"                          
                             /> ,
-                            'Số lượng: '+ data.datacc?.length                     
+                            data?.length +' Phòng, Xuất file Excel=> ',
+                            <CSVLink 
+                              filename={"Baocaocskh.csv"}   
+                              icon={<FileExcelOutlined />}                        
+                              data={data}><Button
+                              icon={<FileExcelOutlined />}
+                              type="default"/>
+                            </CSVLink>,                    
                         ]
-                    },
-                    {
-                        label: `CT Cấp cứu `,
-                        key: 'ctbnchuyentuyencc',
-                        children: [   
-                            <strong key={"ctcctext1"}>Tổng: {getTitle(data.dataChuyentuyencc)}</strong>,                             
-                            <Table   
-                              rowKey={"patientrecordid"}                    
-                              bordered
-                              dataSource={data.dataChuyentuyencc} columns={columns_nt}                       
-                              key="cttbchuyentuyen"                           
-                            /> ,
-                            'Số lượng: '+data.dataChuyentuyencc?.length                    
-                        ]
-                    },
-                    {
-                        label: `CT Khám bệnh`,
-                        key: 'ctbnchuyentuyen',
-                        children: [ 
-                            <strong  key={"ctcctext2"}>Tổng: {getTitle(data.dataChuyentuyen)}</strong>, 
-                            <Table   
-                              rowKey={"patientrecordid"}                    
-                              bordered
-                              dataSource={data.dataChuyentuyen} columns={columns_nt}                       
-                              key="cttbchuyentuyen"                           
-                            /> ,
-                            'Số lượng: '+ data.dataChuyentuyen?.length                    
-                        ]
-                    },{
-                      label: `BN Khám bệnh`,
-                      key: 'ctbnkham',
-                      children: [ 
-                          <strong  key={"ctcctext3"}>Tổng: {getTitle(data.dataKham)}</strong>, 
-                          <Table   
-                          rowKey={"patientrecordid"}                    
-                          bordered
-                          dataSource={data.dataKham} columns={columns_nt}                       
-                          key="tbchuyentuyen"                           
-                          /> ,
-                          'Số lượng: '+ data.dataKham?.length                    
-                      ]
-                  }
+                    }                   
                   ]}
               />           
           </Modal>

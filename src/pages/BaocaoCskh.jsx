@@ -35,30 +35,136 @@ const BaocaoCskhPage = () => {
     const ShowChitiet = async() => {        
         setIsModalChitiet(true);       
         setPendingChitiet(true);
-        const res = await postbaocaongoaitruChitietApi(dateOp); 
+        const res = await postbaocaocskhApi(dateOp); 
+        // setFilData(res)
         setFildataChitiet(res);      
         setPendingChitiet(false);        
     };
-    const setFildataChitiet = (items) => {    
+    const setFildataChitiet = (items) => {   
+        // const arrPdt_Noi = items.filter(item=> item.roomid_out===500); 
+        // const arrPdt_Ngoai = items.filter(item=> item.roomid_out===341); 
+        // const arrPdt_Nhi = items.filter(item=> item.roomid_out===672); 
+        // const arrPdt_Mat = items.filter(item=> item.roomid_out===674); 
+        // const arrPdt_Tmh = items.filter(item=> item.roomid_out===392); 
+        // const arrPdt_San = items.filter(item=> item.roomid_out===393); 
+        // const arrPdt_LCK = items.filter(item=> item.roomid_out===392);    
+        const arrPdt_Noi = []; 
+        const arrPdt_Ngoai = []; 
+        const arrPdt_Nhi = []; 
+        const arrPdt_Mat = []; 
+        const arrPdt_Tmh = []; 
+        const arrPdt_San = []; 
+        const arrPdt_LCK = [];    
+        const arr_PhongKham = [];    
+        for (let item of items) {
+            if(item.roomid_out===500)
+                arrPdt_Noi.push(item);
+            else if(item.roomid_out===341)
+                arrPdt_Ngoai.push(item);
+            else if(item.roomid_out===672)
+                arrPdt_Nhi.push(item);
+            else if(item.roomid_out===674)
+                arrPdt_Mat.push(item);
+            else if(item.roomid_out===392)
+                arrPdt_Tmh.push(item);
+            else if(item.roomid_out===393)
+                arrPdt_San.push(item);
+            // else if(item.roomid_out===392)
+            //     arrPdt_LCK.push(item);
+            else
+                arr_PhongKham.push(item);
+
+        }       
+        const arrBaocao=[];
+        //const arrS1 = data.filter(item=> item.trangthai.toLowerCase()==='1'); 
+//        arrchart.push({name:"Không có SĐT",value:arrS1.length});
+
+        arrBaocao.push({
+            name:"PĐT Nội",
+            roomid:500,
+            ksdt:arrPdt_Noi.filter(item=> item.trangthai.toLowerCase()==='1').length,
+            knm:arrPdt_Noi.filter(item=> item.trangthai.toLowerCase()==='2').length,
+            hl:arrPdt_Noi.filter(item=> item.trangthai.toLowerCase()==='3').length,
+            khl:arrPdt_Noi.filter(item=> item.trangthai.toLowerCase()==='4').length,
+            ss:arrPdt_Noi.filter(item=> item.trangthai.toLowerCase()==='5').length,
+            tong:arrPdt_Noi.filter(item=> item.trangthai.toLowerCase()!=='0').length
+        })
+        arrBaocao.push({
+            name:"PĐT Ngoại",
+            roomid:341,
+            ksdt:arrPdt_Ngoai.filter(item=> item.trangthai.toLowerCase()==='1').length,
+            knm:arrPdt_Ngoai.filter(item=> item.trangthai.toLowerCase()==='2').length,
+            hl:arrPdt_Ngoai.filter(item=> item.trangthai.toLowerCase()==='3').length,
+            khl:arrPdt_Ngoai.filter(item=> item.trangthai.toLowerCase()==='4').length,
+            ss:arrPdt_Ngoai.filter(item=> item.trangthai.toLowerCase()==='5').length,
+            tong:arrPdt_Ngoai.filter(item=> item.trangthai.toLowerCase()!=='0').length
+        })
+        arrBaocao.push({
+            name:"PĐT Nhi",
+            roomid:672,
+            ksdt:arrPdt_Nhi.filter(item=> item.trangthai.toLowerCase()==='1').length,
+            knm:arrPdt_Nhi.filter(item=> item.trangthai.toLowerCase()==='2').length,
+            hl:arrPdt_Nhi.filter(item=> item.trangthai.toLowerCase()==='3').length,
+            khl:arrPdt_Nhi.filter(item=> item.trangthai.toLowerCase()==='4').length,
+            ss:arrPdt_Nhi.filter(item=> item.trangthai.toLowerCase()==='5').length,
+            tong:arrPdt_Nhi.filter(item=> item.trangthai.toLowerCase()!=='0').length
+        })
+        arrBaocao.push({
+            name:"PĐT Mắt",
+            roomid:674,
+            ksdt:arrPdt_Mat.filter(item=> item.trangthai.toLowerCase()==='1').length,
+            knm:arrPdt_Mat.filter(item=> item.trangthai.toLowerCase()==='2').length,
+            hl:arrPdt_Mat.filter(item=> item.trangthai.toLowerCase()==='3').length,
+            khl:arrPdt_Mat.filter(item=> item.trangthai.toLowerCase()==='4').length,
+            ss:arrPdt_Mat.filter(item=> item.trangthai.toLowerCase()==='5').length,
+            tong:arrPdt_Mat.filter(item=> item.trangthai.toLowerCase()!=='0').length
+        })
+        arrBaocao.push({
+            name:"PĐT TMH",
+            roomid:392,
+            ksdt:arrPdt_Tmh.filter(item=> item.trangthai.toLowerCase()==='1').length,
+            knm:arrPdt_Tmh.filter(item=> item.trangthai.toLowerCase()==='2').length,
+            hl:arrPdt_Tmh.filter(item=> item.trangthai.toLowerCase()==='3').length,
+            khl:arrPdt_Tmh.filter(item=> item.trangthai.toLowerCase()==='4').length,
+            ss:arrPdt_Tmh.filter(item=> item.trangthai.toLowerCase()==='5').length,
+            tong:arrPdt_Tmh.filter(item=> item.trangthai.toLowerCase()!=='0').length
+        })
+        arrBaocao.push({
+            name:"PĐT Sản",
+            roomid:393,
+            ksdt:arrPdt_San.filter(item=> item.trangthai.toLowerCase()==='1').length,
+            knm:arrPdt_San.filter(item=> item.trangthai.toLowerCase()==='2').length,
+            hl:arrPdt_San.filter(item=> item.trangthai.toLowerCase()==='3').length,
+            khl:arrPdt_San.filter(item=> item.trangthai.toLowerCase()==='4').length,
+            ss:arrPdt_San.filter(item=> item.trangthai.toLowerCase()==='5').length,
+            tong:arrPdt_San.filter(item=> item.trangthai.toLowerCase()!=='0').length
+        })
+        // arrBaocao.push({
+        //     name:"PĐT LCK",
+        //     roomid:392,
+        //     ksdt:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='1').length,
+        //     knm:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='2').length,
+        //     hl:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='3').length,
+        //     khl:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='4').length,
+        //     ss:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='5').length,
+        //     tong:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()!=='0').length
+        // })
+        arrBaocao.push({
+            name:"Phòng Khám",
+            roomid:1001,
+            ksdt:arr_PhongKham.filter(item=> item.trangthai.toLowerCase()==='1').length,
+            knm:arr_PhongKham.filter(item=> item.trangthai.toLowerCase()==='2').length,
+            hl:arr_PhongKham.filter(item=> item.trangthai.toLowerCase()==='3').length,
+            khl:arr_PhongKham.filter(item=> item.trangthai.toLowerCase()==='4').length,
+            ss:arr_PhongKham.filter(item=> item.trangthai.toLowerCase()==='5').length,
+            tong:arr_PhongKham.filter(item=> item.trangthai.toLowerCase()!=='0').length
+        })
+        setDataChitiet(arrBaocao);             
     }
-    const loadDataModel=async(pid)=>{    
-        setLoading(true);             
-        // const res = await postpatientApi(pid);  
-        const res = await postcskhPidApi(pid);      
-        // console.log("viewcskh>>",res);                 
-        if (!res?.message) {                    
-            setLoading(false);
-            setModaldata(res);
-        } else {
-            notification.error({
-                message: "Unauthorized",
-                description: res.message
-            })
-        }
-    }
-      const OnClickBaocao = async () => { 
+    const OnClickBaocao = async () => { 
             setLoadingPost(true);  
-            const res = await postbaocaocskhApi(dateOp);   
+            const res = await postbaocaocskhApi(dateOp);  
+            // console.log(res); 
             if (!res?.message) { 
                 setLoadingPost(false);
                 if(res?.thongbao){
@@ -108,10 +214,6 @@ const BaocaoCskhPage = () => {
        // console.log("date", dateString);
        setDateOp(dateString);
     };  
-    const showNap = () => {  
-        setIsModalNap(true);
-    };  
-    
     return (
         <> 
          <div style={{ padding: 20 }}>
