@@ -1,11 +1,11 @@
-import { AutoComplete, Button, Col, DatePicker, Input, Layout, notification, Row, Select, Space, Spin, Table, Tabs } from "antd";
+import {  Button, Col, DatePicker, Layout, notification, Row, Space } from "antd";
 import { useEffect, useState } from "react";
-import { getbnBynv, getLsCskhApi, postbaocaocskhApi, postbaocaoIcdApi, postcskhPidApi, postDoctorApi, postIcdApi } from "../util/api";
-import { AudioOutlined, SearchOutlined } from "@ant-design/icons";
-import ModelNapCskh from "../components/module/ModelNapCskh";
+import { getLsCskhApi, postbaocaocskhApi, postbaocaongoaitruChitietApi, postcskhPidApi } from "../util/api";
+import { SearchOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
 import ChartComponent from "../components/module/ChartComponent";
 import BlogList from "../components/module/BlogList";
+import ModelbcCskhchitiet from "../components/module/ModelbcCskhchitiet";
 
 const BaocaoCskhPage = () => {   
     const { RangePicker } = DatePicker;  
@@ -14,6 +14,10 @@ const BaocaoCskhPage = () => {
     const [dataKhS4, setDataKhS4]= useState([]); 
     const [loadingPost, setLoadingPost] = useState(false);
     const [dataChart, setDataChart]= useState([]);     
+    const [isModalChitiet, setIsModalChitiet] = useState(false);
+    const [pendingChitiet, setPendingChitiet]= useState(true);  
+    const [dataChitiet, setDataChitiet]= useState([]);   
+
     useEffect(() => {   
         fetchKhachhang();        
     }, [])    
@@ -28,6 +32,15 @@ const BaocaoCskhPage = () => {
             })
         }
     }  
+    const ShowChitiet = async() => {        
+        setIsModalChitiet(true);       
+        setPendingChitiet(true);
+        const res = await postbaocaongoaitruChitietApi(dateOp); 
+        setFildataChitiet(res);      
+        setPendingChitiet(false);        
+    };
+    const setFildataChitiet = (items) => {    
+    }
     const loadDataModel=async(pid)=>{    
         setLoading(true);             
         // const res = await postpatientApi(pid);  
@@ -109,7 +122,7 @@ const BaocaoCskhPage = () => {
                 ><SearchOutlined /></Button>
               <Button 
                         type="dashed"
-                        onClick={showNap}
+                        onClick={ShowChitiet}
                     >
                 Báo cáo CSKH
                     </Button> 
@@ -126,7 +139,13 @@ const BaocaoCskhPage = () => {
                     </Row>
                 </Content>
             </Layout>  
-        </div>                       
+        </div>,
+        <ModelbcCskhchitiet
+                open={isModalChitiet}
+                setOpen={setIsModalChitiet}
+                loading={pendingChitiet}
+                data={dataChitiet}               
+            />                         
         </>
        
     )

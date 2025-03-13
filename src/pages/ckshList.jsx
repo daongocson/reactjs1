@@ -23,7 +23,8 @@ const CSKHListPage = () => {
     const [pid, setPid] = useState('');
     const [phone, setPhone] = useState('');
     const [modaldata, setModaldata] = useState([]);
-
+    const [uuid,setUuid]=useState('');
+    const [startCall, setStartCall] = useState(false);
 
     useEffect(() => {   
         fetchKhachhang();        
@@ -109,9 +110,9 @@ const CSKHListPage = () => {
         }
     }
     const showModal = (record) => {  
+        setPid(record["idcskh"]);       
         if(record["patientrecordid"]!==''){
             const phoneNumber = record["phone"];
-            setPid(record["idcskh"]);
             setPhone(phoneNumber);
             loadDataModel(record["patientrecordid"]);
         }        
@@ -150,31 +151,33 @@ const CSKHListPage = () => {
                          },
                        
                         callbacks: {
-                            register: (data) => {                                
+                            register: (data) => {                             
                             },
-                            connecting: (data) => {                                
+                            connecting: (data) => {   
                             },
                             invite: (data) => {                                
-                                 console.log('invite:', data);
                             },
-                            inviteRejected: (data) => {                                
+                            inviteRejected: (data) => {  
                             },
-                            ringing: (data) => {                                
+                            ringing: (data) => {  
+                                const {uuid}=data;   
+                                setUuid(uuid);                    
                             },
                             accepted: (data) => {
-                                
                             },
-                            incall: (data) => {                                
+                            incall: (data) => {                               
                             },
-                            acceptedByOther: (data) => {                                
+                            acceptedByOther: (data) => {                      
                             },
                             ended: (data) => {
                                 
                             },
                             holdChanged: (status) => {                                
+                                console.log('sondnon9 save call info:', data);
                             },
                             saveCallInfo: (data) => {
-                                
+                                console.log('sondnon10 save call info:', data);
+
                             },
                         }                        
                     };
@@ -209,9 +212,11 @@ const CSKHListPage = () => {
             )));      
     } 
     const handleOk=()=>{
+        setStartCall(false);
         setIsModalVisible(false);
     }
     const handleCancel=()=>{
+        setStartCall(false);
         setIsModalVisible(false);
     }
     return (        
@@ -256,7 +261,7 @@ const CSKHListPage = () => {
                         type="dashed"
                         onClick={config}
                     >
-                        Cài đặt
+                        Sử dụng phone
                     </Button>                  
              </Space.Compact>
         </div>     
@@ -343,6 +348,9 @@ const CSKHListPage = () => {
                 phone={phone}
                 loading={loading}
                 pid={pid}
+                startCall={startCall}
+                setStartCall={setStartCall}
+                uuid={uuid}
                 modaldata={modaldata}
                 handleOk={handleOk}
                 handleCancel={handleCancel}

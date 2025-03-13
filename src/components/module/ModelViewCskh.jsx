@@ -4,9 +4,9 @@ import { AutoComplete, Button, Card, Checkbox, Form, Input,Modal, notification, 
 import Draggable from 'react-draggable';
 import TextArea from 'antd/es/input/TextArea';
 import { PhoneOutlined } from '@ant-design/icons';
-import { postkqGoiApi, postpatientApi } from '../../util/api';
+import { postkqGoiApi, postpatientApi, postUpdateCallIDApi } from '../../util/api';
 function ModelViewCskh(props) {
-    const{open,setOpen,phone,pid,loading,refetch,modaldata,handleCancel}=props;  
+    const{open,setOpen,phone,pid,uuid,loading,refetch,modaldata,handleCancel,startCall,setStartCall}=props;  
     const [disabled, setDisabled] = useState(true);   
     const [form] = Form.useForm();
     // const [loading, setLoading] = React.useState(true);
@@ -45,9 +45,15 @@ function ModelViewCskh(props) {
   ];  
     const onFinish = (values) => {
         // console.log('Success:',">>>",form.getFieldsValue());
+        if(startCall){
+          UpdateCallID(pid,uuid);
+        }
         postkqGoi(form.getFieldsValue());
           
       };
+      const UpdateCallID = async(pid,callid)=>{
+        await postUpdateCallIDApi(pid,callid);  
+    }
       const postkqGoi = async (values) => {
           if(values?.ketqua&&values?.note){
             const res = await postkqGoiApi({"idcskh":pid,ketqua:values.ketqua,note:values.note});            
@@ -79,7 +85,12 @@ function ModelViewCskh(props) {
         right: 0,
       });
     const callPhone =()=>{
-      omiSDK.makeCall(phone);  
+      setStartCall(true);
+      omiSDK.makeCall("0914069888");  
+    }
+    const cancelPhone =()=>{
+      // console.log("testui>>>",startCall);
+      omiSDK.stopCall()
     }
     const draggleRef = useRef(null);
     return (
@@ -105,7 +116,7 @@ function ModelViewCskh(props) {
                       onBlur={() => {}}
                       // end
                     >
-                      Chi tiết bệnh nhân
+                      Chi tiết bệnh nhân IDCSKH-{pid}
                     </div>
                   }
                 open={open}
@@ -126,8 +137,9 @@ function ModelViewCskh(props) {
                   footer={(_, { OkBtn, CancelBtn }) => (
                     <>
                       <Button onClick={callPhone}  icon={<PhoneOutlined /> } danger>Gọi điện</Button>
+                      <Button onClick={cancelPhone}  icon={<PhoneOutlined /> } danger>Hủy gọi</Button>
                       <CancelBtn />
-                      <OkBtn icon={<PhoneOutlined />} >Gọi điện</OkBtn>
+                      <OkBtn />
                     </>
                   )}
             >             
