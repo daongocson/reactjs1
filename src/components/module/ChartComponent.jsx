@@ -9,7 +9,7 @@ const ChartComponent = ({data}) => {
   return (
     <Content style={{ padding: "20px" }}>
     <div style={{ marginTop: 40 }}>
-          <Title level={4}>Thống kê tổng bệnh nhân ({total})</Title>
+          <Title level={4}>Tổng Bệnh nhân khảo sát ({total})</Title>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
