@@ -14,7 +14,7 @@ const CSKHListPage = () => {
     const [dataKhLast, setDataKhLast]= useState([]); 
 
     const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isModalOpenPlay, setIsModalOpenPlay] = useState(true);
+    const [isModalOpenPlay, setIsModalOpenPlay] = useState(false);
     const [loadingPlay, setloadingPlay] = useState(false);
 
     const [loading, setLoading] = useState(true);
@@ -49,9 +49,9 @@ const CSKHListPage = () => {
       setIsPlaying(!isPlaying);
     };
 
-    const playCallCskh =async(record) => {   
-        console.log("palay",record);
-        setIsModalOpenPlay(true);      
+    const playCallCskh =async(record) => {          
+        setIsModalOpenPlay(true);   
+        setloadingPlay(true);   
         if(token==''){
             const res = await getTokenApi();      
             if(res.access_token){
@@ -61,6 +61,7 @@ const CSKHListPage = () => {
                 // setAudioSrc(link);
             }
             else{
+                setloadingPlay(false); 
                 console.log("Lấy token thất bại");
             }
         }else{
@@ -86,7 +87,7 @@ const CSKHListPage = () => {
         // console.log("access_token",payload.transaction_id,"phone",payload.destination_number,"urlmp3",payload.recording_file_url);
         if(payload.recording_file_url)setAudioSrc(payload.recording_file_url);
         // if(mp3link!=='')
-        //     setloadingPlay(false);
+        setloadingPlay(false);
         console.log("url",payload.recording_file_url);
         return payload.recording_file_url;
 
