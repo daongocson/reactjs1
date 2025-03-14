@@ -123,6 +123,10 @@ const Header = () => {
                     label: <Link to={"/bcpttt"}>Báo cáo PTTT</Link>,
                     key: 'bcpttt',
                     icon: <UsergroupAddOutlined />,
+                },{
+                    label: <Link to={"/bcdichvu"}>BC Dịch vụ</Link>,
+                    key: 'bcdichvu',
+                    icon: <UsergroupAddOutlined />,
                 }
             ]
         }       

@@ -80,6 +80,10 @@ const router = createBrowserRouter([
         element: <BCPtttPage />
       },
       {
+        path: "bcDichvu",
+        element: <BCPtttPage />
+      },
+      {
         path:"/ketquacls/:id",
         element:<TrakqPage />
       },

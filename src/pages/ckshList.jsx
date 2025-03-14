@@ -156,6 +156,8 @@ const CSKHListPage = () => {
                             connecting: (data) => {   
                             },
                             invite: (data) => {                                
+                                console.log('sondnon1 save call info:', data);
+
                             },
                             inviteRejected: (data) => {  
                             },
@@ -164,19 +166,26 @@ const CSKHListPage = () => {
                                 setUuid(uuid);                    
                             },
                             accepted: (data) => {
+                                console.log('sondnon2 save call info:', data);
+
                             },
                             incall: (data) => {                               
+                                console.log('sondnon3 save call info:', data);
+
                             },
-                            acceptedByOther: (data) => {                      
+                            acceptedByOther: (data) => { 
+                                console.log('sondnon4 save call info:', data);
+                     
                             },
                             ended: (data) => {
-                                
+                                console.log('sondnon5 save call info:', data);
+
                             },
                             holdChanged: (status) => {                                
-                                console.log('sondnon9 save call info:', data);
+                                console.log('sondnon6 save call info:', data);
                             },
                             saveCallInfo: (data) => {
-                                console.log('sondnon10 save call info:', data);
+                                console.log('sondnon7 save call info:', data);
 
                             },
                         }                        

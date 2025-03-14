@@ -86,7 +86,8 @@ function ModelViewCskh(props) {
       });
     const callPhone =()=>{
       setStartCall(true);
-      omiSDK.makeCall("0914069888");  
+      // omiSDK.makeCall(phoneNumber);  
+      omiSDK.makeCall(phone);  
     }
     const cancelPhone =()=>{
       // console.log("testui>>>",startCall);
