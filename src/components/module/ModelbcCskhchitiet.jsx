@@ -81,7 +81,7 @@ function ModelbcCskhchitiet(props) {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="ksm" fill="#8884d8" barSize={50} />
+                  <Bar dataKey="knm" fill="#8884d8" barSize={50} />
                   <Bar dataKey="hl" fill="#82ca9d" barSize={50} />
                   <Bar dataKey="khl" fill="#ffc658" barSize={50} />
                 </BarChart>
