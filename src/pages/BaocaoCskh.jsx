@@ -36,18 +36,11 @@ const BaocaoCskhPage = () => {
         setIsModalChitiet(true);       
         setPendingChitiet(true);
         const res = await postbaocaocskhApi(dateOp); 
-        // setFilData(res)
+        setFilData(res)
         setFildataChitiet(res);      
         setPendingChitiet(false);        
     };
-    const setFildataChitiet = (items) => {   
-        // const arrPdt_Noi = items.filter(item=> item.roomid_out===500); 
-        // const arrPdt_Ngoai = items.filter(item=> item.roomid_out===341); 
-        // const arrPdt_Nhi = items.filter(item=> item.roomid_out===672); 
-        // const arrPdt_Mat = items.filter(item=> item.roomid_out===674); 
-        // const arrPdt_Tmh = items.filter(item=> item.roomid_out===392); 
-        // const arrPdt_San = items.filter(item=> item.roomid_out===393); 
-        // const arrPdt_LCK = items.filter(item=> item.roomid_out===392);    
+    const setFildataChitiet = (items) => {          
         const arrPdt_Noi = []; 
         const arrPdt_Ngoai = []; 
         const arrPdt_Nhi = []; 

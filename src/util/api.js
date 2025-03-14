@@ -201,10 +201,14 @@ const getLsDoctorApi  = () => {
     const URL_API = "/v1/api/getLsDoctors";
     return axios.get(URL_API)
 }
+const getTokenApi  = () => {
+    const URL_API = "/v1/apicus/gettokencskh";
+    return axios.get(URL_API)
+}
 const getLsphongkhamApi  = () => {   
     const URL_API = "/v1/api/getLsPhongKham";
     return axios.get(URL_API)
 }
 export {
-    postbaocaoDichvuApi,postDichvuApi,postUpdateCallIDApi,postbaocaocskhApi,postNapcskhApi,postbaocaongoaitruChitietApi,postLoadcskhApi,postbaocaoptttApi,postbaocaoclsApi,postbaocaongoaitruApi,postbaocaoLuotTNTdieutriApi,postbaocaodieutriApi,postbaocaoIcdApi,postIcdApi,postcskhPidApi,postkqGoiApi,getbnBynv,postkqclsApi,fetchycbydateApi,postmaquyenApi,getuserduyetApi,createnickbsApi,postDoctorApi,postycbydateApi,postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
+    getTokenApi,postbaocaoDichvuApi,postDichvuApi,postUpdateCallIDApi,postbaocaocskhApi,postNapcskhApi,postbaocaongoaitruChitietApi,postLoadcskhApi,postbaocaoptttApi,postbaocaoclsApi,postbaocaongoaitruApi,postbaocaoLuotTNTdieutriApi,postbaocaodieutriApi,postbaocaoIcdApi,postIcdApi,postcskhPidApi,postkqGoiApi,getbnBynv,postkqclsApi,fetchycbydateApi,postmaquyenApi,getuserduyetApi,createnickbsApi,postDoctorApi,postycbydateApi,postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
 }

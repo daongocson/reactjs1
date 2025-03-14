@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notification } from 'antd';
-import { getbnBynv, getLsCskhApi, postbacsiApi, postcskhPidApi, postpatientApi} from "../util/api";
-import { AudioOutlined, PhoneOutlined, SignatureOutlined } from "@ant-design/icons";
+import { useEffect, useRef, useState } from "react";
+import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notification, Modal } from 'antd';
+import { getbnBynv, getLsCskhApi, getTokenApi, postbacsiApi, postcskhPidApi, postpatientApi} from "../util/api";
+import { AudioOutlined, PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, QuestionOutlined, SignatureOutlined } from "@ant-design/icons";
 import ModelView from "../components/module/ModelView";
 import ModelViewCskh from "../components/module/ModelViewCskh";
 import ModelNapCskh from "../components/module/ModelNapCskh";
@@ -14,6 +14,9 @@ const CSKHListPage = () => {
     const [dataKhLast, setDataKhLast]= useState([]); 
 
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isModalOpenPlay, setIsModalOpenPlay] = useState(true);
+    const [loadingPlay, setloadingPlay] = useState(false);
+
     const [loading, setLoading] = useState(true);
     const { Search } = Input;
     const [fromDate, setFromDate] = useState('');
@@ -24,13 +27,71 @@ const CSKHListPage = () => {
     const [phone, setPhone] = useState('');
     const [modaldata, setModaldata] = useState([]);
     const [uuid,setUuid]=useState('');
+    const [tenbn,setTenbn]=useState('');
+    const [audioSrc, setAudioSrc] = useState('');
+    const [isPlaying, setIsPlaying] = useState(false);
+    const audioRef = useRef(null);
+
+
     const [startCall, setStartCall] = useState(false);
+    const [token, setToken] = useState('');
 
     useEffect(() => {   
         fetchKhachhang();        
-    }, [])
-    const onSearch = async(value, _e, info) => {  
+    }, [])        
+    const togglePlay = () => {
+      if(audioSrc=='')return;
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    };
+
+    const playCallCskh =async(record) => {   
+        console.log("palay",record);
+        setIsModalOpenPlay(true);      
+        if(token==''){
+            const res = await getTokenApi();      
+            if(res.access_token){
+                // console.log("access_token",res.access_token);
+                setToken(res.access_token);
+                const link = getLink(record.transaction_id,res.access_token);
+                // setAudioSrc(link);
+            }
+            else{
+                console.log("Lấy token thất bại");
+            }
+        }else{
+            const link = await getLink(record.transaction_id,token,record.tenbn);         
+            console.log("Play>",link);
+        }
+        
     }
+    const getLink =async(uuid,to_ken,tenbn)=>{
+        // console.log("getlink",uuid,"to_ken>>",to_ken);
+        setTenbn(tenbn);
+        const url_mp3= "https://public-v1-stg.omicall.com/api/v2/callTransaction/getByTransactionId"; 
+        const response  = await fetch(url_mp3,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization":to_ken
+            },
+            body: JSON.stringify({transactionId:uuid})
+        }); 
+        const {payload} = await response.json();  
+        // https://public-v1-stg.omicrm.com/third_party/recording/uc?id=NTJkTkVjZXBCamRvODdCSjBJYlFZdEp3L2Z2V3JMOEdqdXJQWU53bDJ0VXRVSWdvNzlKZGJIQWpVcFd1WnNHTzl3b2hkbzBUSTJadDk1OHh6bUtaa2c9PQ==&code=21c2b76d-35e2-40c0-a88c-b643b5a1c596
+        // console.log("access_token",payload.transaction_id,"phone",payload.destination_number,"urlmp3",payload.recording_file_url);
+        if(payload.recording_file_url)setAudioSrc(payload.recording_file_url);
+        // if(mp3link!=='')
+        //     setloadingPlay(false);
+        console.log("url",payload.recording_file_url);
+        return payload.recording_file_url;
+
+    }
+
     const columns = [
         {
             title: 'Mã BN',
@@ -61,7 +122,11 @@ const CSKHListPage = () => {
             dataIndex: 'id',
             key: 'id',
             render: (index, record) => (
-              <Button  icon={<PhoneOutlined />} onClick={() => showModal(record)} />
+                <Space size="middle">
+                    <Button  icon={<PhoneOutlined />} onClick={() => showModal(record)} />
+                    {record ?.transaction_id?(<Button  icon={<PlayCircleOutlined />} onClick={() => playCallCskh(record)} />):(<QuestionOutlined />)} 
+                </Space>
+              
             )
           },
           
@@ -89,7 +154,10 @@ const CSKHListPage = () => {
             dataIndex: 'id',
             key: 'id',
             render: (index, record) => (
-              <Button  icon={<PhoneOutlined />} onClick={() => showModal(record)} />
+                <Space size="middle">
+                <Button  icon={<PhoneOutlined />} onClick={() => showModal(record)} />
+                {record ?.transaction_id?(<Button  icon={<PlayCircleOutlined />} onClick={() => playCallCskh(record)} />):(<QuestionOutlined />)} 
+            </Space>
             )
           },
           
@@ -133,7 +201,7 @@ const CSKHListPage = () => {
             })
         }
     }
-    const setFilData=(data)=>{
+    const setFilData=(data)=>{        
         setDataKh(data);
         setDataKhCxl(data.filter(item=> item.trangthai.toLowerCase()==='0'));
         setDataKhNm(data.filter(item=> item.trangthai.toLowerCase()==='2'));
@@ -202,7 +270,7 @@ const CSKHListPage = () => {
         });	
         
     } 
-    const handleOnSelect=async ()=>{
+    const handleOnSelect=async ()=>{        
         const res = await getbnBynv(fromDate,toDate,autoKhoa);
         if (!res?.message) {   
             setFilData(res.khgoi);    
@@ -227,6 +295,7 @@ const CSKHListPage = () => {
     const handleCancel=()=>{
         setStartCall(false);
         setIsModalVisible(false);
+        setIsModalOpenPlay(false);
     }
     return (        
         <div style={{ padding: 20 }}>    
@@ -363,8 +432,21 @@ const CSKHListPage = () => {
                 modaldata={modaldata}
                 handleOk={handleOk}
                 handleCancel={handleCancel}
-            />                                               
+            />  
+             <Modal title={"Nghe lại cuộc gọi(" +tenbn+")"} open={isModalOpenPlay} onOk={handleCancel} onCancel={handleCancel} loading={loadingPlay}>
+                <audio ref={audioRef} src={audioSrc} />
+                <p>Link:{audioSrc}</p>
+                <Button 
+                    type="primary" 
+                    icon={isPlaying ? <PauseCircleOutlined /> : <PlayCircleOutlined />} 
+                    onClick={togglePlay}
+                    style={{ marginTop: 10 }}
+                >
+                    {isPlaying ? "Dừng" : "Nghe lại cuộc gọi"}
+                </Button>
+            </Modal>                                             
         </div>
+        
     )
 }
 
