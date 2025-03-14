@@ -81,9 +81,9 @@ function ModelbcCskhchitiet(props) {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="knm" fill="#8884d8" barSize={50} />
-                  <Bar dataKey="hl" fill="#82ca9d" barSize={50} />
-                  <Bar dataKey="khl" fill="#ffc658" barSize={50} />
+                  <Bar dataKey="knm" fill="#8884d8" barSize={50} name="Không nghe máy"  />
+                  <Bar dataKey="hl" fill="#82ca9d" barSize={50}  name="Hài lòng"  />
+                  <Bar dataKey="khl" fill="#ffc658" barSize={50}  name="Không hài lòng" />
                 </BarChart>
               </ResponsiveContainer>
               </div>
