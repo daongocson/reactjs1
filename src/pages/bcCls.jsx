@@ -103,7 +103,8 @@ const BCClsPage = () => {
         setDateOp(dateString);
     };     
     return (
-        <>         
+        <>        
+         <div style={{ padding: 20 }}>     
           <Space.Compact key={"spacehs"} block>
             <RangePicker onChange={onChangeDate}/> 
             <Button type="primary" 
@@ -166,7 +167,8 @@ const BCClsPage = () => {
                     }                 
                    
                     ]}
-                />        
+                /> 
+            </div>       
         </>
     )
 }

@@ -190,7 +190,7 @@ const QuantriPage = () => {
         setIsbasicVisibleData(true);       
       }
     return (
-        <div >           
+        <div style={{ padding: 20 }}>        
             <Tabs
                 defaultActiveKey="1"
                 items={[

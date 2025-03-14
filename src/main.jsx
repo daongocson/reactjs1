@@ -31,7 +31,7 @@ import BCClsPage from './pages/bcCls.jsx';
 import BCPtttPage from './pages/bcPttt.jsx';
 import NhapCskhPage from './pages/NhapCskh.jsx';
 import BaocaoCskhPage from './pages/BaocaoCskh.jsx';
-
+import TracuuDichvuPage from './pages/tracuuDichvu.jsx';
 const router = createBrowserRouter([
   {
     path: "/",
@@ -81,7 +81,7 @@ const router = createBrowserRouter([
       },
       {
         path: "bcDichvu",
-        element: <BCPtttPage />
+        element: <TracuuDichvuPage />
       },
       {
         path:"/ketquacls/:id",

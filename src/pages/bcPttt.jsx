@@ -114,7 +114,8 @@ const BCPtttPage = () => {
         setDateOp(dateString);
     };     
     return (
-        <>         
+        <>        
+         <div style={{ padding: 20 }}>     
           <Space.Compact key={"spacehs"} block>
             <RangePicker onChange={onChangeDate}/> 
             <Button type="primary" 
@@ -122,7 +123,7 @@ const BCPtttPage = () => {
                 ><SearchOutlined /></Button>           
             </Space.Compact>    
                 <Tabs
-                    defaultActiveKey="1"
+                    defaultActiveKey="1"                  
                     items={[                    
                     {
                         label: `Lượt PTTT Nội trú (${numpt})`,
@@ -148,18 +149,19 @@ const BCPtttPage = () => {
                                 {value: '67',label: 'Khoa Nội Nhi'}                      
                             ]}
                         />,  <CSVLink 
+                                key={"cvsdf"}
                                         filename={"Tonghop-hosoyeucau.csv"}   
                                         icon={<FileExcelOutlined />}                        
                                         data={dataPtttnhom}><Button
                                         icon={<FileExcelOutlined />}
                                         type="default"/>
-                        </CSVLink>,
+                            </CSVLink>,
                             <Table   
-                            rowKey={"serviceid"}                    
-                            bordered
-                            dataSource={dataPtttnhom} columns={columns_nt}                       
-                            key="tbluotcdha"
-                            loading={{ indicator: <div><Spin /></div>, spinning:pending}}
+                                rowKey={"serviceid"}                    
+                                bordered
+                                dataSource={dataPtttnhom} columns={columns_nt}                       
+                                key="tbluotcdha"
+                                loading={{ indicator: <div><Spin /></div>, spinning:pending}}
                             /> ,
                             'Số lượng: '+ dataPtttnhom.length                     
                         ]
@@ -206,7 +208,8 @@ const BCPtttPage = () => {
                     }                 
                    
                     ]}
-                />        
+                />    
+            </div>    
         </>
     )
 }

@@ -54,7 +54,8 @@ const BaocaoCskhPage = () => {
         const arrPdt_Mat = []; 
         const arrPdt_Tmh = []; 
         const arrPdt_San = []; 
-        const arrPdt_LCK = [];    
+        // const arrPdt_LCK = [];    
+        const arrPdt_YHCT = [];    
         const arr_PhongKham = [];    
         for (let item of items) {
             if(item.roomid_out===500)
@@ -69,8 +70,8 @@ const BaocaoCskhPage = () => {
                 arrPdt_Tmh.push(item);
             else if(item.roomid_out===393)
                 arrPdt_San.push(item);
-            // else if(item.roomid_out===392)
-            //     arrPdt_LCK.push(item);
+            else if(item.roomid_out===396)
+                arrPdt_YHCT.push(item);
             else
                 arr_PhongKham.push(item);
 
@@ -139,16 +140,16 @@ const BaocaoCskhPage = () => {
             ss:arrPdt_San.filter(item=> item.trangthai.toLowerCase()==='5').length,
             tong:arrPdt_San.filter(item=> item.trangthai.toLowerCase()!=='0').length
         })
-        // arrBaocao.push({
-        //     name:"PĐT LCK",
-        //     roomid:392,
-        //     ksdt:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='1').length,
-        //     knm:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='2').length,
-        //     hl:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='3').length,
-        //     khl:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='4').length,
-        //     ss:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()==='5').length,
-        //     tong:arrPdt_LCK.filter(item=> item.trangthai.toLowerCase()!=='0').length
-        // })
+        arrBaocao.push({
+            name:"PĐT YHCT",
+            roomid:396,
+            ksdt:arrPdt_YHCT.filter(item=> item.trangthai.toLowerCase()==='1').length,
+            knm:arrPdt_YHCT.filter(item=> item.trangthai.toLowerCase()==='2').length,
+            hl:arrPdt_YHCT.filter(item=> item.trangthai.toLowerCase()==='3').length,
+            khl:arrPdt_YHCT.filter(item=> item.trangthai.toLowerCase()==='4').length,
+            ss:arrPdt_YHCT.filter(item=> item.trangthai.toLowerCase()==='5').length,
+            tong:arrPdt_YHCT.filter(item=> item.trangthai.toLowerCase()!=='0').length
+        })
         arrBaocao.push({
             name:"Phòng Khám",
             roomid:1001,

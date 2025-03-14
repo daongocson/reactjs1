@@ -264,7 +264,8 @@ const BCDieutriPage = () => {
         setDataKhoa(dataBaocao.filter(item=> item.khoaid.toString()===a));        
     }
     return (
-        <>         
+        <>  
+         <div style={{ padding: 20 }}>           
           <Space.Compact key={"spacehs"} block>
             <RangePicker onChange={onChangeDate}/> 
             <Button type="primary" 
@@ -363,7 +364,8 @@ const BCDieutriPage = () => {
                             dataSource={dataLuotThannt} columns={columns_luottnt}                       
                             key="modeltbntthannt"                           
                             /> 
-                </Modal>                   
+                </Modal> 
+            </div>                  
         </>
     )
 }
