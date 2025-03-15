@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notification, Modal } from 'antd';
 import { getbnBynv, getTokenApi, postcskhPidApi} from "../util/api";
-import { PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, QuestionOutlined } from "@ant-design/icons";
+import { DownloadOutlined, PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, QuestionOutlined } from "@ant-design/icons";
 import ModelViewCskh from "../components/module/ModelViewCskh";
 const CSKHListPage = () => {       
     const [dataKh, setDataKh]= useState([]); 
@@ -56,7 +56,7 @@ const CSKHListPage = () => {
             if(res.access_token){
                 // console.log("access_token",res.access_token);
                 setToken(res.access_token);
-                const link = getLink(record.transaction_id,res.access_token);
+                const link = getLink(record.transaction_id,res.access_token,record.tenbn+"-"+record.patientrecordid);
                 // setAudioSrc(link);
             }
             else{
@@ -64,11 +64,19 @@ const CSKHListPage = () => {
                 console.log("Lấy token thất bại");
             }
         }else{
-            const link = await getLink(record.transaction_id,token,record.tenbn);         
-            console.log("Play>",link);
+            const link = await getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
         }
         
     }
+    const handleDownload = () => {
+        if(audioSrc=='')return;
+        const link = document.createElement("a");
+        link.href = audioSrc;
+        link.setAttribute("download", audioSrc); // File name when downloaded
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      };
     const getLink =async(uuid,to_ken,tenbn)=>{
         // console.log("getlink",uuid,"to_ken>>",to_ken);
         setTenbn(tenbn);
@@ -84,12 +92,14 @@ const CSKHListPage = () => {
         const {payload} = await response.json();  
         // https://public-v1-stg.omicrm.com/third_party/recording/uc?id=NTJkTkVjZXBCamRvODdCSjBJYlFZdEp3L2Z2V3JMOEdqdXJQWU53bDJ0VXRVSWdvNzlKZGJIQWpVcFd1WnNHTzl3b2hkbzBUSTJadDk1OHh6bUtaa2c9PQ==&code=21c2b76d-35e2-40c0-a88c-b643b5a1c596
         // console.log("access_token",payload.transaction_id,"phone",payload.destination_number,"urlmp3",payload.recording_file_url);
-        if(payload.recording_file_url)setAudioSrc(payload.recording_file_url);
-        // if(mp3link!=='')
-        setloadingPlay(false);
-        console.log("url",payload.recording_file_url);
-        return payload.recording_file_url;
-
+        if(payload.recording_file_url){
+            setAudioSrc(payload.recording_file_url);
+            setloadingPlay(false);        
+            return payload.recording_file_url;
+        }else{
+            setloadingPlay(false);   
+            return ""
+        }
     }
 
     const columns = [
@@ -280,11 +290,7 @@ const CSKHListPage = () => {
                 description: res.message
             })
         }
-    }
-    const setDateChange=()=>{
-        console.log("dateop>>",dateOp?.length);      
-
-    }    
+    }     
     const keys  = ["pkham","tenbn"]
     const searchTable=(data)=>{   
         return data.filter(
@@ -297,6 +303,8 @@ const CSKHListPage = () => {
         setIsModalVisible(false);
     }
     const handleCancel=()=>{
+        setAudioSrc('');
+        setIsPlaying(false);
         setStartCall(false);
         setIsModalVisible(false);
         setIsModalOpenPlay(false);
@@ -447,7 +455,8 @@ const CSKHListPage = () => {
             />  
              <Modal title={"Nghe lại cuộc gọi(" +tenbn+")"} open={isModalOpenPlay} onOk={handleCancel} onCancel={handleCancel} loading={loadingPlay}>
                 <audio ref={audioRef} src={audioSrc} />
-                <p>Link:{audioSrc}</p>
+                <p><strong>Link lưu trữ</strong></p>
+                <p>{audioSrc}</p>
                 <Button 
                     type="primary" 
                     icon={isPlaying ? <PauseCircleOutlined /> : <PlayCircleOutlined />} 
@@ -455,6 +464,9 @@ const CSKHListPage = () => {
                     style={{ marginTop: 10 }}
                 >
                     {isPlaying ? "Dừng" : "Nghe lại cuộc gọi"}
+                </Button>
+                <Button type="dashed" icon={<DownloadOutlined />} onClick={handleDownload}>
+                    Download MP3
                 </Button>
             </Modal>                                             
         </div>
