@@ -1,22 +1,21 @@
 import { useEffect, useRef, useState } from "react";
 import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notification, Modal } from 'antd';
-import { getbnBynv, getLsCskhApi, getTokenApi, postbacsiApi, postcskhPidApi, postpatientApi} from "../util/api";
-import { AudioOutlined, PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, QuestionOutlined, SignatureOutlined } from "@ant-design/icons";
-import ModelView from "../components/module/ModelView";
+import { getbnBynv, getTokenApi, postcskhPidApi} from "../util/api";
+import { PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, QuestionOutlined } from "@ant-design/icons";
 import ModelViewCskh from "../components/module/ModelViewCskh";
-import ModelNapCskh from "../components/module/ModelNapCskh";
 const CSKHListPage = () => {       
     const [dataKh, setDataKh]= useState([]); 
     const [dataKhCxl, setDataKhCxl]= useState([]); 
     const [dataKhNm, setDataKhNm]= useState([]); 
     const [dataKhHL, setDataKhHL]= useState([]); 
+    const { RangePicker } = DatePicker;
 
     const [dataKhLast, setDataKhLast]= useState([]); 
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalOpenPlay, setIsModalOpenPlay] = useState(false);
     const [loadingPlay, setloadingPlay] = useState(false);
-
+    const [dateOp, setDateOp] = useState([]); 
     const [loading, setLoading] = useState(true);
     const { Search } = Input;
     const [fromDate, setFromDate] = useState('');
@@ -271,7 +270,7 @@ const CSKHListPage = () => {
         });	
         
     } 
-    const handleOnSelect=async ()=>{        
+    const handleOnSelect=async ()=>{   
         const res = await getbnBynv(fromDate,toDate,autoKhoa);
         if (!res?.message) {   
             setFilData(res.khgoi);    
@@ -282,6 +281,10 @@ const CSKHListPage = () => {
             })
         }
     }
+    const setDateChange=()=>{
+        console.log("dateop>>",dateOp?.length);      
+
+    }    
     const keys  = ["pkham","tenbn"]
     const searchTable=(data)=>{   
         return data.filter(
@@ -298,12 +301,20 @@ const CSKHListPage = () => {
         setIsModalVisible(false);
         setIsModalOpenPlay(false);
     }
+    const onChangeDate = (date, dateString) => { 
+        if(dateString.length==2){
+            setFromDate(dateString[0]);
+            setToDate(dateString[1]);
+        }       
+        
+      };
     return (        
         <div style={{ padding: 20 }}>    
             <div className="ant-col ant-col-xs-24 ant-col-xl-8">
                 
-                <Space.Compact key={"spacehs"} block>                                   
-                <DatePicker   
+                <Space.Compact key={"spacehs"} block>   
+                <RangePicker onChange={onChangeDate}/>                                         
+                {/* <DatePicker   
                         label="Từ ngày"
                         placeholder="Từ ngày"
                         onChange={(date, dateString)=>{setFromDate(dateString)}}                       
@@ -316,7 +327,7 @@ const CSKHListPage = () => {
                     style={{
                         width: '160',
                     }}
-                />  
+                />   */}
                     {/* <AutoComplete
                     style={{   
                         width: "100%"            
