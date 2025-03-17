@@ -1,5 +1,5 @@
 import { DownloadOutlined, EyeOutlined, PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, PlusOutlined, QuestionOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Form, Input, Layout, Menu, Modal, Typography } from "antd";
+import { Avatar, Button, Card, Form, Input, Layout, Menu, Modal, Pagination, Typography } from "antd";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import sampleImage from "../../assets/react.svg"; // Import hình ảnh từ thư mục assets
@@ -44,7 +44,8 @@ const BlogCard = ({ posts }) => {
   const [loadingPlay, setloadingPlay] = useState(false);
   const [token, setToken] = useState('');
   const [tenbn,setTenbn]=useState('');
-
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [newPost, setNewPost] = useState({ title: "", content: "", image: "", author: "", date: "", views: 0 });
   const [searchTerm, setSearchTerm] = useState("");
   const loadDataModel=async(pid)=>{    
@@ -148,6 +149,7 @@ const playCallCskh =async(record) => {
     post.tenbn.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.phone.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const paginatedPosts = filteredPosts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const getTextTrangthai = (trangthai)=>{
     // { value: '1', label: 'Không có SĐT' },
     // { value: '2', label: 'Không nghe máy' },
@@ -171,6 +173,10 @@ const playCallCskh =async(record) => {
         return "Chưa update";
     }
   }
+  const handlePageSizeChange = (current, size) => {   
+    setPageSize(size);
+    setCurrentPage(1);
+  };
   return (
     <Layout style={{ minHeight: "100vh" }}>     
       <Content style={{ padding: "20px" }}>
@@ -184,7 +190,7 @@ const playCallCskh =async(record) => {
           Thêm bài viết
         </Button> */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "10px", marginTop:10 }}>
-          {filteredPosts.map(post => (
+          {paginatedPosts.map(post => (
             <Card
               key={post.idcskh}          
               actions={[
@@ -207,6 +213,14 @@ const playCallCskh =async(record) => {
             </Card>
           ))}
         </div>
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          onShowSizeChange={handlePageSizeChange}
+          total={filteredPosts.length}
+          onChange={(page) => setCurrentPage(page)}
+          style={{ marginTop: 20, textAlign: "center" }}
+        />
         </Content>
         <ModelViewCskh 
                 open={isModalVisible}
