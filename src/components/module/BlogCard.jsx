@@ -155,6 +155,8 @@ const playCallCskh =async(record) => {
     // { value: '4', label: 'Không hài lòng' },
     // { value: '5', label: 'Sai số' }          
     switch (true) {
+      case trangthai == 0:
+        return "Chưa gọi";
       case trangthai == 1:
         return "Không có SĐT";
       case trangthai == 2:
@@ -198,7 +200,7 @@ const playCallCskh =async(record) => {
                     <Paragraph>Ghi chú:{post.ghichu}</Paragraph>
                     <Paragraph>{post.bacsi}</Paragraph>
                     <Paragraph type="secondary">{post.pkham} - Update: {post.ngaycapnhat}</Paragraph>
-                    <Paragraph type="secondary">Kết quả: {getTextTrangthai(post.trangthai)}</Paragraph>
+                    <Paragraph type="warning">Kết quả: {getTextTrangthai(post.trangthai)}</Paragraph>
                   </>
                 }
               />

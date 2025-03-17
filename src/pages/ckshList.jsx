@@ -426,13 +426,14 @@ const CSKHListPage = () => {
                     label: `Tất cả BN(${dataKh.length})`,
                     key: 'bn3',
                     children: [ 
-                        <Table   
-                        rowKey={"patientrecordid"}                    
-                        bordered
-                        dataSource={dataKh} columns={columns}                       
-                        key="cskhk11hl"
-                        /> ,
-                        'Số lượng: '+ dataKh.length                     
+                        // <Table   
+                        // rowKey={"patientrecordid"}                    
+                        // bordered
+                        // dataSource={dataKh} columns={columns}                       
+                        // key="cskhk11hl"
+                        // /> ,
+                        // 'Số lượng: '+ dataKh.length      
+                        <BlogCard key={"allbenhnhan"} posts ={dataKh}/>                       
                     ],
                 }
                 ]}
