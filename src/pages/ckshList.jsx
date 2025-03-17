@@ -201,6 +201,8 @@ const CSKHListPage = () => {
         setIsModalVisible(true);
       };      
     const fetchKhachhang = async () => {
+        //bỏ qua lịch sử uuid cũ
+        setUuid=('');
         const res = await getbnBynv(fromDate,toDate,"Phòng khám mới");
         if (!res?.message) {   
             setFilData(res.khgoi); 
@@ -304,7 +306,9 @@ const CSKHListPage = () => {
         setIsModalVisible(false);
     }
     const handleCancel=()=>{
+        // reset thông tin cuộc gọi cũ
         setAudioSrc('');
+        setUuid('');
         setIsPlaying(false);
         setStartCall(false);
         setIsModalVisible(false);
@@ -393,7 +397,7 @@ const CSKHListPage = () => {
                     label: `BN Vừa gọi (${dataKhLast.length})`,
                     key: 'bnvuagoi',
                     children: [ 
-                        <BlogCard key={"dfdf"} posts ={dataKhLast}/>             
+                        <BlogCard key={"goiblog"} posts ={dataKhLast}/>             
                     ]
                 },{
                     label: `BN không nghe máy (${dataKhNm.length})`,
