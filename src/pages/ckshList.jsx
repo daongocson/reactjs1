@@ -201,8 +201,8 @@ const CSKHListPage = () => {
         setIsModalVisible(true);
       };      
     const fetchKhachhang = async () => {
-        //bỏ qua lịch sử uuid cũ
-        setUuid=('');
+        //bỏ qua lịch sử uuid c
+        setUuid('');
         const res = await getbnBynv(fromDate,toDate,"Phòng khám mới");
         if (!res?.message) {   
             setFilData(res.khgoi); 
@@ -306,7 +306,6 @@ const CSKHListPage = () => {
         setIsModalVisible(false);
     }
     const handleCancel=()=>{
-        // reset thông tin cuộc gọi cũ
         setAudioSrc('');
         setUuid('');
         setIsPlaying(false);
