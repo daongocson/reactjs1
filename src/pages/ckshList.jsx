@@ -3,6 +3,7 @@ import { Tabs, Table, Button, Space, DatePicker, Input, AutoComplete, notificati
 import { getbnBynv, getTokenApi, postcskhPidApi} from "../util/api";
 import { DownloadOutlined, PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, QuestionOutlined } from "@ant-design/icons";
 import ModelViewCskh from "../components/module/ModelViewCskh";
+import BlogCard from "../components/module/BlogCard";
 const CSKHListPage = () => {       
     const [dataKh, setDataKh]= useState([]); 
     const [dataKhCxl, setDataKhCxl]= useState([]); 
@@ -392,13 +393,7 @@ const CSKHListPage = () => {
                     label: `BN Vừa gọi (${dataKhLast.length})`,
                     key: 'bnvuagoi',
                     children: [ 
-                        <Table   
-                        rowKey={"patientrecordid"}                    
-                        bordered
-                        dataSource={dataKhLast} columns={columnlast}                       
-                        key="cskhk1hl"
-                        /> ,
-                        'Số lượng: '+ dataKhLast.length                     
+                        <BlogCard key={"dfdf"} posts ={dataKhLast}/>             
                     ]
                 },{
                     label: `BN không nghe máy (${dataKhNm.length})`,
