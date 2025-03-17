@@ -148,6 +148,27 @@ const playCallCskh =async(record) => {
     post.tenbn.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.phone.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  const getTextTrangthai = (trangthai)=>{
+    // { value: '1', label: 'Không có SĐT' },
+    // { value: '2', label: 'Không nghe máy' },
+    // { value: '3', label: 'Hài lòng' },
+    // { value: '4', label: 'Không hài lòng' },
+    // { value: '5', label: 'Sai số' }          
+    switch (true) {
+      case trangthai == 1:
+        return "Không có SĐT";
+      case trangthai == 2:
+        return "Không nghe máy";
+      case trangthai == 3:
+        return "Hài Lòng";
+      case trangthai == 4:
+        return "Không Hài lòng";
+      case trangthai == 5:
+        return "Sai số";
+      default:
+        return "Chưa update";
+    }
+  }
   return (
     <Layout style={{ minHeight: "100vh" }}>     
       <Content style={{ padding: "20px" }}>
@@ -177,6 +198,7 @@ const playCallCskh =async(record) => {
                     <Paragraph>Ghi chú:{post.ghichu}</Paragraph>
                     <Paragraph>{post.bacsi}</Paragraph>
                     <Paragraph type="secondary">{post.pkham} - Update: {post.ngaycapnhat}</Paragraph>
+                    <Paragraph type="secondary">Kết quả: {getTextTrangthai(post.trangthai)}</Paragraph>
                   </>
                 }
               />
