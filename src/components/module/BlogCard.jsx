@@ -1,4 +1,4 @@
-import { DownloadOutlined, EyeOutlined, PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, PlusOutlined, QuestionOutlined } from "@ant-design/icons";
+import { DownloadOutlined, EyeOutlined, HistoryOutlined, PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, PlusOutlined, QuestionOutlined } from "@ant-design/icons";
 import { Avatar, Button, Card, Form, Input, Layout, Menu, Modal, Pagination, Typography } from "antd";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -6,6 +6,9 @@ import sampleImage from "../../assets/react.svg"; // Import hình ảnh từ th�
 import banner4 from "../../assets/images/banner4.jpg";
 import ModelViewCskh from "./ModelViewCskh";
 import { getTokenApi, postcskhPidApi } from "../../util/api";
+import ModelbcNgoaitruchitiet from "./ModelbcNgoaitruchitiet";
+import ModelbcCallHistory from "./ModelbcCallHistory";
+import Mp3Player from "./Mp3Player";
 
 const { Header, Content } = Layout;
 const { TextArea } = Input;
@@ -41,6 +44,7 @@ const BlogCard = ({ posts }) => {
   const [modaldata, setModaldata] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpenPlay, setIsModalOpenPlay] = useState(false);
+  const [isModalOpenHistory, setIsModalOpenHistory] = useState(false);
   const [loadingPlay, setloadingPlay] = useState(false);
   const [token, setToken] = useState('');
   const [tenbn,setTenbn]=useState('');
@@ -96,6 +100,9 @@ const getLink =async(uuid,to_ken,tenbn)=>{
       return ""
   }
 }
+const getCallHistory =async(record) => {      
+  setIsModalOpenHistory(true);   
+}
 const playCallCskh =async(record) => {          
   setIsModalOpenPlay(true);   
   setloadingPlay(true);   
@@ -144,7 +151,9 @@ const playCallCskh =async(record) => {
     setIsModalVisible(false)
     setIsModalOpen(false);
   };
-
+  const handleCancelHistory = () => {
+    setIsModalOpenHistory(false);
+  }
   const filteredPosts = posts.filter(post => 
     post.tenbn.toLowerCase().includes(searchTerm.toLowerCase()) ||
     post.phone.toLowerCase().includes(searchTerm.toLowerCase())
@@ -195,8 +204,9 @@ const playCallCskh =async(record) => {
               key={post.idcskh}          
               actions={[
                  <PhoneOutlined  onClick={() => showModal(post)} key="views" />,
-                <span>{post ?.transaction_id?(<Button  icon={<PlayCircleOutlined /> } onClick={() => playCallCskh(post)} />):(<QuestionOutlined /> )} Ghi âm</span>,
-                // <span>{post.idcskh} lượt xem</span>
+                <span>{post ?.transaction_id?(<Button  icon={<PlayCircleOutlined /> } onClick={() => playCallCskh(post)} />):(<QuestionOutlined />)} Ghi âm</span>,
+                <HistoryOutlined  onClick={() => getCallHistory(post)} key="viewsHis" />,
+
               ]}
             >
               <Meta
@@ -236,22 +246,19 @@ const playCallCskh =async(record) => {
                 handleOk={handleOk}
                 handleCancel={handleCancel}
             /> 
-          <Modal title={"Nghe lại cuộc gọi(" +tenbn+")"} open={isModalOpenPlay} onOk={handleCancel} onCancel={handleCancel} loading={loadingPlay}>
-                <audio ref={audioRef} src={audioSrc} />
-                <p><strong>Link lưu trữ</strong></p>
-                <p>{audioSrc}</p>
-                <Button 
-                    type="primary" 
-                    icon={isPlaying ? <PauseCircleOutlined /> : <PlayCircleOutlined />} 
-                    onClick={togglePlay}
-                    style={{ marginTop: 10 }}
-                >
-                    {isPlaying ? "Dừng" : "Nghe lại cuộc gọi"}
-                </Button>
+          <Modal title={"Nghe lại cuộc gọi(" +tenbn+")"} open={isModalOpenPlay} onOk={handleCancel} onCancel={handleCancel} loading={loadingPlay}>                              
+                <Mp3Player filemp3={audioSrc}/>
                 <Button type="dashed" icon={<DownloadOutlined />} onClick={handleDownload}>
                     Download MP3
                 </Button>
-            </Modal>        
+            </Modal>           
+             <ModelbcCallHistory
+                open={isModalOpenHistory}
+                setOpen={setIsModalOpenHistory}
+                token={token}
+                loading={loadingPlay}
+                 data={[]}               
+            />    
         </Layout>
     
   );

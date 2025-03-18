@@ -48,24 +48,29 @@ const CSKHListPage = () => {
       }
       setIsPlaying(!isPlaying);
     };
-
-    const playCallCskh =async(record) => {          
-        setIsModalOpenPlay(true);   
-        setloadingPlay(true);   
+    const getToken= async()=>{
         if(token==''){
-            const res = await getTokenApi();      
+            setloadingPlay(true);   
+            const res = await getTokenApi();  
             if(res.access_token){
-                // console.log("access_token",res.access_token);
-                setToken(res.access_token);
-                const link = getLink(record.transaction_id,res.access_token,record.tenbn+"-"+record.patientrecordid);
-                // setAudioSrc(link);
-            }
-            else{
                 setloadingPlay(false); 
-                console.log("Lấy token thất bại");
+                setToken(res.access_token);
+                return res.access_token;
+            }else{
+                setloadingPlay(false); 
+                return "tonken-fail"
             }
+        }
+        else return token
+
+    }
+    const playCallCskh =(record) => {          
+        setIsModalOpenPlay(true);         
+        if(token==''){
+            let newtoken = getToken();                
+            getLink(record.transaction_id,newtoken,record.tenbn+"-"+record.patientrecordid);
         }else{
-            const link = await getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
+            getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
         }
         
     }
@@ -413,27 +418,14 @@ const CSKHListPage = () => {
                 },{
                     label: `BN không hài lòng (${dataKhHL.length})`,
                     key: 'bnkhl',
-                    children: [ 
-                        <Table   
-                        rowKey={"patientrecordid"}                    
-                        bordered
-                        dataSource={dataKhHL} columns={columns}                       
-                        key="cskhkhl1"
-                        /> ,
-                        'Số lượng: '+ dataKhHL.length                     
+                    children: [                          
+                        <BlogCard key={"bnkhonghl"} posts ={dataKhHL} token={token} getToken={getToken}/>                        
                     ],
                 },{
                     label: `Tất cả BN(${dataKh.length})`,
                     key: 'bn3',
-                    children: [ 
-                        // <Table   
-                        // rowKey={"patientrecordid"}                    
-                        // bordered
-                        // dataSource={dataKh} columns={columns}                       
-                        // key="cskhk11hl"
-                        // /> ,
-                        // 'Số lượng: '+ dataKh.length      
-                        <BlogCard key={"allbenhnhan"} posts ={dataKh}/>                       
+                    children: [                       
+                        <BlogCard key={"allbenhnhan"} posts ={dataKh} token={token} getToken={getToken}/>                       
                     ],
                 }
                 ]}
