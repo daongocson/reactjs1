@@ -24,7 +24,7 @@ const CSKHPage = () => {
         },
         {
             title: 'Ngày Ra',
-            dataIndex: 'ngayra',
+            dataIndex: 'ngayrv',
         }
     ];  
     const fetchKhachhang = async () => {

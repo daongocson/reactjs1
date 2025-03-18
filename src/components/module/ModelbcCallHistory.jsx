@@ -12,9 +12,14 @@ function ModelbcCallHistory(props) {
       const formattedDate = date.toLocaleString(); 
       return formattedDate;
     };
-    const saveTransaction=async(idcskh,transid)=>{
-        // console.log("hiuhgiiihohiohoih>>",idcskh,transaction_id);
-        await postcskhSaveTransactionApi(transid,idcskh);  
+    const formatDateTodataBase = (unixTimestamp) => {
+      const date = new Date(unixTimestamp ); // Chuyển từ giây sang mili giây
+      const formattedDate = date.toISOString();  
+      return formattedDate;
+    };
+    const saveTransaction=async(idcskh,transid,dateString)=>{
+        console.log("hiuhgiiihohiohoih>>",idcskh,transid,dateString);
+        await postcskhSaveTransactionApi(transid,idcskh,dateString);  
     }
     const columns_nt = [
     {
@@ -22,7 +27,7 @@ function ModelbcCallHistory(props) {
         dataIndex: 'transaction_id',
         render: (index, record) => (
           <span>{record.transaction_id.substring(0, 10)+"..."}
-            <Button  icon={<SaveOutlined />} onClick={() => saveTransaction(idcskh,record.transaction_id)} />
+            <Button  icon={<SaveOutlined />} onClick={() => saveTransaction(idcskh,record.transaction_id,formatDateTodataBase(record.created_date))} />
           </span>
           
         )
@@ -101,19 +106,19 @@ function ModelbcCallHistory(props) {
                             'Số lượng: '+ data?.length                     
                         ]
                     },
-                    {
-                        label: `Thông tin bệnh nhân`,
-                        key: 'infotab',
-                        children: [                                                          
-                            <Table   
-                              rowKey={"transaction_id"}                    
-                              bordered
-                              dataSource={data} columns={columns_nt}                       
-                              key="cttbchuyentuyen"                           
-                            /> ,
-                            'Số lượng: '+data?.length                    
-                        ]
-                    }
+                    // {
+                    //     label: `Thông tin bệnh nhân`,
+                    //     key: 'infotab',
+                    //     children: [                                                          
+                    //         <Table   
+                    //           rowKey={"transaction_id"}                    
+                    //           bordered
+                    //           dataSource={data} columns={columns_nt}                       
+                    //           key="cttbchuyentuyen"                           
+                    //         /> ,
+                    //         'Số lượng: '+data?.length                    
+                    //     ]
+                    // }
                   ]}
               />           
           </Modal>

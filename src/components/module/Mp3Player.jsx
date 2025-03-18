@@ -9,7 +9,6 @@ const Mp3Player = ({filemp3}) => {
 
   // Xử lý khi nhạc bắt đầu phát
   const playAudio = () => {
-    console.log("test>>",filemp3);
     audioRef.current.play();
     setIsPlaying(true);
   };

@@ -38,7 +38,7 @@ const NhapCskhPage = () => {
             dataIndex: 'phone',
         },{
             title: 'Ngày RV',
-            dataIndex: 'ngayravien',
+            dataIndex: 'ngayrv',
         },{
             title: 'Ghi chú',
             dataIndex: 'ghichu',

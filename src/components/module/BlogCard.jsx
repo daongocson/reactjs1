@@ -37,7 +37,7 @@ const BlogCard = ({ posts }) => {
         }
         setIsPlaying(!isPlaying);
       };
-  const [audioSrc, setAudioSrc] = useState('');
+  const [audioSrc, setAudioSrc] = useState('sample.mp3');
   const [isPlaying, setIsPlaying] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -74,7 +74,7 @@ const BlogCard = ({ posts }) => {
 const fetchHistoryByPhone = async(vtoken, phone)=>{
   if(vtoken?.length>10){
     const unixTimeMillis = Date.now();
-    const unixTime10DaysAgo = Math.floor((Date.now() - 10 * 86400000) );
+    const unixTime10DaysAgo = Math.floor((Date.now() - 20 * 86400000) );
     const url_mp3= "https://public-v1-stg.omicall.com/api/v2/callTransaction/search"; 
     const response  = await fetch(url_mp3,{
         method: "POST",
@@ -97,29 +97,26 @@ const handleDownload = () => {
   link.click();
   document.body.removeChild(link);
 };
-const getLink =async(uuid,to_ken,tenbn)=>{
-  // console.log("getlink",uuid,"to_ken>>",to_ken);
+const getLink =async(uuid,vtoken,tenbn)=>{
   setTenbn(tenbn);
-  const url_mp3= "https://public-v1-stg.omicall.com/api/v2/callTransaction/getByTransactionId"; 
-  const response  = await fetch(url_mp3,{
-      method: "POST",
-      headers: {
-          "Content-Type": "application/json",
-          "Authorization":to_ken
-      },
-      body: JSON.stringify({transactionId:uuid})
-  }); 
-  const {payload} = await response.json();  
-  // https://public-v1-stg.omicrm.com/third_party/recording/uc?id=NTJkTkVjZXBCamRvODdCSjBJYlFZdEp3L2Z2V3JMOEdqdXJQWU53bDJ0VXRVSWdvNzlKZGJIQWpVcFd1WnNHTzl3b2hkbzBUSTJadDk1OHh6bUtaa2c9PQ==&code=21c2b76d-35e2-40c0-a88c-b643b5a1c596
-  // console.log("access_token",payload.transaction_id,"phone",payload.destination_number,"urlmp3",payload.recording_file_url);
-  if(payload.recording_file_url){
-      setAudioSrc(payload.recording_file_url);
-      setloadingPlay(false);        
-      return payload.recording_file_url;
-  }else{
-      setloadingPlay(false);   
-      return ""
+  if(vtoken?.length>10){
+    const url_mp3= "https://public-v1-stg.omicall.com/api/v2/callTransaction/getByTransactionId"; 
+    const response  = await fetch(url_mp3,{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization":vtoken
+        },
+        body: JSON.stringify({transactionId:uuid})
+    }); 
+    const {payload} = await response.json();  
+    // https://public-v1-stg.omicrm.com/third_party/recording/uc?id=NTJkTkVjZXBCamRvODdCSjBJYlFZdEp3L2Z2V3JMOEdqdXJQWU53bDJ0VXRVSWdvNzlKZGJIQWpVcFd1WnNHTzl3b2hkbzBUSTJadDk1OHh6bUtaa2c9PQ==&code=21c2b76d-35e2-40c0-a88c-b643b5a1c596
+    if(payload.recording_file_url){
+        setAudioSrc(payload.recording_file_url);
+    }
   }
+  // return "";
+  
 }
 const getCallHistory =async(record) => {  
   setIdcskh(record.idcskh);
@@ -130,22 +127,16 @@ const getCallHistory =async(record) => {
     let newtoken = await getNewToken();  
     fetchHistoryByPhone(newtoken,record.phone)
     setloadingPlay(false);   
-   // getLink(record.transaction_id, newtoken ,record.tenbn+"-"+record.patientrecordid);      
   }else{
     fetchHistoryByPhone(token, record.phone);
-    setloadingPlay(false);   
-
-    //getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
+    setloadingPlay(false); 
   }
 }
 const getNewToken=async()=>{
   const res = await getTokenApi();     
   if(res.access_token){
-    // console.log("access_token",res.access_token);
-    setloadingPlay(false); 
     setToken(res.access_token);
-    return res.access_token;
-    // setAudioSrc(link);
+    return res.access_token;    
   }
   else{
       setloadingPlay(false); 
@@ -156,12 +147,14 @@ const playCallCskh =async(record) => {
   setIsModalOpenPlay(true);   
   setloadingPlay(true);   
   if(token==''){     
-    let newtoken = getNewToken();  
-    getLink(record.transaction_id, newtoken ,record.tenbn+"-"+record.patientrecordid);      
+    let newtoken = await getNewToken(); 
+    await getLink(record.transaction_id, newtoken ,record.tenbn+"-"+record.patientrecordid);    
   }else{
-    getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
+    await getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
+    
   }
-  
+  setloadingPlay(false); 
+
 }
   const showModal = (record) => {
     // setPid(record["idcskh"]);       
@@ -251,9 +244,9 @@ const playCallCskh =async(record) => {
                 description={
                   <>
                     <Paragraph>Ghi chú:{post.ghichu}</Paragraph>
-                    <Paragraph>{post.bacsi}</Paragraph>
-                    <Paragraph type="secondary">{post.pkham} - Update: {post.ngaycapnhat}</Paragraph>
-                    <Paragraph type="warning">Kết quả: {getTextTrangthai(post.trangthai)}</Paragraph>
+                    {/* <Paragraph>{post.bacsi}</Paragraph> */}
+                    <Paragraph type="secondary">{post.bacsi}-{post.pkham} - Ngày ra viện: {post.ngayrv}</Paragraph>
+                    <Paragraph type="warning">{getTextTrangthai(post.trangthai)}: {post.ngaycapnhat}</Paragraph>
                   </>
                 }
               />

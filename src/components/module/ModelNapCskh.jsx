@@ -26,7 +26,7 @@ function ModelNapCskh(props) {
     },
     {
         title: 'Ngày RV',
-        dataIndex: 'ngayra',
+        dataIndex: 'ngayrv',
     }, {
       title: 'Khoa điều trị',
       dataIndex: 'khoadieutri',
