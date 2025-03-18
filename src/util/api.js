@@ -110,10 +110,10 @@ const postcskhPidApi = (mavp) => {
     }
     return axios.post(URL_API, data)
 }
-const postcskhSaveTransactionApi=(transid,phone) => {
+const postcskhSaveTransactionApi=(transid,idcskh) => {
     const URL_API = "/v1/apicus/postcskhsavetransaction";
     const data = {
-        transid,phone
+        transid,idcskh
     }
     return axios.post(URL_API, data)
 }

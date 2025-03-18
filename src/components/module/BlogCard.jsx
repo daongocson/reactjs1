@@ -43,6 +43,8 @@ const BlogCard = ({ posts }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modaldata, setModaldata] = useState([]);
   const [phone, setPhone] = useState('');
+  const [idcskh, setIdcskh] = useState('');
+
   const [mPhoneHistory, setMPhoneHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpenPlay, setIsModalOpenPlay] = useState(false);
@@ -120,6 +122,7 @@ const getLink =async(uuid,to_ken,tenbn)=>{
   }
 }
 const getCallHistory =async(record) => {  
+  setIdcskh(record.idcskh);
   setPhone(record.phone);
   setIsModalOpenHistory(true);   
   setloadingPlay(true);   
@@ -162,10 +165,7 @@ const playCallCskh =async(record) => {
 }
   const showModal = (record) => {
     // setPid(record["idcskh"]);       
-    if(record["patientrecordid"]!==''){
-        const phoneNumber = record["phone"];
-        // setPhone(phoneNumber);
-        console.log("nhocnhan>",record["patientrecordid"]);
+    if(record["patientrecordid"]!==''){    
         loadDataModel(record["patientrecordid"]);
     }        
     // Initiate the call
@@ -293,7 +293,8 @@ const playCallCskh =async(record) => {
                 open={isModalOpenHistory}
                 setOpen={setIsModalOpenHistory}              
                 loading={loadingPlay}
-                phone={phone}               
+                phone={phone}      
+                idcskh={idcskh}           
                 setPhone={setPhone}    
                 data={mPhoneHistory}      
                 fetchHistoryByPhone={fetchHistoryByPhone}     

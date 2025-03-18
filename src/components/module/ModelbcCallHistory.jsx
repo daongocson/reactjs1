@@ -5,15 +5,16 @@ import { SaveOutlined } from '@ant-design/icons';
 import {  postcskhSaveTransactionApi } from '../../util/api';
 function ModelbcCallHistory(props) {
 
-    const{open,setOpen,phone,setPhone,loading,fetchHistoryByPhone,data}=props;    
+    const{open,setOpen,phone,setPhone,loading,fetchHistoryByPhone,data,idcskh}=props;    
     const { Search } = Input;
     const formatDate = (unixTimestamp) => {
       const date = new Date(unixTimestamp ); // Chuyển từ giây sang mili giây
       const formattedDate = date.toLocaleString(); 
       return formattedDate;
     };
-    const saveTransaction=async(record)=>{
-        await postcskhSaveTransactionApi(record.transaction_id,record.phone_number);  
+    const saveTransaction=async(idcskh,transid)=>{
+        // console.log("hiuhgiiihohiohoih>>",idcskh,transaction_id);
+        await postcskhSaveTransactionApi(transid,idcskh);  
     }
     const columns_nt = [
     {
@@ -21,7 +22,7 @@ function ModelbcCallHistory(props) {
         dataIndex: 'transaction_id',
         render: (index, record) => (
           <span>{record.transaction_id.substring(0, 10)+"..."}
-            <Button  icon={<SaveOutlined />} onClick={() => saveTransaction(record)} />
+            <Button  icon={<SaveOutlined />} onClick={() => saveTransaction(idcskh,record.transaction_id)} />
           </span>
           
         )
@@ -61,7 +62,7 @@ function ModelbcCallHistory(props) {
     return (
         <>        
            <Modal
-            title={"Lịch sử cuộc gọi-"+phone}
+            title={"Lịch sử cuộc gọi-"+idcskh}
             style={{
               top: 30
             }}
