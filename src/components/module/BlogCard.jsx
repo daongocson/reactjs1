@@ -71,8 +71,8 @@ const BlogCard = ({ posts }) => {
         })
     }
 }
-const fetchHistoryByPhone = async(phone)=>{
-  if(token?.length>10){
+const fetchHistoryByPhone = async(vtoken, phone)=>{
+  if(vtoken?.length>10){
     const unixTimeMillis = Date.now();
     const unixTime10DaysAgo = Math.floor((Date.now() - 10 * 86400000) );
     const url_mp3= "https://public-v1-stg.omicall.com/api/v2/callTransaction/search"; 
@@ -80,7 +80,7 @@ const fetchHistoryByPhone = async(phone)=>{
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "Authorization":token
+            "Authorization":vtoken
         },
         body: JSON.stringify( {fromDate:unixTime10DaysAgo, toDate:unixTimeMillis,keyword:phone})
     });        
@@ -127,12 +127,12 @@ const getCallHistory =async(record) => {
   setIsModalOpenHistory(true);   
   setloadingPlay(true);   
   if(token==''){     
-    let newtoken = getNewToken();  
-    fetchHistoryByPhone(record.phone)
+    let newtoken = await getNewToken();  
+    fetchHistoryByPhone(newtoken,record.phone)
     setloadingPlay(false);   
    // getLink(record.transaction_id, newtoken ,record.tenbn+"-"+record.patientrecordid);      
   }else{
-    fetchHistoryByPhone(record.phone);
+    fetchHistoryByPhone(token, record.phone);
     setloadingPlay(false);   
 
     //getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
@@ -242,7 +242,7 @@ const playCallCskh =async(record) => {
               actions={[
                  <PhoneOutlined  onClick={() => showModal(post)} key="views" />,
                 <span>{post ?.transaction_id?(<Button  icon={<PlayCircleOutlined /> } onClick={() => playCallCskh(post)} />):(<QuestionOutlined />)} Ghi âm</span>,
-                <HistoryOutlined  onClick={() => getCallHistory(post)} key="viewsHis" />,
+                <span><Button icon={<HistoryOutlined />}  onClick={() => getCallHistory(post)} key="viewsHis" >ký gọi</Button></span>,
 
               ]}
             >
