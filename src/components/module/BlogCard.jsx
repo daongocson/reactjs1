@@ -235,7 +235,7 @@ const playCallCskh =async(record) => {
               actions={[
                  <PhoneOutlined  onClick={() => showModal(post)} key="views" />,
                 <span>{post ?.transaction_id?(<Button  icon={<PlayCircleOutlined /> } onClick={() => playCallCskh(post)} />):(<QuestionOutlined />)} Ghi âm</span>,
-                <span><Button icon={<HistoryOutlined />}  onClick={() => getCallHistory(post)} key="viewsHis" >ký gọi</Button></span>,
+                <span><Button icon={<HistoryOutlined />}  onClick={() => getCallHistory(post)} key="viewsHis" >Nký gọi</Button></span>,
 
               ]}
             >
