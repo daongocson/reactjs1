@@ -110,6 +110,13 @@ const postcskhPidApi = (mavp) => {
     }
     return axios.post(URL_API, data)
 }
+const postcskhSaveTransactionApi=(transid,phone) => {
+    const URL_API = "/v1/apicus/postcskhsavetransaction";
+    const data = {
+        transid,phone
+    }
+    return axios.post(URL_API, data)
+}
 const postkqclsApi = (mavp) => {
     const URL_API = "/v1/api/postkqcls"
     return axios.post(URL_API, {mavp})
@@ -210,5 +217,5 @@ const getLsphongkhamApi  = () => {
     return axios.get(URL_API)
 }
 export {
-    getTokenApi,postbaocaoDichvuApi,postDichvuApi,postUpdateCallIDApi,postbaocaocskhApi,postNapcskhApi,postbaocaongoaitruChitietApi,postLoadcskhApi,postbaocaoptttApi,postbaocaoclsApi,postbaocaongoaitruApi,postbaocaoLuotTNTdieutriApi,postbaocaodieutriApi,postbaocaoIcdApi,postIcdApi,postcskhPidApi,postkqGoiApi,getbnBynv,postkqclsApi,fetchycbydateApi,postmaquyenApi,getuserduyetApi,createnickbsApi,postDoctorApi,postycbydateApi,postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
+    postcskhSaveTransactionApi,getTokenApi,postbaocaoDichvuApi,postDichvuApi,postUpdateCallIDApi,postbaocaocskhApi,postNapcskhApi,postbaocaongoaitruChitietApi,postLoadcskhApi,postbaocaoptttApi,postbaocaoclsApi,postbaocaongoaitruApi,postbaocaoLuotTNTdieutriApi,postbaocaodieutriApi,postbaocaoIcdApi,postIcdApi,postcskhPidApi,postkqGoiApi,getbnBynv,postkqclsApi,fetchycbydateApi,postmaquyenApi,getuserduyetApi,createnickbsApi,postDoctorApi,postycbydateApi,postDeleteYeucauApi,postduyetycApi,createUserApi, loginApi, getUserApi,getLsErrorApi,getLsDoctorApi,postbacsiApi,postpatientApi,getLsphongkhamApi,postKhambenhApi,getLsCskhApi,getLsChamcongApi,postChamcongIdApi,postycsuaApi,getYcsuaApi
 }

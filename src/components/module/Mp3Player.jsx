@@ -68,7 +68,7 @@ const Mp3Player = ({filemp3}) => {
         <div>
             {filemp3===null ? "Không có thoại":(                
                 <div style={styles.container}>  
-                <div>{filemp3}</div>   
+                {/* <div>{filemp3}</div>    */}
                 <audio
                   ref={audioRef}
                   onTimeUpdate={updateProgress}

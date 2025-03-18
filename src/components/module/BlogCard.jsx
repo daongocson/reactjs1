@@ -42,6 +42,8 @@ const BlogCard = ({ posts }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modaldata, setModaldata] = useState([]);
+  const [phone, setPhone] = useState('');
+  const [mPhoneHistory, setMPhoneHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpenPlay, setIsModalOpenPlay] = useState(false);
   const [isModalOpenHistory, setIsModalOpenHistory] = useState(false);
@@ -66,6 +68,23 @@ const BlogCard = ({ posts }) => {
             description: res.message
         })
     }
+}
+const fetchHistoryByPhone = async(phone)=>{
+  if(token?.length>10){
+    const unixTimeMillis = Date.now();
+    const unixTime10DaysAgo = Math.floor((Date.now() - 10 * 86400000) );
+    const url_mp3= "https://public-v1-stg.omicall.com/api/v2/callTransaction/search"; 
+    const response  = await fetch(url_mp3,{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization":token
+        },
+        body: JSON.stringify( {fromDate:unixTime10DaysAgo, toDate:unixTimeMillis,keyword:phone})
+    });        
+    const {payload} = await response.json();           
+    setMPhoneHistory(payload.items); 
+  }
 }
 const handleDownload = () => {
   if(audioSrc=='')return;
@@ -100,26 +119,44 @@ const getLink =async(uuid,to_ken,tenbn)=>{
       return ""
   }
 }
-const getCallHistory =async(record) => {      
+const getCallHistory =async(record) => {  
+  setPhone(record.phone);
   setIsModalOpenHistory(true);   
+  setloadingPlay(true);   
+  if(token==''){     
+    let newtoken = getNewToken();  
+    fetchHistoryByPhone(record.phone)
+    setloadingPlay(false);   
+   // getLink(record.transaction_id, newtoken ,record.tenbn+"-"+record.patientrecordid);      
+  }else{
+    fetchHistoryByPhone(record.phone);
+    setloadingPlay(false);   
+
+    //getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
+  }
+}
+const getNewToken=async()=>{
+  const res = await getTokenApi();     
+  if(res.access_token){
+    // console.log("access_token",res.access_token);
+    setloadingPlay(false); 
+    setToken(res.access_token);
+    return res.access_token;
+    // setAudioSrc(link);
+  }
+  else{
+      setloadingPlay(false); 
+      console.log("Lấy token thất bại");
+  }
 }
 const playCallCskh =async(record) => {          
   setIsModalOpenPlay(true);   
   setloadingPlay(true);   
-  if(token==''){
-      const res = await getTokenApi();      
-      if(res.access_token){
-          // console.log("access_token",res.access_token);
-          setToken(res.access_token);
-          const link = getLink(record.transaction_id,res.access_token,record.tenbn+"-"+record.patientrecordid);
-          // setAudioSrc(link);
-      }
-      else{
-          setloadingPlay(false); 
-          console.log("Lấy token thất bại");
-      }
+  if(token==''){     
+    let newtoken = getNewToken();  
+    getLink(record.transaction_id, newtoken ,record.tenbn+"-"+record.patientrecordid);      
   }else{
-      const link = await getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
+    getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
   }
   
 }
@@ -254,10 +291,12 @@ const playCallCskh =async(record) => {
             </Modal>           
              <ModelbcCallHistory
                 open={isModalOpenHistory}
-                setOpen={setIsModalOpenHistory}
-                token={token}
+                setOpen={setIsModalOpenHistory}              
                 loading={loadingPlay}
-                 data={[]}               
+                phone={phone}               
+                setPhone={setPhone}    
+                data={mPhoneHistory}      
+                fetchHistoryByPhone={fetchHistoryByPhone}     
             />    
         </Layout>
     
