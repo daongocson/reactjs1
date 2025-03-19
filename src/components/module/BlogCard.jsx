@@ -1,5 +1,5 @@
 import { DownloadOutlined, EyeOutlined, HistoryOutlined, PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, PlusOutlined, QuestionOutlined } from "@ant-design/icons";
-import { Avatar, Button, Card, Form, Input, Layout, Menu, Modal, Pagination, Typography } from "antd";
+import { Avatar, Button, Card, Form, Input, Layout, Menu, Modal, Pagination, Spin, Typography } from "antd";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import sampleImage from "../../assets/react.svg"; // Import hình ảnh từ thư mục assets
@@ -14,7 +14,7 @@ const { Header, Content } = Layout;
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
 const { Meta } = Card;
-const BlogCard = ({ posts }) => {
+const BlogCard = ({ posts,loadPage }) => {
   // const [posts, setPosts] = useState([
   //   { 
   //     id: 1, 
@@ -236,8 +236,8 @@ const playCallCskh =async(record) => {
     setCurrentPage(1);
   };
   return (
-    <Layout style={{ minHeight: "100vh" }}>     
-      <Content style={{ padding: "20px" }}>
+    <Layout style={{ minHeight: "100vh" }} >     
+      <Content style={{ padding: "20px" }} >
         <Input
           placeholder="Tìm kiếm bệnh nhân..."
           value={searchTerm}
@@ -247,7 +247,8 @@ const playCallCskh =async(record) => {
         {/* <Button type="primary" icon={<PlusOutlined />} onClick={showModal}>
           Thêm bài viết
         </Button> */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "10px", marginTop:10 }}>
+         <Spin spinning={loadPage}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "10px", marginTop:10 }}>          
           {paginatedPosts.map(post => (
             <Card
               key={post.idcskh}          
@@ -272,6 +273,7 @@ const playCallCskh =async(record) => {
             </Card>
           ))}
         </div>
+        </Spin>
         <Pagination
           current={currentPage}
           pageSize={pageSize}

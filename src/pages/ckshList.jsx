@@ -18,6 +18,8 @@ const CSKHListPage = () => {
     const [loadingPlay, setloadingPlay] = useState(false);
     const [dateOp, setDateOp] = useState([]); 
     const [loading, setLoading] = useState(true);
+    const [loadingPage, setLoadingPage] = useState(true);
+
     const { Search } = Input;
     const [fromDate, setFromDate] = useState('');
     const [toDate, setToDate] = useState('');
@@ -208,6 +210,8 @@ const CSKHListPage = () => {
     const fetchKhachhang = async () => {
         //bỏ qua lịch sử uuid c
         setUuid('');
+        setLoadingPage(true);
+        setloadingPlay(true);
         const res = await getbnBynv(fromDate,toDate,"Phòng khám mới");
         if (!res?.message) {   
             setFilData(res.khgoi); 
@@ -218,6 +222,8 @@ const CSKHListPage = () => {
                 description: res.message
             })
         }
+        setLoadingPage(false);
+        setloadingPlay(false);
     }
     const setFilData=(data)=>{        
         setDataKh(data);
@@ -289,6 +295,8 @@ const CSKHListPage = () => {
         
     } 
     const handleOnSelect=async ()=>{   
+        setLoadingPage(true);
+        setloadingPlay(true);
         const res = await getbnBynv(fromDate,toDate,autoKhoa);
         if (!res?.message) {   
             setFilData(res.khgoi);    
@@ -298,6 +306,8 @@ const CSKHListPage = () => {
                 description: res.message
             })
         }
+        setLoadingPage(false);
+        setloadingPlay(false);
     }     
     const keys  = ["pkham","tenbn"]
     const searchTable=(data)=>{   
@@ -375,6 +385,7 @@ const CSKHListPage = () => {
                 
            <Tabs
                 defaultActiveKey="1"
+              
                 items={[
                 {
                     label: `BN chưa gọi (${dataKhCxl.length})`,
@@ -391,7 +402,8 @@ const CSKHListPage = () => {
                         /> ,
                         <Table   
                         rowKey={"patientrecordid"}                    
-                        bordered                       
+                        bordered     
+                        loading={loadingPage}                  
                         dataSource={searchTable(dataKhCxl)} columns={columns}                 
                         key="cskhkhl"
                         /> ,
@@ -400,15 +412,17 @@ const CSKHListPage = () => {
                 },{
                     label: `BN Vừa gọi (${dataKhLast.length})`,
                     key: 'bnvuagoi',
+                    
                     children: [ 
-                        <BlogCard key={"goiblog"} posts ={dataKhLast}/>             
+                        <BlogCard key={"goiblog"} posts ={dataKhLast} loadPage={loadingPage}/>             
                     ]
                 },{
                     label: `BN không nghe máy (${dataKhNm.length})`,
                     key: 'bn2',
                     children: [ 
                         <Table   
-                        rowKey={"patientrecordid"}                    
+                        rowKey={"patientrecordid"}           
+                        loading={loadingPage}         
                         bordered
                         dataSource={dataKhNm} columns={columns}                       
                         key="cskhk1hl"
@@ -419,13 +433,13 @@ const CSKHListPage = () => {
                     label: `BN không hài lòng (${dataKhHL.length})`,
                     key: 'bnkhl',
                     children: [                          
-                        <BlogCard key={"bnkhonghl"} posts ={dataKhHL} token={token} getToken={getToken}/>                        
+                        <BlogCard key={"bnkhonghl"} posts ={dataKhHL} loadPage={loadingPage}/>                        
                     ],
                 },{
                     label: `Tất cả BN(${dataKh.length})`,
                     key: 'bn3',
                     children: [                       
-                        <BlogCard key={"allbenhnhan"} posts ={dataKh} token={token} getToken={getToken}/>                       
+                        <BlogCard key={"allbenhnhan"} posts ={dataKh} loadPage={loadingPage}/>                       
                     ],
                 }
                 ]}
