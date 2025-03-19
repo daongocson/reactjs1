@@ -9,12 +9,13 @@ import { getTokenApi, postcskhPidApi } from "../../util/api";
 import ModelbcNgoaitruchitiet from "./ModelbcNgoaitruchitiet";
 import ModelbcCallHistory from "./ModelbcCallHistory";
 import Mp3Player from "./Mp3Player";
+import ModelBcCskh from "./ModelBcCskh";
 
 const { Header, Content } = Layout;
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
 const { Meta } = Card;
-const BlogCard = ({ posts,loadPage }) => {
+const BlogCardLimit = ({ posts,loadPage }) => {
   if(!loadPage) loadPage=false;
 
   // const [posts, setPosts] = useState([
@@ -177,7 +178,9 @@ const playCallCskh =async(record) => {
 
 }
   const showModal = (record) => {
-    // setPid(record["idcskh"]);       
+    // setPid(record["idcskh"]);      
+    setIdcskh(record.tenbn+"-"+record.idcskh);
+ 
     if(record["patientrecordid"]!==''){    
         loadDataModel(record["patientrecordid"]);
     }        
@@ -255,7 +258,7 @@ const playCallCskh =async(record) => {
             <Card
               key={post.idcskh}          
               actions={[
-                 <PhoneOutlined  onClick={() => showModal(post)} key="views" />,
+                 <EyeOutlined  onClick={() => showModal(post)} key="views" />,
                 <span>{post ?.transaction_id?(<Button  icon={<PlayCircleOutlined /> } onClick={() => playCallCskh(post)} />):(<QuestionOutlined />)} Ghi âm</span>,
                 <span><Button icon={<HistoryOutlined />}  onClick={() => getCallHistory(post)} key="viewsHis" >Nký gọi</Button></span>,
 
@@ -285,7 +288,7 @@ const playCallCskh =async(record) => {
           style={{ marginTop: 20, textAlign: "center" }}
         />
         </Content>
-        <ModelViewCskh 
+        <ModelBcCskh 
                 open={isModalVisible}
                 setOpen={setIsModalVisible}
                 // refetch={fetchKhachhang}
@@ -321,4 +324,4 @@ const playCallCskh =async(record) => {
   );
 };
 
-export default BlogCard;
+export default BlogCardLimit;

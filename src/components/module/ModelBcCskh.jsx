@@ -117,7 +117,7 @@ function ModelBcCskh(props) {
                       onBlur={() => {}}
                       // end
                     >
-                      Chi tiết bệnh nhân IDCSKH-{pid}
+                      IDCSKH({pid})
                     </div>
                   }
                 open={open}

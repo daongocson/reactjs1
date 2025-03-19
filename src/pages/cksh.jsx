@@ -4,6 +4,7 @@ import { getLsCskhApi} from "../util/api";
 import { Link } from "react-router-dom";
 import { UsergroupAddOutlined } from "@ant-design/icons";
 import BlogCard from "../components/module/BlogCard";
+import BlogCardLimit from "../components/module/BlogCardLimit";
 const CSKHPage = () => {       
     const [dataKh, setDataKh]= useState([]); 
     useEffect(() => {   
@@ -41,7 +42,7 @@ const CSKHPage = () => {
     
     return (
         <div style={{ padding: 20 }}>    
-        <BlogCard key={"blogkhl"} posts={dataKh}/>   
+        <BlogCardLimit key={"blogkhl"} posts={dataKh}/>   
            {/* <Tabs
                 defaultActiveKey="1"
                 items={[

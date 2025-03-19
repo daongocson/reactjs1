@@ -4,6 +4,7 @@ import { getbnBynv, getTokenApi, postcskhPidApi} from "../util/api";
 import { DownloadOutlined, PauseCircleOutlined, PhoneOutlined, PlayCircleOutlined, QuestionOutlined } from "@ant-design/icons";
 import ModelViewCskh from "../components/module/ModelViewCskh";
 import BlogCard from "../components/module/BlogCard";
+import BlogCardLimit from "../components/module/BlogCardLimit";
 const CSKHListPage = () => {       
     const [dataKh, setDataKh]= useState([]); 
     const [dataKhCxl, setDataKhCxl]= useState([]); 
@@ -433,7 +434,7 @@ const CSKHListPage = () => {
                     label: `BN không hài lòng (${dataKhHL.length})`,
                     key: 'bnkhl',
                     children: [                          
-                        <BlogCard key={"bnkhonghl"} posts ={dataKhHL} loadPage={loadingPage}/>                        
+                        <BlogCardLimit key={"bnkhonghl"} posts ={dataKhHL} loadPage={loadingPage}/>                        
                     ],
                 },{
                     label: `Tất cả BN(${dataKh.length})`,
