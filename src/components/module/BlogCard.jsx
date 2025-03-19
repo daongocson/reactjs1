@@ -73,6 +73,7 @@ const BlogCard = ({ posts }) => {
 }
 const fetchHistoryByPhone = async(vtoken, phone)=>{
   if(vtoken?.length>10){
+    setloadingPlay(true);
     const unixTimeMillis = Date.now();
     const unixTime10DaysAgo = Math.floor((Date.now() - 20 * 86400000) );
     const url_mp3= "https://public-v1-stg.omicall.com/api/v2/callTransaction/search"; 
@@ -86,7 +87,9 @@ const fetchHistoryByPhone = async(vtoken, phone)=>{
     });        
     const {payload} = await response.json();           
     setMPhoneHistory(payload.items); 
+    setloadingPlay(false);
   }else if(token?.length>10){    
+    setloadingPlay(true);
     const unixTimeMillis = Date.now();
     const unixTime10DaysAgo = Math.floor((Date.now() - 20 * 86400000) );
     const url_mp3= "https://public-v1-stg.omicall.com/api/v2/callTransaction/search"; 
@@ -100,6 +103,7 @@ const fetchHistoryByPhone = async(vtoken, phone)=>{
     });        
     const {payload} = await response.json();           
     setMPhoneHistory(payload.items); 
+    setloadingPlay(false);
   }
 }
 const handleDownload = () => {
@@ -300,6 +304,7 @@ const playCallCskh =async(record) => {
                 open={isModalOpenHistory}
                 setOpen={setIsModalOpenHistory}              
                 loading={loadingPlay}
+                setLoading={setloadingPlay}
                 phone={phone}      
                 idcskh={idcskh}           
                 setPhone={setPhone}    
