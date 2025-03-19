@@ -9,7 +9,7 @@ function ModelbcCallHistory(props) {
     const { Search } = Input;
     const formatDate = (unixTimestamp) => {
       const date = new Date(unixTimestamp ); // Chuyển từ giây sang mili giây
-      const formattedDate = date.toLocaleDateString("vi-VN");
+      const formattedDate = date.toLocaleString("vi-VN");
       return formattedDate;
     };
     const formatDateTodataBase = (unixTimestamp) => {
