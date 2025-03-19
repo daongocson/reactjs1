@@ -5,7 +5,7 @@ import { DownloadOutlined, SaveOutlined } from '@ant-design/icons';
 import {  postcskhSaveTransactionApi } from '../../util/api';
 function ModelbcCallHistory(props) {
 
-    const{open,setOpen,phone,setPhone,loading,fetchHistoryByPhone,data,idcskh}=props;    
+    const{open,setOpen,phone,setPhone,loading,fetchHistoryByPhone,data,pid,idcskh}=props;    
     const { Search } = Input;
     const formatDate = (unixTimestamp) => {
       const date = new Date(unixTimestamp ); // Chuyển từ giây sang mili giây
@@ -19,7 +19,7 @@ function ModelbcCallHistory(props) {
     };
     
     const saveTransaction=async(idcskh,transid,dateString)=>{
-      console.log("saveTransaction");
+      console.log("saveTransaction",idcskh,transid,dateString);
 
         await postcskhSaveTransactionApi(transid,idcskh,dateString);  
     }
@@ -80,7 +80,7 @@ function ModelbcCallHistory(props) {
     return (
         <>        
            <Modal
-            title={"Lịch sử cuộc gọi("+idcskh+")"}
+            title={"IDCSKH("+pid+")"}
             style={{
               top: 30
             }}

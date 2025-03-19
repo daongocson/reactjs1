@@ -21,6 +21,8 @@ const BlogList =  ({ posts,loadingPost })=> {
   const [token, setToken] = useState('');
 
   const [pid, setPid] = useState('');
+  const [idTile, setIdTitle] = useState('');
+
   const getNewToken=async()=>{
     const res = await getTokenApi();     
     if(res.access_token){
@@ -53,6 +55,7 @@ const BlogList =  ({ posts,loadingPost })=> {
     if(record["patientrecordid"]!==''){
         const phoneNumber = record["phone"];
         setPid(record["idcskh"]);
+        setIdTitle(record.idcskh+"-"+record.tenbn)
         // setPhone(phoneNumber);
         loadDataModel(record["patientrecordid"]);
     }        
@@ -81,6 +84,7 @@ const handleCancel=()=>{
 }
 const getCallHistory =async(record) => {  
   setPid(record.tenbn+"-"+record.idcskh);
+  setIdTitle(record.idcskh+"-"+record.tenbn)
   setPhone(record.phone);
   setIsModalOpenHistory(true);   
   if(token==''){     
@@ -127,7 +131,7 @@ const getCallHistory =async(record) => {
           open={isModalVisible}
           setOpen={setIsModalVisible}
           loading={loading}
-          pid={pid}
+          pid={idTile}
           modaldata={modaldata}
           handleOk={handleOk}
           handleCancel={handleCancel}
@@ -137,7 +141,8 @@ const getCallHistory =async(record) => {
                 setOpen={setIsModalOpenHistory}              
                 loading={loadingPlay}
                 phone={phone}      
-                idcskh={pid}           
+                idcskh={pid}   
+                pid={idTile}        
                 setPhone={setPhone}    
                 data={mPhoneHistory}      
                 fetchHistoryByPhone={fetchHistoryByPhone}     

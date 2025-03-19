@@ -71,9 +71,9 @@ const CSKHListPage = () => {
         setIsModalOpenPlay(true);         
         if(token==''){
             let newtoken = getToken();                
-            getLink(record.transaction_id,newtoken,record.tenbn+"-"+record.patientrecordid);
+            getLink(record.transaction_id,newtoken,record.tenbn+"-"+record.idcskh);
         }else{
-            getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
+            getLink(record.transaction_id,token,record.tenbn+"-"+record.idcskh);               
         }
         
     }
@@ -300,7 +300,9 @@ const CSKHListPage = () => {
         setloadingPlay(true);
         const res = await getbnBynv(fromDate,toDate,autoKhoa);
         if (!res?.message) {   
-            setFilData(res.khgoi);    
+            setFilData(res.khgoi);  
+            setDataKhLast(res.khvuagoi)                     
+  
         } else {
             notification.error({
                 message: "Unauthorized",

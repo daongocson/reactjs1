@@ -47,7 +47,7 @@ const BlogCardLimit = ({ posts,loadPage }) => {
   const [modaldata, setModaldata] = useState([]);
   const [phone, setPhone] = useState('');
   const [idcskh, setIdcskh] = useState('');
-
+  const [idTile, setIdTitle] = useState('');
   const [mPhoneHistory, setMPhoneHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpenPlay, setIsModalOpenPlay] = useState(false);
@@ -140,7 +140,8 @@ const getLink =async(uuid,vtoken,tenbn)=>{
   
 }
 const getCallHistory =async(record) => {   
-  setIdcskh(record.tenbn+"-"+record.idcskh);
+  setIdcskh(record.idcskh);
+  setIdTitle(record.idcskh+"-"+record.tenbn)
   setPhone(record.phone);
   setIsModalOpenHistory(true);   
   setloadingPlay(true);   
@@ -169,9 +170,9 @@ const playCallCskh =async(record) => {
   setloadingPlay(true);   
   if(token==''){     
     let newtoken = await getNewToken(); 
-    await getLink(record.transaction_id, newtoken ,record.tenbn+"-"+record.patientrecordid);    
+    await getLink(record.transaction_id, newtoken ,record.tenbn+"-"+record.idcskh);    
   }else{
-    await getLink(record.transaction_id,token,record.tenbn+"-"+record.patientrecordid);               
+    await getLink(record.transaction_id,token,record.tenbn+"-"+record.idcskh);               
     
   }
   setloadingPlay(false); 
@@ -179,7 +180,8 @@ const playCallCskh =async(record) => {
 }
   const showModal = (record) => {
     // setPid(record["idcskh"]);      
-    setIdcskh(record.tenbn+"-"+record.idcskh);
+    setIdcskh(record.idcskh);
+    setIdTitle(record.idcskh+"-"+record.tenbn)
  
     if(record["patientrecordid"]!==''){    
         loadDataModel(record["patientrecordid"]);
@@ -294,7 +296,7 @@ const playCallCskh =async(record) => {
                 // refetch={fetchKhachhang}
                 // phone={phone}
                 loading={loading}
-                pid={idcskh}
+                pid={idTile}
                 // startCall={startCall}
                 // setStartCall={setStartCall}
                 // uuid={uuid}
@@ -314,7 +316,8 @@ const playCallCskh =async(record) => {
                 loading={loadingPlay}
                 setLoading={setloadingPlay}
                 phone={phone}      
-                idcskh={idcskh}           
+                idcskh={idcskh}
+                pid={idTile}           
                 setPhone={setPhone}    
                 data={mPhoneHistory}      
                 fetchHistoryByPhone={fetchHistoryByPhone}     
