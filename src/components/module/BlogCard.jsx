@@ -204,7 +204,8 @@ const playCallCskh =async(record) => {
   }
   const filteredPosts = posts.filter(post => 
     post.tenbn.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.phone.toLowerCase().includes(searchTerm.toLowerCase())
+    post.phone.toLowerCase().includes(searchTerm.toLowerCase())||
+    post.pkham.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const paginatedPosts = filteredPosts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
   const getTextTrangthai = (trangthai)=>{
