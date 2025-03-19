@@ -1,7 +1,7 @@
 import {Button, Input, Modal,Space,Table, Tabs} from 'antd';
 import { useEffect, useState } from 'react';
 import Mp3Player from './Mp3Player';
-import { SaveOutlined } from '@ant-design/icons';
+import { DownloadOutlined, SaveOutlined } from '@ant-design/icons';
 import {  postcskhSaveTransactionApi } from '../../util/api';
 function ModelbcCallHistory(props) {
 
@@ -9,7 +9,7 @@ function ModelbcCallHistory(props) {
     const { Search } = Input;
     const formatDate = (unixTimestamp) => {
       const date = new Date(unixTimestamp ); // Chuyển từ giây sang mili giây
-      const formattedDate = date.toLocaleString(); 
+      const formattedDate = date.toLocaleDateString("vi-VN");
       return formattedDate;
     };
     const formatDateTodataBase = (unixTimestamp) => {
@@ -17,10 +17,22 @@ function ModelbcCallHistory(props) {
       const formattedDate = date.toISOString();  
       return formattedDate;
     };
+    
     const saveTransaction=async(idcskh,transid,dateString)=>{
-        console.log("hiuhgiiihohiohoih>>",idcskh,transid,dateString);
+      console.log("saveTransaction");
+
         await postcskhSaveTransactionApi(transid,idcskh,dateString);  
     }
+    const handleDownloadModel = (audioUrl) => {
+      if(audioUrl=='')return;
+      const link = document.createElement("a");
+      link.href = audioUrl;
+      link.setAttribute("download", audioUrl); // File name when downloaded
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
     const columns_nt = [
     {
         title: 'ID Cuộc gọi',
@@ -28,6 +40,7 @@ function ModelbcCallHistory(props) {
         render: (index, record) => (
           <span>{record.transaction_id.substring(0, 10)+"..."}
             <Button  icon={<SaveOutlined />} onClick={() => saveTransaction(idcskh,record.transaction_id,formatDateTodataBase(record.created_date))} />
+            <Button type="dashed" icon={<DownloadOutlined />} onClick={() =>handleDownloadModel(record.recording_file_url)}/>
           </span>
           
         )
@@ -56,7 +69,7 @@ function ModelbcCallHistory(props) {
             return false;
           }else{
               if(value.length>8 && value.length<11)
-                  fetchHistoryByPhone(value);
+                  fetchHistoryByPhone("",value);
               else{              
                   // setOptions([]);
                   console.log("fffff",value)
@@ -67,7 +80,7 @@ function ModelbcCallHistory(props) {
     return (
         <>        
            <Modal
-            title={"Lịch sử cuộc gọi-"+idcskh}
+            title={"Lịch sử cuộc gọi("+idcskh+")"}
             style={{
               top: 30
             }}

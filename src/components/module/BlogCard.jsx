@@ -86,6 +86,20 @@ const fetchHistoryByPhone = async(vtoken, phone)=>{
     });        
     const {payload} = await response.json();           
     setMPhoneHistory(payload.items); 
+  }else if(token?.length>10){    
+    const unixTimeMillis = Date.now();
+    const unixTime10DaysAgo = Math.floor((Date.now() - 20 * 86400000) );
+    const url_mp3= "https://public-v1-stg.omicall.com/api/v2/callTransaction/search"; 
+    const response  = await fetch(url_mp3,{
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization":token
+        },
+        body: JSON.stringify( {fromDate:unixTime10DaysAgo, toDate:unixTimeMillis,keyword:phone})
+    });        
+    const {payload} = await response.json();           
+    setMPhoneHistory(payload.items); 
   }
 }
 const handleDownload = () => {
@@ -118,8 +132,8 @@ const getLink =async(uuid,vtoken,tenbn)=>{
   // return "";
   
 }
-const getCallHistory =async(record) => {  
-  setIdcskh(record.idcskh);
+const getCallHistory =async(record) => {   
+  setIdcskh(record.tenbn+"-"+record.idcskh);
   setPhone(record.phone);
   setIsModalOpenHistory(true);   
   setloadingPlay(true);   
