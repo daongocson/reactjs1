@@ -6,7 +6,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { PhoneOutlined } from '@ant-design/icons';
 import { postkqGoiApi, postpatientApi, postUpdateCallIDApi } from '../../util/api';
 function ModelViewCskh(props) {
-    const{open,setOpen,phone,pid,uuid,loading,refetch,modaldata,handleCancel,startCall,setStartCall}=props;  
+    const{open,setOpen,phone,pid,idTitle,uuid,loading,refetch,modaldata,handleCancel,startCall,setStartCall}=props;  
     const [disabled, setDisabled] = useState(true);   
     const [form] = Form.useForm();
     // const [loading, setLoading] = React.useState(true);
@@ -117,7 +117,7 @@ function ModelViewCskh(props) {
                       onBlur={() => {}}
                       // end
                     >
-                      IDCSKH({pid})
+                      IDCSKH1({idTitle})
                     </div>
                   }
                 open={open}
@@ -153,7 +153,7 @@ function ModelViewCskh(props) {
                       children: [
                         <div key={"bnhaninfo"}>
                           {modaldata.length==0?"loading...":
-                          (<Card key="ab" title={modaldata.dataKH[0].value+"("+modaldata.dataKH[3].value+")"} size="small">
+                          (<Card key="ab" title={modaldata.dataKH[0].value+",Năm sinh("+modaldata.dataKH[3].value+")"} size="small">
                             {/* <p>Mã CSKH: {pid}</p> */}
                               <p style={{ color: 'blue' }}>{modaldata.dataKH[4].value}</p>     
                               <p>Mã VP: {modaldata.dataKH[1].value}</p>   

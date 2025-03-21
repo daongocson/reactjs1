@@ -21,7 +21,7 @@ const BlogList =  ({ posts,loadingPost })=> {
   const [token, setToken] = useState('');
 
   const [pid, setPid] = useState('');
-  const [idTile, setIdTitle] = useState('');
+  const [idTitle, setIdTitle] = useState('');
 
   const getNewToken=async()=>{
     const res = await getTokenApi();     
@@ -131,7 +131,8 @@ const getCallHistory =async(record) => {
           open={isModalVisible}
           setOpen={setIsModalVisible}
           loading={loading}
-          pid={idTile}
+          pid={pid}
+          idTile={idTitle}
           modaldata={modaldata}
           handleOk={handleOk}
           handleCancel={handleCancel}
@@ -142,7 +143,7 @@ const getCallHistory =async(record) => {
                 loading={loadingPlay}
                 phone={phone}      
                 idcskh={pid}   
-                pid={idTile}        
+                pid={idTitle}        
                 setPhone={setPhone}    
                 data={mPhoneHistory}      
                 fetchHistoryByPhone={fetchHistoryByPhone}     

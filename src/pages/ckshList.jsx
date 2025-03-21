@@ -13,7 +13,7 @@ const CSKHListPage = () => {
     const { RangePicker } = DatePicker;
 
     const [dataKhLast, setDataKhLast]= useState([]); 
-
+    const [idTitle, setIdTitle] = useState('');
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isModalOpenPlay, setIsModalOpenPlay] = useState(false);
     const [loadingPlay, setloadingPlay] = useState(false);
@@ -67,14 +67,15 @@ const CSKHListPage = () => {
         else return token
 
     }
-    const playCallCskh =(record) => {          
+    const playCallCskh =async(record) => {       
         setIsModalOpenPlay(true);         
-        if(token==''){
-            let newtoken = getToken();                
+        if(token==''){         
+            let newtoken = await getToken();                
             getLink(record.transaction_id,newtoken,record.tenbn+"-"+record.idcskh);
         }else{
+            console.log("comehehehehe",token);   
             getLink(record.transaction_id,token,record.tenbn+"-"+record.idcskh);               
-        }
+         }
         
     }
     const handleDownload = () => {
@@ -197,7 +198,8 @@ const CSKHListPage = () => {
         }
     }
     const showModal = (record) => {  
-        setPid(record["idcskh"]);       
+        setPid(record["idcskh"]);    
+        setIdTitle(record.idcskh+"-"+record.tenbn)
         if(record["patientrecordid"]!==''){
             const phoneNumber = record["phone"];
             setPhone(phoneNumber);
@@ -417,7 +419,7 @@ const CSKHListPage = () => {
                     key: 'bnvuagoi',
                     
                     children: [ 
-                        <BlogCard key={"goiblog"} posts ={dataKhLast} loadPage={loadingPage}/>             
+                        <BlogCard key={"goiblog"} posts ={dataKhLast} loadPage={loadingPage} fetchKhachhang={fetchKhachhang}/>             
                     ]
                 },{
                     label: `BN không nghe máy (${dataKhNm.length})`,
@@ -436,13 +438,13 @@ const CSKHListPage = () => {
                     label: `BN không hài lòng (${dataKhHL.length})`,
                     key: 'bnkhl',
                     children: [                          
-                        <BlogCardLimit key={"bnkhonghl"} posts ={dataKhHL} loadPage={loadingPage}/>                        
+                        <BlogCardLimit key={"bnkhonghl"} posts ={dataKhHL} loadPage={loadingPage} fetchKhachhang={fetchKhachhang}/>                        
                     ],
                 },{
                     label: `Tất cả BN(${dataKh.length})`,
                     key: 'bn3',
                     children: [                       
-                        <BlogCard key={"allbenhnhan"} posts ={dataKh} loadPage={loadingPage}/>                       
+                        <BlogCardLimit key={"allbenhnhan"} posts ={dataKh} loadPage={loadingPage}/>                       
                     ],
                 }
                 ]}
@@ -454,6 +456,7 @@ const CSKHListPage = () => {
                 phone={phone}
                 loading={loading}
                 pid={pid}
+                idTitle={idTitle}
                 startCall={startCall}
                 setStartCall={setStartCall}
                 uuid={uuid}

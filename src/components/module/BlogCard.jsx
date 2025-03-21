@@ -14,7 +14,7 @@ const { Header, Content } = Layout;
 const { TextArea } = Input;
 const { Title, Paragraph } = Typography;
 const { Meta } = Card;
-const BlogCard = ({ posts,loadPage }) => {
+const BlogCard = ({ posts,loadPage,fetchKhachhang }) => {
   if(!loadPage) loadPage=false;
 
   // const [posts, setPosts] = useState([
@@ -46,7 +46,8 @@ const BlogCard = ({ posts,loadPage }) => {
   const [modaldata, setModaldata] = useState([]);
   const [phone, setPhone] = useState('');
   const [idcskh, setIdcskh] = useState('');
-  const [idTile, setIdTitle] = useState('');
+  const [idTitle, setIdTitle] = useState('');
+  const [pid, setPid] = useState('');
 
   const [mPhoneHistory, setMPhoneHistory] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -179,7 +180,9 @@ const playCallCskh =async(record) => {
 
 }
   const showModal = (record) => {
-    // setPid(record["idcskh"]);       
+    setPid(record["idcskh"]);    
+    setIdTitle(record.idcskh+"-"+record.tenbn);
+    setPhone(record.phone);   
     if(record["patientrecordid"]!==''){    
         loadDataModel(record["patientrecordid"]);
     }        
@@ -290,10 +293,11 @@ const playCallCskh =async(record) => {
         <ModelViewCskh 
                 open={isModalVisible}
                 setOpen={setIsModalVisible}
-                // refetch={fetchKhachhang}
-                // phone={phone}
+                refetch={fetchKhachhang}
+                phone={phone}
                 loading={loading}
-                pid={idTile}
+                pid={pid}
+                idTitle={idTitle}
                 // startCall={startCall}
                 // setStartCall={setStartCall}
                 // uuid={uuid}
@@ -314,7 +318,8 @@ const playCallCskh =async(record) => {
                 setLoading={setloadingPlay}
                 phone={phone}      
                 idcskh={idcskh}  
-                pid={idTile}             
+                pid={idTitle}   
+                idTitle={idTitle}             
                 setPhone={setPhone}    
                 data={mPhoneHistory}      
                 fetchHistoryByPhone={fetchHistoryByPhone}     
