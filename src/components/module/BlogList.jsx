@@ -110,7 +110,7 @@ const getCallHistory =async(record) => {
                 title={post.tenbn+"-"+post.phone} description=
                   {
                     <>
-                      <Paragraph >{post?.ghichu}</Paragraph>
+                      <Paragraph style={{ fontFamily: "Arial", fontSize: "16px" }} >{post?.ghichu}</Paragraph>
                       <strong>Tên Bệnh: </strong>{post?.tenbenh}
                       <p><strong>Địa chỉ: </strong>{post?.diachi}</p>                
                       <Paragraph type="warning">{post.pkham} </Paragraph>                  

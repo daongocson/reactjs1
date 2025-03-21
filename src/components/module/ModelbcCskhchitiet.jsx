@@ -29,7 +29,6 @@ function ModelbcCskhchitiet(props) {
   }
 ]; 
     const getTitle = (items) => {
-      console.log(items);
       let all =0;    
       for (let item of items) {
         all+=item.tong;
