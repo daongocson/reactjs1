@@ -35,6 +35,24 @@ function ModelbcCskhchitiet(props) {
       }
       return all.toString();
     };
+  const handChitiet=(dataChitiet)=>{
+      return dataChitiet.map(item => {
+          if(item.roomid==1001){ 
+            return {
+              name:"Phòng Khám",
+              ksdt:0,    
+              knm:0,
+              hl:0,
+              khl:item.khl,
+              ss:0,
+              knm:0
+            }
+          }
+          return item;
+      });
+      // return data;
+      // handChitiet
+  }
     return (
         <>         
            <Modal          
@@ -59,7 +77,7 @@ function ModelbcCskhchitiet(props) {
                             />  ,
               <div className="w-full h-96" key={"chat11"}>
               <ResponsiveContainer width="100%" height="100%" minWidth={300} minHeight={300} key={"ress"}>
-                <BarChart data={ data.filter(item=> item.roomid!==1001)} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                <BarChart data={handChitiet(data)} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis />
