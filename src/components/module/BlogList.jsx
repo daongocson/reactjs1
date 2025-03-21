@@ -132,7 +132,7 @@ const getCallHistory =async(record) => {
           setOpen={setIsModalVisible}
           loading={loading}
           pid={pid}
-          idTile={idTitle}
+          idTitle={idTitle}
           modaldata={modaldata}
           handleOk={handleOk}
           handleCancel={handleCancel}
@@ -143,7 +143,8 @@ const getCallHistory =async(record) => {
                 loading={loadingPlay}
                 phone={phone}      
                 idcskh={pid}   
-                pid={idTitle}        
+                pid={idTitle}    
+                idTitle={idTitle}    
                 setPhone={setPhone}    
                 data={mPhoneHistory}      
                 fetchHistoryByPhone={fetchHistoryByPhone}     

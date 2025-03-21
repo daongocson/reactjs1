@@ -73,7 +73,6 @@ const CSKHListPage = () => {
             let newtoken = await getToken();                
             getLink(record.transaction_id,newtoken,record.tenbn+"-"+record.idcskh);
         }else{
-            console.log("comehehehehe",token);   
             getLink(record.transaction_id,token,record.tenbn+"-"+record.idcskh);               
          }
         

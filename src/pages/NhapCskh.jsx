@@ -42,14 +42,7 @@ const NhapCskhPage = () => {
         },{
             title: 'Ghi chú',
             dataIndex: 'ghichu',
-        },{
-            title: 'Duyệt',
-            dataIndex: 'id',
-            key: 'id',
-            render: (index, record) => (
-              <Button  icon={<PhoneOutlined />} onClick={() => showModal(record)} />
-            )
-          },
+        }
           
     ];   
     const keys  = ["loairv","patientrecordid","patientrecordid_vp"] 

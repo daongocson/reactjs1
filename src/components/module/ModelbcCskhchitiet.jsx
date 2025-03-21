@@ -33,7 +33,6 @@ function ModelbcCskhchitiet(props) {
       let all =0;    
       for (let item of items) {
         all+=item.tong;
-        console.log("tessttt>",item.tong);        
       }
       return all.toString();
     };
