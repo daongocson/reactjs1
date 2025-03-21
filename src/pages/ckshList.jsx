@@ -443,7 +443,7 @@ const CSKHListPage = () => {
                     label: `Tất cả BN(${dataKh.length})`,
                     key: 'bn3',
                     children: [                       
-                        <BlogCardLimit key={"allbenhnhan"} posts ={dataKh} loadPage={loadingPage}/>                       
+                        <BlogCard key={"allbenhnhan"} posts ={dataKh} loadPage={loadingPage}/>                       
                     ],
                 }
                 ]}
